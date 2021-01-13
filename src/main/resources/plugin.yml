@@ -1,0 +1,38 @@
+name: TanoRPG
+version: ${project.version}
+main: com.github.tanokun.tanorpg.TanoRPG
+depend: [ProtocolLib]
+commands:
+  tanorpg:
+    permission: tanorpg.command.tanorpg
+    aliases: [tr]
+  giveitem:
+    permission: tanorpg.command.giveitem
+    aliases: [gi]
+  mobspawn:
+    permission: tanorpg.command.mobspawn
+    aliases: [ms]
+  givemobspawner:
+    permission: tanorpg.command.givemobspawner
+    aliases: [gms]
+  giveskitem:
+    permission: tanorpg.command.giveskitem
+    aliases: [gs]
+  opencraft:
+  openshop:
+  opensell:
+  status:
+    aliases: [st]
+  test:
+    permission: tanokun.tanorpg.command.test
+permissions:
+  tanorpg.command.tanorpg:
+    default: op
+  tanorpg.command.giveitem:
+    default: op
+  tanorpg.command.mobspawn:
+    default: op
+  tanorpg.command.test:
+    default: op
+  tanorpg.command.giveskitem:
+    default: op

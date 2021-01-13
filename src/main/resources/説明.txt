@@ -1,0 +1,16 @@
+レアリティ一覧:
+    セッティング名: COMMON      表示名: Common
+    セッティング名: UN_COMMON   表示名: unCommon
+    セッティング名: RARE        表示名: Rare
+    セッティング名: SUPER_RARE  表示名: SuperRare
+    セッティング名: LEGEND      表示名: Legend
+status一覧:
+    セッティング名: NONE  表示名: なし
+    セッティング名: ATK   表示名: 物理攻撃力
+    セッティング名: DEF   表示名: 物理耐性
+    セッティング名: MATK  表示名: 魔撃力
+    セッティング名: MDEF  表示名: 魔耐性
+    セッティング名: AGI   表示名: 俊敏
+    セッティング名: ING   表示名: 巧妙
+    セッティング名: INT   表示名: 知性
+    セッティング名: VIT   表示名: 生命力

@@ -1,0 +1,8 @@
+#職業選択した時全員がもらう装備ID
+first-job-armor: "初期装備"
+
+#職業選択で「メイジ」、「プリースト」を選択した人がもらう武器IDです
+first-job-mage-weapon: "初期魔法武器"
+
+#職業選択で「ウォーリア」を選択した人がもらう武器iD
+first-job-warrior-weapon: "初期武器"
