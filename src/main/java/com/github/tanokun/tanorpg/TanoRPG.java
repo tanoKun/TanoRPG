@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
 import com.github.tanokun.tanorpg.util.io.Coding;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -16,6 +17,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -24,6 +26,7 @@ import java.util.HashSet;
 
 public final class TanoRPG extends JavaPlugin {
     private static Plugin plugin;
+    private static Economy econ = null;
     public static final String PX = "§6[§a-｜ §b§lSystem§a ｜-§6] §7=> §b";
     public static final String PX_BUFF_UP = "§7[-｜ バフ付与 ｜-] §7=> ";
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
@@ -38,6 +41,7 @@ public final class TanoRPG extends JavaPlugin {
         }
         Bukkit.broadcastMessage(TanoRPG.PX + "完了");
         CustomEntityManager.loadCustomEntity();
+        setupEcon();
         Buff.start();
         Registration registration = new Registration(this);
         registration.registerConfigs();
@@ -53,6 +57,14 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         removeEntities();
     }
+
+    private void setupEcon() {
+        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
+        econ = rsp.getProvider();
+    }
+
+    public static Economy getEcon() {return econ;}
+
     public void onDisable () {
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
         GamePlayerManager.saveDataAll();
