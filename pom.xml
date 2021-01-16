@@ -99,5 +99,12 @@
             <scope>system</scope>
             <systemPath>${basedir}/lib/ProtocolLib.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.github.MilkBowl</groupId>
+            <artifactId>VaultAPI</artifactId>
+            <version>1.7.1-b91</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Vault.jar</systemPath>
+        </dependency>
     </dependencies>
 </project>
