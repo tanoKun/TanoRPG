@@ -9,18 +9,20 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+import static org.bukkit.Bukkit.getOfflinePlayer;
+
 public class GamePlayer {
     private GamePlayerJobType job;
 
     private String name;
     private UUID uuid;
-    private long money = 1000;
 
     private double THIS_MAX_HP = 200;
     private double MAX_HP = 200;
@@ -41,7 +43,9 @@ public class GamePlayer {
     public String getName() {return name;}
     public GamePlayerJobType getJob() {return job;}
     public UUID getUuid() { return uuid;}
-    public long getMoney() {return money;}
+    public long getMoney() {
+        return Math.round(TanoRPG.getEcon().getBalance(getOfflinePlayer(uuid)));
+    }
     public double getMAX_HP() {return MAX_HP;}
     public double getTHIS_MAX_HP() {return THIS_MAX_HP;}
     public double getHAS_HP() {return HAS_HP;}
@@ -52,7 +56,7 @@ public class GamePlayer {
     public long getMAX_EXP() {return MAX_EXP;}
     public long getHAS_EXP() {return HAS_EXP;}
 
-    public void setMoney(long money) {this.money = money;}
+    public void setMoney(long money) {TanoRPG.getEcon().depositPlayer(getOfflinePlayer(uuid), money);}
     public void setTHIS_MAX_HP(double THIS_MAX_HP) {this.THIS_MAX_HP = THIS_MAX_HP;}
     public void setMAX_HP(double MAX_HP) {this.MAX_HP = MAX_HP;}
     public void setHAS_HP(double HAS_HP) {this.HAS_HP = HAS_HP;}
@@ -180,7 +184,7 @@ public class GamePlayer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         GamePlayer that = (GamePlayer) o;
-        return money == that.money &&
+        return
                 Double.compare(that.THIS_MAX_HP, THIS_MAX_HP) == 0 &&
                 Double.compare(that.MAX_HP, MAX_HP) == 0 &&
                 Double.compare(that.HAS_HP, HAS_HP) == 0 &&
@@ -197,7 +201,7 @@ public class GamePlayer {
                 Objects.equals(skills, that.skills);
     }
     public int hashCode() {
-        return Objects.hash(job, name, uuid, money, THIS_MAX_HP, MAX_HP, HAS_HP, MAX_MP, THIS_MAX_MP, HAS_MP, LEVEL, MAX_EXP, HAS_EXP, statuses, skills);
+        return Objects.hash(job, name, uuid, THIS_MAX_HP, MAX_HP, HAS_HP, MAX_MP, THIS_MAX_MP, HAS_MP, LEVEL, MAX_EXP, HAS_EXP, statuses, skills);
     }
 
 }
