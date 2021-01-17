@@ -39,13 +39,13 @@ public class CustomEntityManager {
                     int ING = 0;
                     int INT = 0;
                     for (String key : mobEntity.getConfig().getConfigurationSection(value + ".status").getKeys(false)) {
-                        if (key.contentEquals("atk")){ATK = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("def")){DEF = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("matk")){MATK = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("mdef")){MDEF = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("agi")){AGI = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("ing")){ING = mobEntity.getConfig().getInt(value + ".status." + key);}
-                        if (key.contentEquals("int")){INT = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("atk")){ATK = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("def")){DEF = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("matk")){MATK = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("mdef")){MDEF = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("agi")){AGI = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("ing")){ING = mobEntity.getConfig().getInt(value + ".status." + key);}
+                        if (key.equalsIgnoreCase("int")){INT = mobEntity.getConfig().getInt(value + ".status." + key);}
                     }
                     String mainHand = "";
                     String offHand = "";
