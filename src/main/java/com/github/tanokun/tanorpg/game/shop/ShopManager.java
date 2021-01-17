@@ -36,7 +36,7 @@ public class ShopManager implements Listener {
                         ShopItem item = new ShopItem(customItem, config.getConfig().getLong(value + ".items." + key), id);
                         items.add(item);
                     }
-                    shops.put(id, new Shop(id, name, items));
+                    shops.put(id, new Shop(name, id, items));
                 }
             }
         }catch (Exception e){
