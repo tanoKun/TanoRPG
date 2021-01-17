@@ -5,6 +5,7 @@ import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemType;
 import com.github.tanokun.tanorpg.game.player.status.Status;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -17,6 +18,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
+import static org.bukkit.Bukkit.getTicksPerMonsterSpawns;
 
 public class GamePlayer {
     private GamePlayerJobType job;
@@ -56,7 +58,15 @@ public class GamePlayer {
     public long getMAX_EXP() {return MAX_EXP;}
     public long getHAS_EXP() {return HAS_EXP;}
 
-    public void setMoney(long money) {TanoRPG.getEcon().depositPlayer(getOfflinePlayer(uuid), money);}
+    public void setMoney(long money) {
+        TanoRPG.getEcon().depositPlayer(Bukkit.getPlayer(uuid), getMoney() - money);
+    }
+    public void removeMoney(long money) {
+        TanoRPG.getEcon().withdrawPlayer(Bukkit.getPlayer(uuid), money);
+    }
+    public void addMoney(long money) {
+        TanoRPG.getEcon().depositPlayer(Bukkit.getPlayer(uuid), money);
+    }
     public void setTHIS_MAX_HP(double THIS_MAX_HP) {this.THIS_MAX_HP = THIS_MAX_HP;}
     public void setMAX_HP(double MAX_HP) {this.MAX_HP = MAX_HP;}
     public void setHAS_HP(double HAS_HP) {this.HAS_HP = HAS_HP;}
