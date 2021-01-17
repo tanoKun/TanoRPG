@@ -80,9 +80,7 @@ public class ShopManager implements Listener {
                 if (GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).getMoney() >= shop.getItem(uuid).getPrice()){
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                             "execute " + e.getWhoClicked().getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
-                    GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).setMoney(
-                            GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).getMoney() -
-                                    shop.getItem(uuid).getPrice());
+                    GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).removeMoney(shop.getItem(uuid).getPrice());
                     e.getWhoClicked().sendMessage(TanoRPG.PX + "購入しました！");
                     e.getWhoClicked().getInventory().addItem(shop.getItem(uuid).getItem().getItem());
                     e.getWhoClicked().getOpenInventory().setItem(0, MenuManager.createItem(Material.EMERALD,

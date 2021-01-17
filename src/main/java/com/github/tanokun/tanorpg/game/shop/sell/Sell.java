@@ -85,7 +85,7 @@ public class Sell implements Listener {
             long price = check(e.getClickedInventory().getContents());
             e.getWhoClicked().setMetadata("sell", new FixedMetadataValue(TanoRPG.getPlugin(), true));
             e.getWhoClicked().closeInventory();
-            player.setMoney(player.getMoney() + price);
+            player.addMoney(price);
             e.getWhoClicked().sendMessage(TanoRPG.PX + "売却しました！ §d(合計: " + price + ")");
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                     "execute " + e.getWhoClicked().getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");

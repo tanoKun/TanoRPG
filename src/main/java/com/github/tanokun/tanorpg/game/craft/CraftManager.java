@@ -123,9 +123,7 @@ public class CraftManager implements Listener {
                             item.setAmount(craft.getItem(uuid).getBeforeItemsCount().get(i - 1));
                             e.getWhoClicked().getInventory().removeItem(item);
                         }
-                        GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).setMoney(
-                                GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).getMoney() -
-                                        craft.getItem(uuid).getPrice());
+                        GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).removeMoney(craft.getItem(uuid).getPrice());
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound block.anvil.destroy player @s ~ ~ ~ 10 1");
                         try {Thread.sleep(750);} catch (InterruptedException e) {e.printStackTrace();}
