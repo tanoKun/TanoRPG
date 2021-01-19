@@ -52,7 +52,7 @@ public class CraftManager implements Listener {
         }
         return message;
     }
-    public static void deleteShops(){
+    public static void deleteCrafts(){
         crafts = new HashMap<>();
     }
     public static Craft getCraft(String id) {return crafts.get(id);}
