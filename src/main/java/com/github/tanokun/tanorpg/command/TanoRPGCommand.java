@@ -5,6 +5,7 @@ import com.github.tanokun.tanorpg.command.register.Command;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import org.bukkit.command.CommandSender;
 
 public class TanoRPGCommand extends Command {
@@ -27,6 +28,10 @@ public class TanoRPGCommand extends Command {
             sender.sendMessage(TanoRPG.PX + "reloading shop configs....");
             ShopManager.deleteShops();
             sender.sendMessage(TanoRPG.PX + ShopManager.loadShops());
+        } else if (args[0].equals("rec")){
+            sender.sendMessage(TanoRPG.PX + "reloading craft configs....");
+            CraftManager.deleteCrafts();
+            sender.sendMessage(TanoRPG.PX + CraftManager.loadCrafts());
         }
         else{error(sender); return true;}
 
@@ -37,6 +42,7 @@ public class TanoRPGCommand extends Command {
         sender.sendMessage("§b/tanorpg rei  §fアイテムコンフィグをreloadします");
         sender.sendMessage("§b/tanorpg rem  §fエンティティコンフィグをreloadします");
         sender.sendMessage("§b/tanorpg res  §fショップコンフィグをreloadします");
+        sender.sendMessage("§b/tanorpg rec  §fクラフトコンフィグをreloadします");
         sender.sendMessage("§e------------------------------");
     }
 }

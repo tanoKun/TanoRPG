@@ -52,7 +52,7 @@ public class CraftManager implements Listener {
         }
         return message;
     }
-    public static void deleteShops(){
+    public static void deleteCrafts(){
         crafts = new HashMap<>();
     }
     public static Craft getCraft(String id) {return crafts.get(id);}
@@ -101,7 +101,7 @@ public class CraftManager implements Listener {
                     }
                 }
                 for (CustomItem item2 : craft.getItem(uuid).getBeforeItems()) {
-                    if (CustomItemManager.getAmount((Player) e.getWhoClicked(), item2.getItem()) < amount.get(item2.getId())) {
+                    if (!(CustomItemManager.getAmount((Player) e.getWhoClicked(), item2.getItem()) > amount.get(item2.getId()))) {
                         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                                 "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound block.note.bass player @s ~ ~ ~ 10 1");
                         e.getWhoClicked().sendMessage(TanoRPG.PX + "§c素材が足りません");
