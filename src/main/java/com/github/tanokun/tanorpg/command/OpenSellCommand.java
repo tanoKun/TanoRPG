@@ -12,7 +12,7 @@ public class OpenSellCommand extends Command {
 
     public boolean execute(CommandSender sender, String[] args) {
         if (args.length >= 1) {
-            if (!args[1].equals(TanoRPG.OPEN_KYE)) return true;
+            if (!args[0].equals(TanoRPG.OPEN_KYE)) return true;
             Sell.openSell((Player) sender);
         }
     return true;
