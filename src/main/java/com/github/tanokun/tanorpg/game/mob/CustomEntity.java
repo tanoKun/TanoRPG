@@ -89,6 +89,7 @@ public class CustomEntity {
         if (!(boots.equals(""))){entity.getEquipment().setBoots(CustomItemManager.getCustomItem(boots).getItem());}
         entity.setMaxHealth(HP);
         entity.setHealth(HP);
+        CustomEntityManager.addNewEntity(new NewEntity(entity, this));
         return entity;
     }
     public void giveSpawnerEntity(Player player){

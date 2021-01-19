@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 
@@ -15,10 +16,10 @@ import java.util.HashMap;
 
 public class CustomEntityManager {
     private static HashMap<String, CustomEntity> customEntities = new HashMap<>();
-    private static HashMap<String, CustomEntity> customBosses = new HashMap<>();
+
+    private static HashMap<Creature, NewEntity> newEntities = new HashMap<>();
 
     private static Config mobEntity;
-    private static Config mobBoss;
     public static String loadCustomEntity(){
         String message = ChatColor.GREEN + "All entity config loaded without errors.";
         try {
@@ -99,10 +100,6 @@ public class CustomEntityManager {
         customEntities = null;
         customEntities = new HashMap<>();
     }
-    public static void deleteBosses(){
-        customBosses = null;
-        customBosses = new HashMap<>();
-    }
 
     public static CustomEntity getEntity(String name) {
         return customEntities.get(name);
@@ -113,9 +110,13 @@ public class CustomEntityManager {
     }
     public static boolean isExists(String name){
         return (customEntities.get(name) != null);
-    }
+        }
     public static boolean isExists(Entity entity){
         String[] name = entity.getName().split(" ");
         return (customEntities.get(name[0]) != null);
     }
+    public static void addNewEntity(NewEntity entity){newEntities.put(entity.getCreature(), entity);}
+    public static NewEntity getNewEntity(Creature creature){return newEntities.get(creature);}
+    public static void removeNewEntity(Creature creature){newEntities.remove(creature);}
+
 }

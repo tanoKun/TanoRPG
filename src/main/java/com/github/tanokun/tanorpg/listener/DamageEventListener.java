@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemType;
 import com.github.tanokun.tanorpg.game.mob.CustomEntity;
 import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.mob.NewEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
@@ -13,6 +14,7 @@ import com.github.tanokun.tanorpg.util.task.MagicTask;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -42,10 +44,11 @@ public class DamageEventListener implements Listener {
 
     private void player(EntityDamageByEntityEvent e) {
         if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {e.setCancelled(true); return;}
-        String[] name = e.getEntity().getName().split(" ");
-        if (!CustomEntityManager.isExists(name[0])) return;
+        if (CustomEntityManager.getNewEntity((Creature) e.getEntity()) == null) return;
+        e.setCancelled(true);
         GamePlayer attacker = GamePlayerManager.getPlayer(e.getDamager().getUniqueId());
-        CustomEntity victim = CustomEntityManager.getEntity(name[0]);
+        NewEntity victim = CustomEntityManager.getNewEntity((Creature) e.getEntity());
+        CustomEntity customEntity = victim.getCustomEntity();
         if (attacker.getPlayer().hasMetadata("cooltime")) {e.setCancelled(true);return;}
         attacker.getPlayer().setNoDamageTicks(0);
         if (!attacker.isProper(attacker.getPlayer().getEquipment().getItemInMainHand())) {attacker.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です"); e.setCancelled(true);return;}
@@ -75,12 +78,12 @@ public class DamageEventListener implements Listener {
             return;
         }
         int at_lvl = attacker.getLEVEL();
-        int vi_lvl = victim.getLEVEL();
+        int vi_lvl = customEntity.getLEVEL();
         double atk = DamageManager.getDamage(attacker.getStatus(StatusType.ATK).getLevel(),
                 attacker.getStatus(StatusType.ING).getLevel(),
                 attacker.getStatus(StatusType.AGI).getLevel());
-        long damage = DamageManager.getCompDamage(atk, victim.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
-        DamageManager.createMake(damage, attacker.getPlayer(), e.getEntity());
+        long damage = DamageManager.getCompDamage(atk, customEntity.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
+        DamageManager.createMake(damage, attacker.getPlayer(), victim.getCreature());
         attacker.getPlayer().setMetadata("cooltime", new FixedMetadataValue(TanoRPG.getPlugin(), true));
         String id = CustomItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
         final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
@@ -97,15 +100,15 @@ public class DamageEventListener implements Listener {
         }.runTaskTimer(TanoRPG.getPlugin(), 0, 1L);
     }
     private void entity(EntityDamageByEntityEvent e) {
-        String[] name = e.getDamager().getName().split(" ");
-        if (!CustomEntityManager.isExists(name[0])) return;
+        if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
         e.setDamage(0);
-        CustomEntity attacker = CustomEntityManager.getEntity(name[0]);
+        NewEntity attacker = CustomEntityManager.getNewEntity((Creature) e.getDamager());
+        CustomEntity customEntity = attacker.getCustomEntity();
         GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
         ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
-        int at_lvl = attacker.getLEVEL();
+        int at_lvl = customEntity.getLEVEL();
         int vi_lvl = victim.getLEVEL();
-        double atk = DamageManager.getDamage(attacker.getATK(), attacker.getINT(), attacker.getAGI());
+        double atk = DamageManager.getDamage(customEntity.getATK(), customEntity.getINT(), customEntity.getAGI());
         long damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
         victim.setHAS_HP(victim.getHAS_HP() - damage);
         victim.setHAS_HP(new BigDecimal("" + victim.getHAS_HP()).setScale(2,BigDecimal.ROUND_DOWN).doubleValue());

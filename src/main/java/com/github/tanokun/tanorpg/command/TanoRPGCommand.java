@@ -22,7 +22,6 @@ public class TanoRPGCommand extends Command {
         else if (args[0].equals("rem")) {
             sender.sendMessage(TanoRPG.PX + "reloading entity configs....");
             CustomEntityManager.deleteEntities();
-            CustomEntityManager.deleteBosses();
             sender.sendMessage(TanoRPG.PX + CustomEntityManager.loadCustomEntity());
         }else if (args[0].equals("res")){
             sender.sendMessage(TanoRPG.PX + "reloading shop configs....");
