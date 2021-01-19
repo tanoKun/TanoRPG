@@ -229,9 +229,9 @@ public class CustomItemManager {
         for (ItemStack is : player.getInventory().getContents()) {
             if (is == null || is.getType().equals(Material.AIR)) continue;
             String is_name = (is.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
-            String item_name = (is.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
+            String item_name = (item.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
             List<String> is_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
-            List<String> item_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
+            List<String> item_lore = (item.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
             if (is_name.equals(item_name) && is_lore.equals(item_lore) && is.getType().equals(item.getType())){
                 i = i + is.getAmount();
             }
