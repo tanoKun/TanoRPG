@@ -3,6 +3,7 @@ package com.github.tanokun.tanorpg.game.mob;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.CustomItem;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.mob.boss.NewBossEntity;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -18,6 +19,7 @@ public class CustomEntityManager {
     private static HashMap<String, CustomEntity> customEntities = new HashMap<>();
 
     private static HashMap<Creature, NewEntity> newEntities = new HashMap<>();
+    private static HashMap<Creature, NewBossEntity> newBossEntities  = new HashMap<>();
 
     private static Config mobEntity;
     public static String loadCustomEntity(){
@@ -115,8 +117,17 @@ public class CustomEntityManager {
         String[] name = entity.getName().split(" ");
         return (customEntities.get(name[0]) != null);
     }
-    public static void addNewEntity(NewEntity entity){newEntities.put(entity.getCreature(), entity);}
+    public static void addNewEntity(NewEntity entity){
+        newEntities.put(entity.getCreature(), entity);
+    }
+    public static void addNewEntity(NewBossEntity entity){
+        newEntities.put(entity.getCreature(), entity);
+        newBossEntities.put(entity.getCreature(), entity);
+    }
     public static NewEntity getNewEntity(Creature creature){return newEntities.get(creature);}
-    public static void removeNewEntity(Creature creature){newEntities.remove(creature);}
+    public static void removeNewEntity(Creature creature){
+        newEntities.remove(creature);
+        newBossEntities.remove(creature);
+    }
 
 }
