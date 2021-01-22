@@ -30,38 +30,35 @@ public class DamageManager {
     }
 
     public static void createMake(long damage, Entity attacker, Entity target){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                ((Creature)target).setTarget((LivingEntity) attacker);
-                String[] name = target.getName().split(" ");
-                if (!CustomEntityManager.isExists(name[0])) return;
-                ((Creature) target).damage(damage);
-                CustomEntity customEntity = CustomEntityManager.getEntity(target);
-                GamePlayer gamePlayer = GamePlayerManager.getPlayer(attacker.getUniqueId());
-                try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
-                boolean NULL = false;
-                String key = null;
-                try {
-                    key = (String) target.getMetadata("custom_entity").get(0).value();
-                }catch (IndexOutOfBoundsException e){
-                    NULL = true;
+        ((Creature)target).setTarget((LivingEntity) attacker);
+        String[] name = target.getName().split(" ");
+        if (CustomEntityManager.getNewEntity((Creature) target) == null) return;
+        ((Creature) target).damage(damage);
+        CustomEntity customEntity;
+        try {
+            customEntity = CustomEntityManager.getNewEntity((Creature) target).getCustomEntity();
+        }catch (NullPointerException e){return;}
+        GamePlayer gamePlayer = GamePlayerManager.getPlayer(attacker.getUniqueId());
+        boolean NULL = false;
+        String key = null;
+        try {
+            key = (String) target.getMetadata("custom_entity").get(0).value();
+        }catch (IndexOutOfBoundsException e){
+            NULL = true;
+        }
+        if (((Creature) target).getHealth() <= 0) {
+            customEntity.getDropItems().giveDropItems((Player) attacker);
+            gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + CustomEntityManager.getEntity(name[0]).getEXP());
+            if (NULL == false) {
+                Integer count;
+                if (key != null) {
+                    count = EntitySpawnEventListener.counts.get(key);
+                    if (count == null) count = 1;
+                    count -= 1;
+                    EntitySpawnEventListener.counts.put(key, count);
                 }
-                if (((Creature) target).getHealth() <= 0) {
-                    customEntity.getDropItems().giveDropItems((Player) attacker);
-                    gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + CustomEntityManager.getEntity(name[0]).getEXP());
-                    if (NULL == false) {
-                        Integer count;
-                        if (key != null) {
-                            count = EntitySpawnEventListener.counts.get(key);
-                            if (count == null) count = 1;
-                            count -= 1;
-                            EntitySpawnEventListener.counts.put(key, count);
-                        }
-                    }
-                }
-                gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
             }
-        }.runTaskAsynchronously(TanoRPG.getPlugin());
+        }
+        gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
     }
 }
