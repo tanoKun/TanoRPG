@@ -15,6 +15,7 @@ import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -74,20 +75,13 @@ public final class TanoRPG extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return Register.getCommand(command.getName()).execute(sender, args);
     }
-    public static void removeEntities(){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
-                for(Entity entity : Bukkit.getWorld("world").getEntities()) {
-                    String[] name = entity.getName().split(" ");
-                    if (CustomEntityManager.isExists(name[0])) {
-                        entity.remove();
-                    }
-                }
-                EntitySpawnEventListener.counts = new HashMap<>();
+    private static void removeEntities(){
+        for(Entity entity : Bukkit.getWorld("world").getEntities()) {
+            if (entity instanceof Monster) {
+                entity.remove();
             }
-        }.runTaskAsynchronously(TanoRPG.getPlugin());
+        }
+        EntitySpawnEventListener.counts = new HashMap<>();
     }
     public static Entity[] getNearbyEntities(Location l, double radius) {
         double chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
