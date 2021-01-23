@@ -33,7 +33,6 @@ public class DamageManager {
         ((Creature)target).setTarget((LivingEntity) attacker);
         String[] name = target.getName().split(" ");
         if (CustomEntityManager.getNewEntity((Creature) target) == null) return;
-        ((Creature) target).damage(damage);
         CustomEntity customEntity;
         try {
             customEntity = CustomEntityManager.getNewEntity((Creature) target).getCustomEntity();
@@ -46,7 +45,7 @@ public class DamageManager {
         }catch (IndexOutOfBoundsException e){
             NULL = true;
         }
-        if (((Creature) target).getHealth() <= 0) {
+        if (((Creature) target).getHealth() - damage <= 0) {
             customEntity.getDropItems().giveDropItems((Player) attacker);
             gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + CustomEntityManager.getEntity(name[0]).getEXP());
             if (NULL == false) {
@@ -59,6 +58,7 @@ public class DamageManager {
                 }
             }
         }
+        ((Creature) target).damage(damage);
         gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
     }
 }
