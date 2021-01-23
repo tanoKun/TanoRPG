@@ -20,7 +20,6 @@ public class EntitySpawnEventListener implements Listener {
     public void onSpawn(SpawnerSpawnEvent e){
         Entity entity = e.getEntity();
         if (entity.getScoreboardTags().contains("entitymarker")) {
-            e.getEntity().remove();
             String name = e.getEntity().getName();
             Location en_loc = e.getEntity().getLocation();
             Location spawner_loc = e.getSpawner().getLocation();
@@ -34,6 +33,7 @@ public class EntitySpawnEventListener implements Listener {
             counts.put(Key + key2, count);
             Creature creature = CustomEntityManager.getEntity(name).spawnEntity(en_loc);
             creature.setMetadata("custom_entity", new FixedMetadataValue(TanoRPG.getPlugin(), Key + key2));
+            e.getEntity().remove();
         }
     }
 }
