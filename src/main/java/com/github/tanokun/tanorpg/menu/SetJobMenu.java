@@ -8,6 +8,7 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
@@ -42,7 +43,7 @@ public class SetJobMenu extends Menu {
                 p.kickPlayer("ログアウト");
                 return;
             }
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound minecraft:entity.experience_orb.pickup player @s ~ ~ ~ 1 1");
+            TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§c§lウォーリア")){
                 GamePlayerManager.createData(p.getUniqueId(), GamePlayerJobType.WARRIOR);
                 GamePlayerManager.saveData(p.getUniqueId());
