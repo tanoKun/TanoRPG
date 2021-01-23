@@ -72,7 +72,9 @@ public class EditComboEventListener implements Listener {
         } else {
             return new ArrayList<>();
         }
-        return (List<String>) m.value();
+        try{
+            return (List<String>) m.value();
+        }catch (Exception e){return new ArrayList<>();}
     }
     private void addCombo(Player player, String combo){
         Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
