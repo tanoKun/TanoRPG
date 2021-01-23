@@ -93,8 +93,17 @@ public class CustomEntity {
         return entity;
     }
     public void giveSpawnerEntity(Player player){
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),"give " + player.getName() + " minecraft:mob_spawner 1 0 {\"display\":{\"Name\":\"" + getName() + "\"},\"BlockEntityTag\":{\"id\":\"MobSpawner\",\"SpawnCount\":1s,\"SpawnRange\":2s,\"MaxNearbyEntities\":16s,\"Delay\":-1s,\"MinSpawnDelay\":150s,\"MaxSpawnDelay\":300s,\"RequiredPlayerRange\":15s,\"SpawnPotentials\":[{\"Weight\":1,\"Entity\":{\"CustomName\":\"" + name + "\",\"CustomNameVisible\":1,\"Tags\":[\"entitymarker\"],\"id\":\"villager\"}}]}}");
-    }
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
+                "give " + player.getName() + " spawner{" +
+                        "display:{" +
+                        "Name:'{" +
+                        "\"text\":\"" + name +"\"" +
+                        "}'" +
+                        "},BlockEntityTag:{" +
+                        "SpawnCount:1,SpawnRange:2,Delay:-20,MinSpawnDelay:150,MaxSpawnDelay:300,MaxNearbyEntities:10,RequiredPlayerRange:15,SpawnData:" +
+                        "{id:\"minecraft:villager\",Tags:[\"entitymarker\"],CustomName:'{" +
+                        "\"text\":\"" + name +"\"}'},SpawnPotentials:[{Weight:1,Entity:{" +
+                        "id:\"minecraft:villager\",Tags:[\"entitymarker\"],CustomName:'{\"text\":\"" + name + "\"}'}}]}} 1"); }
 
     public static boolean chance(double percent) {
         double count = percent / 100;
