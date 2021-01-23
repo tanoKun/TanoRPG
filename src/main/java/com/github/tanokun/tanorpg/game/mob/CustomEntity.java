@@ -103,4 +103,22 @@ public class CustomEntity {
         }
         return false;
     }
+    public String getMainHand() {
+        return mainHand;
+    }
+    public String getOffHand() {
+        return offHand;
+    }
+    public String getHelmet() {
+        return helmet;
+    }
+    public String getChestPlate() {
+        return chestPlate;
+    }
+    public String getLeggings() {
+        return leggings;
+    }
+    public String getBoots() {
+        return boots;
+    }
 }

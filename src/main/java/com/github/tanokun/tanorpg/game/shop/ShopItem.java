@@ -26,8 +26,7 @@ public class ShopItem {
         this.uuid = UUID.randomUUID().toString();
         this.owner = owner;
         this.inv = Bukkit.createInventory(null, 27, "§6§l購入確認 " + "§7(ID: " + owner +")");
-        ItemStack BSG = MenuManager.setItemColor(MenuManager.createItem(Material.STAINED_GLASS_PANE, "    ", 1, false),
-                (short) 4);
+        ItemStack BSG = MenuManager.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false);
         for (int i = 1; i < 27; i++) {
             inv.setItem(i - 1, BSG);
         }
@@ -39,8 +38,8 @@ public class ShopItem {
         meta.setLore(lore);
         show.setItemMeta(meta);
         inv.setItem(15, show);
-        inv.setItem(18, MenuManager.setItemColor(MenuManager.createItem(Material.WOOL, "§c戻る", 1, true), ShortColor.RED.getColor()));
-        inv.setItem(26, MenuManager.setItemColor(MenuManager.createItem(Material.WOOL, "§a購入する", 1, true), ShortColor.GREEN.getColor()));
+        inv.setItem(18, MenuManager.createItem(Material.RED_WOOL, "§c戻る", 1, true));
+        inv.setItem(26, MenuManager.createItem(Material.GREEN_WOOL, "§a購入する", 1, true));
     }
 
     public CustomItem getItem() {return item;}

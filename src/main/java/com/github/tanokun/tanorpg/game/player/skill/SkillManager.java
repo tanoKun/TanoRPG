@@ -114,7 +114,7 @@ public class SkillManager {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayName("§bスキル習得書: §6" + name);
-        meta.addEnchant(new Glowing(80), 1, true);
+        meta.addEnchant(new Glowing(), 1, true);
         meta.setLore(lore);
         item.setItemMeta(meta);
         return item;

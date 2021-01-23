@@ -31,7 +31,7 @@ public class PlayerSkJumpAttack extends Skill {
         super("薙ぎ払い", 7, 40, 45,
                 new ArrayList<String>(Arrays.asList("LC", "RC", "LC")),
                 new ArrayList<String>(Arrays.asList("§f剣を振って敵を払います (半径10m)")),
-                new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.WOOD_SWORD);
+                new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.WOODEN_SWORD);
     }
 
     @Override

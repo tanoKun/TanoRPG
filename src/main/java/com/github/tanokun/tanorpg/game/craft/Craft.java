@@ -22,8 +22,7 @@ public class Craft {
         this.id = id;
         this.items = items;
         Inventory inventory = Bukkit.createInventory(null, 45, "§b§lCraft: " + name + " §7(ID: " + id + ")");
-        ItemStack BSG = MenuManager.setItemColor(MenuManager.createItem(Material.STAINED_GLASS_PANE, "    ", 1, false),
-                ShortColor.LIGHT_BLUE.getColor());
+        ItemStack BSG = MenuManager.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "    ", 1, false);
         for (int i = 1; i <= 18; i++){
             if (i <= 9){
                 inventory.setItem(i - 1, BSG);
