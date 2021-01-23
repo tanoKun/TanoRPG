@@ -24,6 +24,7 @@ public class CustomItemManager {
     private static Folder itemMagicWeapon;
     private static Folder itemEquipment;
     private static HashMap<String, CustomItem> customItems = new HashMap<>();
+    private static List<String> customItemIDs = new ArrayList<>();
     public static final String LORE = "§e〇=-=-=-=-=§b説明§e=-=-=-=-=-〇";
     public static final String FIRST_STATUS = "§e〇=-=-=-§bステータス§e-=-=-=-〇";
     public static final String FINAL_STATUS = "§e〇=-=-=-=-=-=-=-=-=-=-=-=-〇";
@@ -88,6 +89,7 @@ public class CustomItemManager {
                 customItem.setRarity(CustomItemRarityType.valueOf((String) config.getConfig().get(value + ".rarity")));
                 customItem.setPrice(price);
                 customItems.put(value, customItem);
+                customItemIDs.add(value);
             }
         }
     }
@@ -123,6 +125,7 @@ public class CustomItemManager {
                 customItem.setCooltime(ct);
                 customItem.setLvl(config.getConfig().getInt(value + ".lvl"));
                 customItems.put(value, customItem);
+                customItemIDs.add(value);
             }
         }
     }
@@ -157,6 +160,7 @@ public class CustomItemManager {
                 customItem.setCooltime(ct);
                 customItem.setLvl(config.getConfig().getInt(value + ".lvl"));
                 customItems.put(value, customItem);
+                customItemIDs.add(value);
             }
         }
     }
@@ -198,6 +202,7 @@ public class CustomItemManager {
                 customItem.setLvl(config.getConfig().getInt(value + ".lvl"));
                 if (color != null) customItem.setColor(color);
                 customItems.put(value, customItem);
+                customItemIDs.add(value);
             }
         }
     }
@@ -237,5 +242,8 @@ public class CustomItemManager {
             }
         }
         return i;
+    }
+    public static List<String> getItemIDs(){
+        return customItemIDs;
     }
 }
