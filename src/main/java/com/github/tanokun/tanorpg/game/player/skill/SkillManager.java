@@ -30,11 +30,12 @@ public class SkillManager {
     private static HashMap<String, Skill> priestSkills = new HashMap<>();
 
     private static HashMap<String, Skill> skillNames = new HashMap<>();
+    private static ArrayList<String> skillIDs = new ArrayList<>();
 
-    public static void addAllSkill(Skill skill){allSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);}
-    public static void addMageSkill(Skill skill){mageSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);}
-    public static void addWarriorSkill(Skill skill){warriorSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);}
-    public static void addPriestSkill(Skill skill){priestSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);}
+    public static void addAllSkill(Skill skill){allSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill); skillIDs.add(skill.getName());}
+    public static void addMageSkill(Skill skill){mageSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);skillIDs.add(skill.getName());}
+    public static void addWarriorSkill(Skill skill){warriorSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);skillIDs.add(skill.getName());}
+    public static void addPriestSkill(Skill skill){priestSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);skillIDs.add(skill.getName());}
 
     public static boolean runPlayerSkill(GamePlayer player, ArrayList<String> combos){
         GamePlayerJobType job = player.getJob();
@@ -124,6 +125,7 @@ public class SkillManager {
     }
 
     public static Skill getSkillNames(String name) {return skillNames.get(name);}
+    public static ArrayList<String> getSkillNames() {return skillIDs;}
 
     public static HashMap<String, Skill> getAllSkills() {return allSkills;}
     public static HashMap<String, Skill> getMageSkills() {return mageSkills;}

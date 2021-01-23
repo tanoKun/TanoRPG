@@ -6,6 +6,9 @@ import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class MobSpawnCommand extends Command {
     public MobSpawnCommand() {super("mobspawn");}
 
@@ -32,5 +35,16 @@ public class MobSpawnCommand extends Command {
             sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§aを召喚しました");
         }
         return true;
+    }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (args.length == 0){
+            return CustomEntityManager.getEntityIDs();
+        }
+        List<String> texts = new ArrayList<>();
+        for (String id : CustomEntityManager.getEntityIDs()){
+            if (id.contains(args[0])) texts.add(id);
+        }
+        return texts;
     }
 }

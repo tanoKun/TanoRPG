@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class OpenStatusCommand extends Command {
 
     public OpenStatusCommand(){super("status");}
@@ -16,5 +18,9 @@ public class OpenStatusCommand extends Command {
                 "execute " + sender.getName() + " ~ ~ ~ playsound minecraft:entity.shulker.open player @s ~ ~ ~ 10 1");
         new StatusMainMenu((Player) sender).openInv((Player) sender);
         return true;
+    }
+   @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return null;
     }
 }

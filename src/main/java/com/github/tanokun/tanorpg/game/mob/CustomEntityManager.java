@@ -13,10 +13,12 @@ import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 public class CustomEntityManager {
     private static HashMap<String, CustomEntity> customEntities = new HashMap<>();
+    private static List<String> customEntityIDs = new ArrayList<>();
 
     private static HashMap<Creature, NewEntity> newEntities = new HashMap<>();
     private static HashMap<Creature, NewBossEntity> newBossEntities  = new HashMap<>();
@@ -89,7 +91,7 @@ public class CustomEntityManager {
                     customEntity.setArmors(mainHand, offHand, helmet, chestPlate, leggings, boots);
                     customEntity.setStatuses(ATK, DEF, MATK, MDEF, AGI, ING, INT);
                     customEntities.put(value, customEntity);
-
+                    customEntityIDs.add(value);
                 }
             });
         } catch (Exception e){
@@ -130,4 +132,5 @@ public class CustomEntityManager {
         newBossEntities.remove(creature);
     }
 
+    public static List<String> getEntityIDs() {return customEntityIDs;}
 }

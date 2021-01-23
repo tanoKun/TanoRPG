@@ -2,9 +2,13 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
+import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GiveMobSpawnerCommand extends Command {
     public GiveMobSpawnerCommand() {
@@ -34,5 +38,16 @@ public class GiveMobSpawnerCommand extends Command {
             sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§aのスポナーをgiveしました");
         }
         return true;
+    }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (args.length == 0){
+            return CustomEntityManager.getEntityIDs();
+        }
+        List<String> texts = new ArrayList<>();
+        for (String id : CustomEntityManager.getEntityIDs()){
+            if (id.contains(args[0])) texts.add(id);
+        }
+        return texts;
     }
 }

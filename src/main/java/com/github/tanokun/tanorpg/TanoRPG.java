@@ -24,6 +24,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
 
 public final class TanoRPG extends JavaPlugin {
     private static Plugin plugin;
@@ -97,5 +98,10 @@ public final class TanoRPG extends JavaPlugin {
         }
 
         return radiusEntities.toArray(new Entity[radiusEntities.size()]);
+    }
+
+    @Override
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return Register.getCommand(command.getName()).tabComplete(sender, args);
     }
 }

@@ -7,6 +7,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class GiveItemCommand extends Command {
     public GiveItemCommand(){super("giveitem");}
 
@@ -34,5 +38,16 @@ public class GiveItemCommand extends Command {
             sender.sendMessage(TanoRPG.PX + "§a" + sender.getName() + "§aに" + "§bID「" + args[0] + "§b」" + "§aを渡しました");
         }
         return true;
+    }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (args.length == 0){
+            return CustomItemManager.getItemIDs();
+        }
+        List<String> texts = new ArrayList<>();
+        for (String id : CustomItemManager.getItemIDs()){
+            if (id.contains(args[0])) texts.add(id);
+        }
+        return texts;
     }
 }
