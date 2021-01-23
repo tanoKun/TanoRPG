@@ -6,6 +6,8 @@ import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.List;
+
 public class OpenSellCommand extends Command {
 
     public OpenSellCommand(){super("opensell");}
@@ -16,5 +18,9 @@ public class OpenSellCommand extends Command {
             Sell.openSell((Player) sender);
         }
     return true;
+    }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return null;
     }
 }

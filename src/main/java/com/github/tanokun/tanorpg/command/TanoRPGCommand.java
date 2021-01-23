@@ -8,6 +8,8 @@ import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import org.bukkit.command.CommandSender;
 
+import java.util.List;
+
 public class TanoRPGCommand extends Command {
     public TanoRPGCommand(){super("tanorpg");}
 
@@ -43,5 +45,9 @@ public class TanoRPGCommand extends Command {
         sender.sendMessage("§b/tanorpg res  §fショップコンフィグをreloadします");
         sender.sendMessage("§b/tanorpg rec  §fクラフトコンフィグをreloadします");
         sender.sendMessage("§e------------------------------");
+    }
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return null;
     }
 }
