@@ -13,6 +13,7 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -36,7 +37,7 @@ public class PlayerSkJumpAttack extends Skill {
 
     @Override
     public void execute(Entity entity) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + entity.getName() + " ~ ~ ~ /playsound entity.wither.shoot player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound((Player) entity, Sound.ENTITY_WITHER_SHOOT, 10, 1);
         Location location = entity.getLocation();
         location.add(0, 0.5, 0);
         int i = 0;

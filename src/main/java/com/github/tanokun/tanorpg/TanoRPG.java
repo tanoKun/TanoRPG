@@ -12,6 +12,7 @@ import com.github.tanokun.tanorpg.util.io.Coding;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
@@ -103,5 +104,8 @@ public final class TanoRPG extends JavaPlugin {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return Register.getCommand(command.getName()).tabComplete(sender, args);
+    }
+    public static void playSound(Player player, Sound sound, int volume, int v2){
+        player.playSound(player.getLocation(), sound, volume, v2);
     }
 }

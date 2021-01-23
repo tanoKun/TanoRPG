@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.menu.MenuManager;
 import com.github.tanokun.tanorpg.util.ShortColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -87,8 +88,7 @@ public class Sell implements Listener {
             e.getWhoClicked().closeInventory();
             player.addMoney(price);
             e.getWhoClicked().sendMessage(TanoRPG.PX + "売却しました！ §d(合計: " + price + ")");
-            Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                    "execute " + e.getWhoClicked().getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
+            TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
             return;
         }
         ItemStack item = e.getWhoClicked().getOpenInventory().getItem(49);

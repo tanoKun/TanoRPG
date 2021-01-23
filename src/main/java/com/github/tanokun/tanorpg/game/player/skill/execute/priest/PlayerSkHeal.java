@@ -9,7 +9,9 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -29,8 +31,7 @@ public class PlayerSkHeal extends Skill {
 
     @Override
     public void execute(Entity entity) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                "execute " + entity.getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound((Player) entity, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
         Location location = entity.getLocation();
         for (int i = 0; i < 60; i++) {
             double x = 1 * cos(2 * Math.PI * i * 0.02);

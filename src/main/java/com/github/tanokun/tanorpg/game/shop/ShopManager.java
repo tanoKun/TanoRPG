@@ -10,6 +10,7 @@ import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -78,8 +79,7 @@ public class ShopManager implements Listener {
                 ItemStack item = e.getWhoClicked().getOpenInventory().getItem(15);
                 String uuid = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).replace("§7", "");
                 if (GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).getMoney() >= shop.getItem(uuid).getPrice()){
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            "execute " + e.getWhoClicked().getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
+                    TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
                     GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).removeMoney(shop.getItem(uuid).getPrice());
                     e.getWhoClicked().sendMessage(TanoRPG.PX + "購入しました！");
                     e.getWhoClicked().getInventory().addItem(shop.getItem(uuid).getItem().getItem());
@@ -89,8 +89,7 @@ public class ShopManager implements Listener {
                 } else {
                     e.getWhoClicked().closeInventory();
                     e.getWhoClicked().sendMessage(TanoRPG.PX + "§cお金が足りません");
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound block.note.bass player @s ~ ~ ~ 10 1");
+                    TanoRPG.playSound((Player) e.getWhoClicked(), Sound.BLOCK_NOTE_BLOCK_BASS, 10, 1);
                 }
             }
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§c戻る")){

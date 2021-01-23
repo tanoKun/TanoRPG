@@ -9,7 +9,9 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -46,8 +48,7 @@ public class PlayerSkCircleHeal extends Skill {
                         gamePlayer.setHAS_HP(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25);
                         if (gamePlayer.getHAS_HP() > gamePlayer.getMAX_HP()) gamePlayer.setHAS_HP(gamePlayer.getMAX_HP());
                         gamePlayer.getPlayer().sendMessage(TanoRPG.PX + "回復しました！");
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "execute " + player.getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
+                        TanoRPG.playSound((Player) entity, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
                         for (int i = 0; i < 60; i++) {
                             double x = 1 * cos(2 * Math.PI * i * 0.02);
                             double z = 1 * sin(2 * Math.PI * i * 0.02);
@@ -67,8 +68,7 @@ public class PlayerSkCircleHeal extends Skill {
                 }
                 for (Entity player : TanoRPG.getNearbyEntities(location, 5)) {
                     if (GamePlayerManager.getPlayer(player.getUniqueId()) == null) continue;
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            "execute " + player.getName() + " ~ ~ ~ playsound block.lever.click player @s ~ ~ ~ 10 1");
+                    TanoRPG.playSound((Player) entity, Sound.BLOCK_LEVER_CLICK, 10, 1);
                 }
                 t++;
             }

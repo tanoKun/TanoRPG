@@ -11,7 +11,9 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -61,8 +63,7 @@ public class PlayerSkCoolTimeUpBuff extends Skill {
                     for (Entity player : TanoRPG.getNearbyEntities(teleport, 4)) {
                         if (GamePlayerManager.getPlayer(player.getUniqueId()) == null) continue;
                         Buff.addBuff(new BuffSelf(BuffType.SKILL_COOL_TIME_15, player, 30));
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "execute " + player.getName() + " ~ ~ ~ playsound entity.evocation_illager.cast_spell player @s ~ ~ ~ 10 1");
+                        TanoRPG.playSound((Player) entity, Sound.ENTITY_EVOKER_CAST_SPELL, 10, 1);
                     }
 
                 }
@@ -77,6 +78,7 @@ public class PlayerSkCoolTimeUpBuff extends Skill {
                     if (GamePlayerManager.getPlayer(player.getUniqueId()) == null) continue;
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
                             "execute " + player.getName() + " ~ ~ ~ playsound block.lever.click player @s ~ ~ ~ 10 1");
+                    TanoRPG.playSound((Player) entity, Sound.BLOCK_LEVER_CLICK, 10, 1);
                 }
                 t++;
             }

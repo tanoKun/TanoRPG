@@ -13,9 +13,11 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -93,8 +95,7 @@ public class PlayerSkExplosionAttack extends Skill {
                     targetLoc.subtract(x, 0, z);
                 }
                 targetLoc.subtract(0, 2, 0);
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                        "execute " + entity.getName() + " ~ ~ ~ playsound block.lever.click player @s ~ ~ ~ 10 1");
+                TanoRPG.playSound((Player) entity, Sound.BLOCK_LEVER_CLICK, 10, 1);
                 t[0]++;
             }
         }.runTaskTimer(TanoRPG.getPlugin(), 0, 10);

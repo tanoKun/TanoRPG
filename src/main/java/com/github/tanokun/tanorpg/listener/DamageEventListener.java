@@ -14,6 +14,7 @@ import com.github.tanokun.tanorpg.util.task.MagicTask;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftItemFrame;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -37,6 +38,19 @@ public class DamageEventListener implements Listener {
         }
         if (!(event instanceof EntityDamageByEntityEvent)) return;
         EntityDamageByEntityEvent e = (EntityDamageByEntityEvent) event;
+        if (e.getEntity() instanceof CraftItemFrame) {
+            if (e.getDamager() instanceof Player){
+                Player player = (Player) e.getDamager();
+                if (player.getGameMode().equals(GameMode.CREATIVE)) {
+                    return;
+                }
+                else {
+                    e.setCancelled(true);
+                }
+                return;
+            }
+            return;
+        }
         ((LivingEntity)e.getEntity()).setMaximumNoDamageTicks(0);
         if (e.getDamager() instanceof Player) player(e);
         else entity(e);
@@ -100,7 +114,11 @@ public class DamageEventListener implements Listener {
         }.runTaskTimer(TanoRPG.getPlugin(), 0, 1L);
     }
     private void entity(EntityDamageByEntityEvent e) {
-        if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
+        try{
+            if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
+        }catch (Exception ex) {
+            return;
+        }
         e.setDamage(0);
         NewEntity attacker = CustomEntityManager.getNewEntity((Creature) e.getDamager());
         CustomEntity customEntity = attacker.getCustomEntity();
