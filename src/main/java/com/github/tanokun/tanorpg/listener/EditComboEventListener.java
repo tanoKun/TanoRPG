@@ -7,12 +7,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.metadata.MetadataValue;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +25,7 @@ public class EditComboEventListener implements Listener {
     @EventHandler
     public void onClick(PlayerInteractEvent e){
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK){
+            if (e.getPlayer().hasMetadata("drop")) return;
             if (e.getPlayer().isSneaking()){
                 addCombo(e.getPlayer(), "SLC");
                 return;
@@ -40,12 +44,20 @@ public class EditComboEventListener implements Listener {
     }
     @EventHandler
     public void onDrop(PlayerDropItemEvent e){
+        e.getPlayer().setMetadata("drop", new FixedMetadataValue(TanoRPG.getPlugin(), true));
         if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) e.setCancelled(true);
         if (e.getPlayer().isSneaking()){
             addCombo(e.getPlayer(), "SDR");
             return;
         }
         addCombo(e.getPlayer(), "DR");
+        new BukkitRunnable(){
+            @Override
+            public void run() {
+                try {Thread.sleep(1);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
+                e.getPlayer().removeMetadata("drop", TanoRPG.getPlugin());
+            }
+        }.runTaskAsynchronously(TanoRPG.getPlugin());
     }
     public static List<String> getCombos(Player p){
         MetadataValue m = null;
