@@ -31,4 +31,5 @@ abstract public class Boss extends CustomEntity {
         boss.start();
         return entity;
     }
+
 }
