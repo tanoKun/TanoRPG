@@ -28,7 +28,7 @@ public class NewBossEntity extends NewEntity {
         for(Entity sound : TanoRPG.getNearbyEntities(loc, 30)){
             if (!(sound instanceof Player)) continue;
             Player player = (Player) sound;
-            player.playSound(loc, Sound.ENTITY_WITHER_SPAWN, 3, 1);
+            TanoRPG.playSound(player, Sound.ENTITY_WITHER_SPAWN, 10, 1);
         }
     }
 }

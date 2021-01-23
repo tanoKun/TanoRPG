@@ -1,10 +1,13 @@
 package com.github.tanokun.tanorpg.game.player.skill.execute;
 
+import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -21,7 +24,7 @@ public class PlayerSkJump extends Skill {
 
     @Override
     public void execute(Entity entity) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + entity.getName() + " ~ ~ ~ /playsound entity.ghast.shoot player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound((Player) entity, Sound.ENTITY_GHAST_SHOOT, 10, 1);
         Vector vector = entity.getLocation().getDirection().normalize();
         vector.setY(1.5);
         entity.setVelocity(vector);

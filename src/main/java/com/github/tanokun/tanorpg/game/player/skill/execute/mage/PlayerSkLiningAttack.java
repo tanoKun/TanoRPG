@@ -16,6 +16,7 @@ import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Creature;
@@ -42,8 +43,7 @@ public class PlayerSkLiningAttack extends Skill {
 
     @Override
     public void execute(Entity entity) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                "execute " + entity.getName() + " ~ ~ ~ /playsound entity.illusion_illager.cast_spell player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound((Player) entity, Sound.ENTITY_ILLUSIONER_CAST_SPELL, 10, 1);
         Location location = entity.getLocation(); location.setPitch(0);
         location.setPitch(0);
         Vector vector = location.getDirection();
@@ -59,10 +59,8 @@ public class PlayerSkLiningAttack extends Skill {
                 if (t == 3) {
                     this.cancel();
                     lining(location);
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            "execute " + entity.getName() + " ~ ~ ~ /playsound minecraft:entity.lightning.thunder player @s ~ ~ ~ 10 1");
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                            "execute " + entity.getName() + " ~ ~ ~ /playsound entity.lightning.impact player @s ~ ~ ~ 10 0.5");
+                    TanoRPG.playSound((Player) entity, Sound.ENTITY_LIGHTNING_BOLT_THUNDER, 10, 1);
+                    TanoRPG.playSound((Player) entity, Sound.ENTITY_LIGHTNING_BOLT_IMPACT, 10, 1);
                     ParticleEffect.EXPLOSION_HUGE.display(location, 0, 0, 0, 0, 1, null, Bukkit.getOnlinePlayers());
                     GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
                     for (Entity entity2 : TanoRPG.getNearbyEntities(location, 2.5)) {

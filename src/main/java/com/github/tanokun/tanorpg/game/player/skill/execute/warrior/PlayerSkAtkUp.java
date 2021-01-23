@@ -9,7 +9,9 @@ import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -28,8 +30,7 @@ public class PlayerSkAtkUp extends Skill {
     public void execute(Entity entity) {
         Location player_loc = entity.getLocation();
         player_loc.setPitch(-45);
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                "execute " + entity.getName() + " ~ ~ ~ playsound entity.polar_bear.warning player @s ~ ~ ~ 10 0");
+        TanoRPG.playSound((Player) entity, Sound.ENTITY_POLAR_BEAR_WARNING, 10, 1);
         final int[] t = {1};
         new BukkitRunnable(){
             @Override

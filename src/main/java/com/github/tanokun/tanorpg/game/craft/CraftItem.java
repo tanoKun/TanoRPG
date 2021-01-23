@@ -1,10 +1,12 @@
 package com.github.tanokun.tanorpg.game.craft;
 
+import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.CustomItem;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import com.github.tanokun.tanorpg.util.ShortColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -69,8 +71,7 @@ public class CraftItem {
     public ArrayList<Integer> getBeforeItemsCount() {return beforeItemsCount;}
 
     public void openCheck(Player player) {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                "execute " + player.getName() + " ~ ~ ~ playsound minecraft:entity.shulker.open player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 10, 1);
         player.openInventory(inv);
     }
     public long getPrice() {return price;}

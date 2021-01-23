@@ -12,8 +12,10 @@ import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import com.github.tanokun.tanorpg.util.particle.data.color.RegularColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -65,7 +67,7 @@ public class MagicTask extends BukkitRunnable {
         gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
         String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
         final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute " + gamePlayer.getName() + " ~ ~ ~ /playsound entity.ghast.shoot player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound(gamePlayer.getPlayer(), Sound.ENTITY_GHAST_SHOOT, 2, 1);
         CustomItem item = CustomItemManager.getCustomItem(CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand()));
         if (item == null) {
             regularColor = new RegularColor(new Color(255, 255, 255));

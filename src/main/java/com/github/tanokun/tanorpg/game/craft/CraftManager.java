@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -102,8 +103,7 @@ public class CraftManager implements Listener {
                 }
                 for (CustomItem item2 : craft.getItem(uuid).getBeforeItems()) {
                     if (!(CustomItemManager.getAmount((Player) e.getWhoClicked(), item2.getItem()) >= amount.get(item2.getId()))) {
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound block.note.bass player @s ~ ~ ~ 10 1");
+                        TanoRPG.playSound((Player)e.getWhoClicked(), Sound.BLOCK_NOTE_BLOCK_BASS, 10, 1);
                         e.getWhoClicked().sendMessage(TanoRPG.PX + "§c素材が足りません");
                         e.getWhoClicked().closeInventory();
                         return;
@@ -124,8 +124,7 @@ public class CraftManager implements Listener {
                             e.getWhoClicked().getInventory().removeItem(item);
                         }
                         GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).removeMoney(craft.getItem(uuid).getPrice());
-                        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                                "execute " + e.getWhoClicked().getName() + " ~ ~ ~ /playsound block.anvil.destroy player @s ~ ~ ~ 10 1");
+                        TanoRPG.playSound((Player)e.getWhoClicked(), Sound.BLOCK_ANVIL_DESTROY, 10, 1);
                         try {Thread.sleep(750);} catch (InterruptedException e) {e.printStackTrace();}
                         e.getWhoClicked().sendMessage(TanoRPG.PX + "クラフトが完了しました");
                         e.getWhoClicked().getInventory().addItem(craft.getItem(uuid).getAfterItem().getItem());
