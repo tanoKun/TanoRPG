@@ -47,7 +47,7 @@ public class Sell implements Listener {
 
     public static void openSell(Player player){
         Inventory sell = Bukkit.createInventory(null, 54, INV_NAME);
-        ItemStack BSG = MenuManager.setItemColor(MenuManager.createItem(Material.STAINED_GLASS_PANE, "    ", 1, false), ShortColor.PURPLE.getColor());
+        ItemStack BSG = MenuManager.createItem(Material.PURPLE_STAINED_GLASS_PANE, "    ", 1, false);
         ItemStack sell_item = MenuManager.createItem(Material.EMERALD, "§d§l合計値段: 0",
                 Arrays.asList("§bクリックで売却する", "§7※ 合計値段がおかしくても売却時", "§7  に合計値は治ります"), 1, true);
         ItemStack side = MenuManager.createItem(Material.PURPLE_GLAZED_TERRACOTTA, "  ", 1, false);
@@ -77,7 +77,7 @@ public class Sell implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e){
         if (e.getClickedInventory() == null) return;
-        if (!e.getClickedInventory().getTitle().equals(INV_NAME)) return;
+        if (!e.getView().getTitle().equals(INV_NAME)) return;
         if (nulls.contains(e.getSlot())){
             e.setCancelled(true);
             if (!e.getCurrentItem().getItemMeta().getDisplayName().contains("§d§l合計値段: ")) return;

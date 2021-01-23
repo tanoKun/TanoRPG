@@ -36,7 +36,7 @@ public class MenuManager implements Listener {
 
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
-        if (glowing == true) {im.addEnchant(new Glowing(80), 1, true);}
+        if (glowing == true) {im.addEnchant(new Glowing(), 1, true);}
         is.setItemMeta(im);
         return is;
     }
@@ -47,7 +47,7 @@ public class MenuManager implements Listener {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
         im.setLore(lore);
-        if (glowing == true) {im.addEnchant(new Glowing(80), 1, true);}
+        if (glowing == true) {im.addEnchant(new Glowing(), 1, true);}
         is.setItemMeta(im);
         return is;
     }
@@ -55,7 +55,7 @@ public class MenuManager implements Listener {
         ItemStack is = new ItemStack(material, count, color.getWoolData());
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
-        if (glowing == true) {im.addEnchant(new Glowing(80), 1, true);}
+        if (glowing == true) {im.addEnchant(new Glowing(), 1, true);}
         is.setItemMeta(im);
         return is;
     }
@@ -65,7 +65,7 @@ public class MenuManager implements Listener {
         ItemMeta im = is.getItemMeta();
         im.setDisplayName(name);
         im.setLore(lore);
-        if (glowing == true) {im.addEnchant(new Glowing(80), 1, true);}
+        if (glowing == true) {im.addEnchant(new Glowing(), 1, true);}
         is.setItemMeta(im);
         return is;
     }

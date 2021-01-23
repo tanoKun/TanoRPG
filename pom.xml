@@ -88,14 +88,14 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.12.2-R0.1-SNAPSHOT</version>
+            <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/spigot-1.12.2.jar</systemPath>
+            <systemPath>${basedir}/lib/spigot-1.15.2.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>com.comphenix.protocol</groupId>
             <artifactId>ProtocolLib</artifactId>
-            <version>4.5.0</version>
+            <version>4.5.1</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/ProtocolLib.jar</systemPath>
         </dependency>

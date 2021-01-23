@@ -86,7 +86,7 @@ public class Registration {
             e.printStackTrace();
         }
         try {
-            Glowing glow = new Glowing(80);
+            Glowing glow = new Glowing();
             Enchantment.registerEnchantment(glow);
         }
         catch (IllegalArgumentException e){

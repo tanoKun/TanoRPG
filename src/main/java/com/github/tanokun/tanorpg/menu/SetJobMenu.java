@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -18,7 +19,7 @@ public class SetJobMenu extends Menu {
     public SetJobMenu(){
         super("§c§l職業選択 §7説明をよく読んで選択しよう！", 3);
         for (int i = 0; i < 27; i++) {
-            setItem(i, MenuManager.createItem(Material.STAINED_GLASS_PANE, " ", 1, false, DyeColor.YELLOW));
+            setItem(i, MenuManager.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false));
         }
         setItem(11, MenuManager.createItem(Material.DIAMOND_SWORD, "§c§lウォーリア",
                 Arrays.asList("§f近接系のスキルが豊富で、", "§f正面の戦いに長けている", "§f遠距離攻撃は少し苦手")
@@ -36,7 +37,7 @@ public class SetJobMenu extends Menu {
         if (e.getCurrentItem() != null) {
             Player p = (Player) e.getWhoClicked();
             e.setCancelled(true);
-            if (e.getCurrentItem().getType().equals(Material.STAINED_GLASS_PANE)) return;
+            if (e.getCurrentItem().getType().equals(Material.YELLOW_STAINED_GLASS_PANE)) return;
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§cログアウト")) {
                 p.kickPlayer("ログアウト");
                 return;

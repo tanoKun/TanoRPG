@@ -1,12 +1,14 @@
 package com.github.tanokun.tanorpg.util;
+import com.github.tanokun.tanorpg.TanoRPG;
+import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentTarget;
 import org.bukkit.inventory.ItemStack;
 
 public class Glowing extends Enchantment {
 
-    public Glowing(int id) {
-        super(id);
+    public Glowing() {
+        super(new NamespacedKey(TanoRPG.getPlugin(), "glowing"));
     }
     @Override
     public boolean canEnchantItem(ItemStack arg0) {

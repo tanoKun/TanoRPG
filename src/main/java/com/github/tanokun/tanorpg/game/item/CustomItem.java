@@ -100,7 +100,7 @@ public class CustomItem {
         lore.add("§7ID: " + id);
         im.setLore(lore);
         if (glowing == true) {
-            im.addEnchant(new Glowing(80), 1, true);
+            im.addEnchant(new Glowing(), 1, true);
         }
         im.setUnbreakable(true);
         is.setItemMeta(im);
