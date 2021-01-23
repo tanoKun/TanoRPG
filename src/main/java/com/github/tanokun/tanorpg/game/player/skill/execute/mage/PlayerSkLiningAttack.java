@@ -83,7 +83,7 @@ public class PlayerSkLiningAttack extends Skill {
                     double x = r * cos(2 * Math.PI * i * 0.02);
                     double z = r * sin(2 * Math.PI * i * 0.02);
                     location.add(x, y, z);
-                    ParticleEffect.REDSTONE.display(location, new Vector(0, 1, 0), 0, 10, null, Bukkit.getOnlinePlayers());
+                    ParticleEffect.FLAME.display(location, new Vector(0, 1, 0), 0, 10, null, Bukkit.getOnlinePlayers());
                     location.subtract(x, y, z);
                 }
                 t++;

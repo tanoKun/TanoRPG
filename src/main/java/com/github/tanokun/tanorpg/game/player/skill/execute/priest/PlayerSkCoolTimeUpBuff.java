@@ -71,7 +71,7 @@ public class PlayerSkCoolTimeUpBuff extends Skill {
                     double x = r * cos(i * 0.5);
                     double z = r * sin(i * 0.5);
                     location[0].add(x, y, z);
-                    ParticleEffect.REDSTONE.display(location[0], new Vector(0, 1, 0), 0, 10, null, Bukkit.getOnlinePlayers());
+                    ParticleEffect.FLAME.display(location[0], new Vector(0, 1, 0), 0, 10, null, Bukkit.getOnlinePlayers());
                     location[0].subtract(x, y, z);
                 }
                 for (Entity player : TanoRPG.getNearbyEntities(location[0], 5)) {

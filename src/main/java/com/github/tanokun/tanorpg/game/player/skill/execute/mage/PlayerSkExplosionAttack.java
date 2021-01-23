@@ -91,7 +91,7 @@ public class PlayerSkExplosionAttack extends Skill {
                     double x = 0.5 * cos(2 * Math.PI * i * 0.04);
                     double z = 0.5 * sin(2 * Math.PI * i * 0.04);
                     targetLoc.add(x, 0.025, z);
-                    ParticleEffect.REDSTONE.display(targetLoc, 0f, 0f, 0f, 0, 2, null, Bukkit.getOnlinePlayers());
+                    ParticleEffect.FLAME.display(targetLoc, 0f, 0f, 0f, 0, 2, null, Bukkit.getOnlinePlayers());
                     targetLoc.subtract(x, 0, z);
                 }
                 targetLoc.subtract(0, 2, 0);
