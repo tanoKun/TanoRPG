@@ -39,7 +39,7 @@ public class PlayerSkAtkUp extends Skill {
                 entity.teleport(player_loc);
                 t[0]++;
             }
-        }.runTaskTimerAsynchronously(TanoRPG.getPlugin(), 0, 1);
+        }.runTaskTimer(TanoRPG.getPlugin(), 0, 1);
         Buff.addBuff(new BuffSelf(BuffType.ATK_UP_S, entity, 15));
     }
 }
