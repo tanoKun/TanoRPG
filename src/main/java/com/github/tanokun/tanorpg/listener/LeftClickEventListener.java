@@ -10,6 +10,7 @@ import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.util.task.MagicTask;
 import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -73,8 +74,7 @@ public class LeftClickEventListener implements Listener {
                     player.getPlayer().sendMessage(PX + "§cレベルが足りないため習得できません");
                     return;
                 }
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-                        "execute " + e.getPlayer().getName() + " ~ ~ ~ playsound entity.experience_orb.pickup player @s ~ ~ ~ 10 1");
+                TanoRPG.playSound(e.getPlayer(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
 
                 player.addSkill(skillName[1]); e.getPlayer().sendMessage(PX + "スキル「" + skillName[1] + "」を習得しました");
                 ItemStack item = e.getItem();
