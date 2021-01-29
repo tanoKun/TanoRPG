@@ -9,7 +9,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 public class DeathEventListener implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent e){
-        e.getDrops().clear();
-        CustomEntityManager.removeNewEntity((Creature) e.getEntity());
+        if (e.getEntity() instanceof Creature) {
+            e.getDrops().clear();
+            CustomEntityManager.removeNewEntity((Creature) e.getEntity());
+        }
     }
 }
