@@ -82,7 +82,7 @@ public class Sell implements Listener {
     @EventHandler
     public void onClick(InventoryClickEvent e){
         if (e.getCurrentItem() == null) return;
-        if (e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory())){
+        if (e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory()) && e.getView().getTitle().equals(INV_NAME)){
             if (nulls.contains(e.getSlot())){
                 e.setCancelled(true);
                 if (e.getCurrentItem().getItemMeta().getDisplayName().contains("§d§l合計値段: ")){
