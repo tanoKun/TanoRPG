@@ -6,7 +6,6 @@ import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.menu.MenuManager;
-import com.github.tanokun.tanorpg.util.ShortColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -16,17 +15,21 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.omg.CORBA.INV_FLAG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 
 public class Sell implements Listener {
     private static String INV_NAME = "§d§l売却";
     private ArrayList<Integer> nulls;
+    private static HashMap<String, BukkitRunnable> check = new HashMap<>();
 
     public Sell(){
         nulls = new ArrayList<>();
@@ -72,48 +75,46 @@ public class Sell implements Listener {
         sell.setItem(45, side);
         sell.setItem(53, side);
         sell.setItem(49, sell_item);
+        new CheckItems(player);
         player.openInventory(sell);
     }
 
     @EventHandler
     public void onClick(InventoryClickEvent e){
-        if (e.getClickedInventory() == null) return;
-        if (!e.getView().getTitle().equals(INV_NAME)) return;
-        if (nulls.contains(e.getSlot())){
-            e.setCancelled(true);
-            if (!e.getCurrentItem().getItemMeta().getDisplayName().contains("§d§l合計値段: ")) return;
-            GamePlayer player = GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId());
-            long price = check(e.getClickedInventory().getContents());
-            e.getWhoClicked().setMetadata("sell", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-            e.getWhoClicked().closeInventory();
-            player.addMoney(price);
-            e.getWhoClicked().sendMessage(TanoRPG.PX + "売却しました！ §d(合計: " + price + ")");
-            TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
-            return;
-        }
-        ItemStack item = e.getWhoClicked().getOpenInventory().getItem(49);
-        ItemMeta meta = item.getItemMeta();
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
-                meta.setDisplayName("§d§l合計値段: " + check(e.getClickedInventory().getContents()));
-                item.setItemMeta(meta);
-                e.getWhoClicked().getOpenInventory().setItem(49, item);
+        if (e.getCurrentItem() == null) return;
+        if (e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory())){
+            if (nulls.contains(e.getSlot())){
+                e.setCancelled(true);
+                if (e.getCurrentItem().getItemMeta().getDisplayName().contains("§d§l合計値段: ")){
+                    TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
+                    long price = check(e.getClickedInventory().getContents());
+                    e.getWhoClicked().sendMessage(TanoRPG.PX + "§d売却しました！ (合計価格: " + price + ")");
+                    GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).addMoney(price);
+                    e.getWhoClicked().setMetadata("sell", new FixedMetadataValue(TanoRPG.getPlugin(), true));
+                    e.getWhoClicked().closeInventory();
+                }
+                return;
             }
-        }.runTaskAsynchronously(TanoRPG.getPlugin());
+        }
     }
     @EventHandler
     public void onClose(InventoryCloseEvent e){
-        if (!e.getView().getTitle().equals(INV_NAME)) return;
-        if (e.getPlayer().hasMetadata("sell")){e.getPlayer().removeMetadata("sell", TanoRPG.getPlugin());return;}
-        for (int i = 0; i < 53; i++) {
-            if (nulls.contains(i)) continue;
-            if (e.getView().getItem(i).getType().equals(Material.AIR)) continue;
-            e.getPlayer().getInventory().addItem(e.getView().getItem(i));
+        if (e.getView().getTitle().equals(INV_NAME)){
+            check.get(e.getPlayer().getUniqueId().toString()).cancel();
+            check.remove(e.getPlayer().getUniqueId().toString());
+            if (e.getPlayer().hasMetadata("sell")){
+                e.getPlayer().removeMetadata("sell", TanoRPG.getPlugin());
+                return;
+            }
+            for (int i = 0; i < 53; i++) {
+                if (nulls.contains(i)) continue;
+                if (e.getView().getItem(i) == null) continue;
+                if (e.getView().getItem(i).getType().equals(Material.AIR)) continue;
+                e.getPlayer().getInventory().addItem(e.getView().getItem(i));
+            }
         }
     }
-    private long check(ItemStack[] items){
+    private static long check(ItemStack[] items){
         long price = 0;
         for (ItemStack item : items){
             if (!CustomItemManager.isExists(CustomItemManager.getID(item))) continue;
@@ -121,5 +122,22 @@ public class Sell implements Listener {
             price += sell_item.getPrice() * item.getAmount();
         }
         return price;
+    }
+    static class CheckItems extends BukkitRunnable {
+        Player player;
+        InventoryView inv;
+        public CheckItems(Player player){
+            this.player = player;
+            check.put(player.getUniqueId().toString(), this);
+            this.runTaskTimerAsynchronously(TanoRPG.getPlugin(), 0, 5);
+        }
+        public void run() {
+            long money = check(player.getOpenInventory().getTopInventory().getContents());
+            ItemStack item = player.getOpenInventory().getItem(49);
+            ItemMeta itemM = item.getItemMeta();
+            itemM.setDisplayName("§d§l合計値段: " + money);
+            item.setItemMeta(itemM);
+            player.getOpenInventory().setItem(49, item);
+        }
     }
 }
