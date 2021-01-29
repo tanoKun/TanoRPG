@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OpenCraftCommand extends Command {
@@ -25,6 +26,6 @@ public class OpenCraftCommand extends Command {
     }
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
+        return Arrays.asList(TanoRPG.OPEN_KYE);
     }
 }

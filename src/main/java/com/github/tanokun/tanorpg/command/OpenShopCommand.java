@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class OpenShopCommand extends Command {
@@ -25,6 +26,6 @@ public class OpenShopCommand extends Command {
     }
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
+        return Arrays.asList(TanoRPG.OPEN_KYE);
     }
 }
