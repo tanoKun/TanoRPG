@@ -30,6 +30,7 @@ public class Sidebar {
                 o.getScore("§d§lHP: §b" + player.getHAS_HP() + "§d§l/§b" + player.getMAX_HP()).setScore(-4);
                 o.getScore("§3§lMP: §b" + player.getHAS_MP() + "§d§l/§b" + player.getMAX_MP()).setScore(-5);
                 o.getScore("  ").setScore(-6);
+                o.getScore("§6§lMoney: §b" + player.getMoney()).setScore(-7);
                 p.setScoreboard(scoreboard);
             }
         }.runTaskLater(TanoRPG.getPlugin(), 1);
@@ -52,8 +53,10 @@ public class Sidebar {
                 o.getScore("§d§lHP: §b" + player.getHAS_HP() + "§d§l/§b" + player.getMAX_HP()).setScore(-4);
                 o.getScore("§3§lMP: §b" + player.getHAS_MP() + "§d§l/§b" + player.getMAX_MP()).setScore(-5);
                 o.getScore("  ").setScore(-6);
+                o.getScore("§6§lMoney: §b" + player.getMoney()).setScore(-7);
                 if (EditComboEventListener.getCombos(p).size() > 0) {
-                    o.getScore("§a§lCB: §b" + EditComboEventListener.getCombos(p)).setScore(-7);
+                    o.getScore("   ").setScore(-8);
+                    o.getScore("§a§lCB: §b" + EditComboEventListener.getCombos(p)).setScore(-9);
                 }
                 p.setScoreboard(scoreboard);
             }
