@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.mob.NewEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.task.MagicTask;
 import org.bukkit.Bukkit;
@@ -149,11 +150,13 @@ public class DamageEventListener implements Listener {
                             victim.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
                             victim.setHAS_HP(victim.getMAX_HP());
                             victim.getPlayer().setGameMode(GameMode.ADVENTURE);
+                            Sidebar.updateSidebar((Player) e.getEntity());
                         }
                     }.runTask(TanoRPG.getPlugin());
                 }
             }.runTaskAsynchronously(TanoRPG.getPlugin());
         }
         e.getEntity().sendMessage(TanoRPG.PX + "§c" + damage + "ダメージ！");
+        Sidebar.updateSidebar((Player) e.getEntity());
     }
 }

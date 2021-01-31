@@ -97,7 +97,6 @@ public class Registration {
     }
     public void registerTask(){
         new AutoSaveTask().runTaskTimerAsynchronously(plugin, 1, 6000);
-        new ActionBarTask().runTaskTimerAsynchronously(plugin, 1, 4);
         new EditStatusTask().runTaskTimerAsynchronously(plugin, 1, 1);
         new PlayerRegenerationTask().runTaskTimerAsynchronously(plugin, 1, 80);
     }

@@ -3,6 +3,7 @@ package com.github.tanokun.tanorpg.listener;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -81,6 +82,7 @@ public class EditComboEventListener implements Listener {
             List<String> combos = getCombos(player);
             if (combos.size() >= 3) return;
             combos.add(combo);
+            Sidebar.updateSidebar(player);
             player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
             boolean skill = false;
             if (combos.size() >= 3) {
@@ -96,6 +98,7 @@ public class EditComboEventListener implements Listener {
             combos = getCombos(player);
             if (combos.size() > 0) {
                 combos.remove(0);
+                Sidebar.updateSidebar(player);
             }
             if (combos.size() <= 0){player.removeMetadata(COMBO, TanoRPG.getPlugin()); return;}
             player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));

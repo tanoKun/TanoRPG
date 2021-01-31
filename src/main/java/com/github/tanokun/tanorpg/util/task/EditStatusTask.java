@@ -49,8 +49,12 @@ public class EditStatusTask extends BukkitRunnable {
             if (bool2 == true) {
                 p.sendMessage(TanoRPG.PX + "§c必要レベルが足りません");
             }
-            game.setMAX_HP(game.getStatus(StatusType.HP).getLevel() + game.getTHIS_MAX_HP());
-            game.setMAX_MP(game.getStatus(StatusType.MP).getLevel() + game.getTHIS_MAX_MP());
+            if (!(game.getMAX_HP() == game.getStatus(StatusType.HP).getLevel() + game.getTHIS_MAX_HP())){
+                game.setMAX_HP(game.getStatus(StatusType.HP).getLevel() + game.getTHIS_MAX_HP());
+            }
+            if (!(game.getMAX_MP() == game.getStatus(StatusType.MP).getLevel() + game.getTHIS_MAX_MP())){
+                game.setMAX_MP(game.getStatus(StatusType.MP).getLevel() + game.getTHIS_MAX_MP());
+            }
         }
     }
 }
