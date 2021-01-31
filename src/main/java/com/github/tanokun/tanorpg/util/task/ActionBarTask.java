@@ -12,7 +12,7 @@ import java.util.ConcurrentModificationException;
 
 public class ActionBarTask extends BukkitRunnable {
     private GameActionbar actionbar;
-
+    @Deprecated
     @Override
     public void run() {
         try {
