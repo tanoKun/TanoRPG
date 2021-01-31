@@ -2,6 +2,7 @@ package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,6 +34,7 @@ public class PlayerJoinEventListener implements Listener {
                         } else {
                             e.setJoinMessage(join + "§a" + player.getName() + "§aがJoinしました！");
                             GamePlayerManager.loadData(player.getUniqueId());
+                            Sidebar.setupSidebar(e.getPlayer());
                         }
                     }
                 }.runTask(TanoRPG.getPlugin());

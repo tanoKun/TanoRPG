@@ -5,6 +5,7 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -66,6 +67,7 @@ public class SetJobMenu extends Menu {
                 p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstMagicWeapon).getItem());
             }
             p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstArmor).getItem());
+            Sidebar.setupSidebar(p);
         }
     }
 
