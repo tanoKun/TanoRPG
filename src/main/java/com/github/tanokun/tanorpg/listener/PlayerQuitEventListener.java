@@ -1,6 +1,8 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
+import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -14,5 +16,7 @@ public class PlayerQuitEventListener implements Listener {
         e.setQuitMessage(quit + player.getName() + "がQuitしました！");
         GamePlayerManager.saveData(player.getUniqueId());
         GamePlayerManager.removeData(player.getUniqueId());
+        FastBoard board = Sidebar.boards.remove(player.getUniqueId());
+        if (board != null) {board.delete();}
     }
 }
