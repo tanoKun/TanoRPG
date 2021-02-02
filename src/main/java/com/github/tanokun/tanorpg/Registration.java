@@ -22,10 +22,10 @@ import com.github.tanokun.tanorpg.menu.player.StatusSkillMenu;
 import com.github.tanokun.tanorpg.util.Glowing;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
-import com.github.tanokun.tanorpg.util.task.ActionBarTask;
 import com.github.tanokun.tanorpg.util.task.AutoSaveTask;
 import com.github.tanokun.tanorpg.util.task.EditStatusTask;
 import com.github.tanokun.tanorpg.util.task.PlayerRegenerationTask;
+import com.github.tanokun.tanorpg.util.task.SidebarTask;
 import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
@@ -99,6 +99,7 @@ public class Registration {
         new AutoSaveTask().runTaskTimerAsynchronously(plugin, 1, 6000);
         new EditStatusTask().runTaskTimerAsynchronously(plugin, 1, 1);
         new PlayerRegenerationTask().runTaskTimerAsynchronously(plugin, 1, 80);
+        new SidebarTask().runTaskTimerAsynchronously(plugin, 1, 100);
     }
 
     public void registerMenus() {
