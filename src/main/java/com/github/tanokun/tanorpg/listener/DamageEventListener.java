@@ -58,105 +58,134 @@ public class DamageEventListener implements Listener {
     }
 
     private void player(EntityDamageByEntityEvent e) {
-        if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {e.setCancelled(true); return;}
-        if (CustomEntityManager.getNewEntity((Creature) e.getEntity()) == null) return;
-        e.setCancelled(true);
-        GamePlayer attacker = GamePlayerManager.getPlayer(e.getDamager().getUniqueId());
-        NewEntity victim = CustomEntityManager.getNewEntity((Creature) e.getEntity());
-        CustomEntity customEntity = victim.getCustomEntity();
-        if (attacker.getPlayer().hasMetadata("cooltime")) {e.setCancelled(true);return;}
-        attacker.getPlayer().setNoDamageTicks(0);
-        if (!attacker.isProper(attacker.getPlayer().getEquipment().getItemInMainHand())) {attacker.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です"); e.setCancelled(true);return;}
-        if (!attacker.isLv(attacker.getPlayer().getEquipment().getItemInMainHand())) {attacker.getPlayer().sendMessage(TanoRPG.PX + "§c必要レベルが足りません"); e.setCancelled(true); return;}
-        if (CustomItemManager.getCustomItem(attacker.getPlayer().getEquipment().getItemInMainHand()).getCit().equals(CustomItemType.MAGIC_WEAPON)){
-            if (!attacker.isProper(
-                    attacker.getPlayer().getEquipment().getItemInMainHand())) {attacker
-                    .getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です"); e.setCancelled(true);return;}
+        try {
+            if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
+                e.setCancelled(true);
+                return;
+            }
+            if (CustomEntityManager.getNewEntity((Creature) e.getEntity()) == null) return;
             e.setCancelled(true);
-            GamePlayer gamePlayer = attacker;
-            if (gamePlayer.getPlayer().hasMetadata("cooltime_magic")) {e.setCancelled(true);return;}
-            gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-            String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
+            GamePlayer attacker = GamePlayerManager.getPlayer(e.getDamager().getUniqueId());
+            NewEntity victim = CustomEntityManager.getNewEntity((Creature) e.getEntity());
+            CustomEntity customEntity = victim.getCustomEntity();
+            if (attacker.getPlayer().hasMetadata("cooltime")) {
+                e.setCancelled(true);
+                return;
+            }
+            attacker.getPlayer().setNoDamageTicks(0);
+            if (!attacker.isProper(attacker.getPlayer().getEquipment().getItemInMainHand())) {
+                attacker.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                e.setCancelled(true);
+                return;
+            }
+            if (!attacker.isLv(attacker.getPlayer().getEquipment().getItemInMainHand())) {
+                attacker.getPlayer().sendMessage(TanoRPG.PX + "§c必要レベルが足りません");
+                e.setCancelled(true);
+                return;
+            }
+            if (CustomItemManager.getCustomItem(attacker.getPlayer().getEquipment().getItemInMainHand()).getCit().equals(CustomItemType.MAGIC_WEAPON)) {
+                if (!attacker.isProper(
+                        attacker.getPlayer().getEquipment().getItemInMainHand())) {
+                    attacker
+                            .getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                    e.setCancelled(true);
+                    return;
+                }
+                e.setCancelled(true);
+                GamePlayer gamePlayer = attacker;
+                if (gamePlayer.getPlayer().hasMetadata("cooltime_magic")) {
+                    e.setCancelled(true);
+                    return;
+                }
+                gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
+                String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
+                final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
+                gamePlayer.getPlayer().setLevel(0);
+                new BukkitRunnable() {
+                    @Override
+                    public void run() {
+                        cool[0] -= 1;
+                        if (cool[0] <= 0) {
+                            gamePlayer.getPlayer().removeMetadata("cooltime_magic", TanoRPG.getPlugin());
+                            this.cancel();
+                        }
+                    }
+                }.runTaskTimerAsynchronously(TanoRPG.getPlugin(), 0, 1L);
+                new MagicTask(attacker).runTaskTimerAsynchronously(TanoRPG.getPlugin(), 2, 1);
+                return;
+            }
+            int at_lvl = attacker.getLEVEL();
+            int vi_lvl = customEntity.getLEVEL();
+            double atk = DamageManager.getDamage(attacker.getStatus(StatusType.ATK).getLevel(),
+                    attacker.getStatus(StatusType.ING).getLevel(),
+                    attacker.getStatus(StatusType.AGI).getLevel());
+            long damage = DamageManager.getCompDamage(atk, customEntity.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
+            DamageManager.createMake(damage, attacker.getPlayer(), victim.getCreature());
+            attacker.getPlayer().setMetadata("cooltime", new FixedMetadataValue(TanoRPG.getPlugin(), true));
+            String id = CustomItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
             final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
-            gamePlayer.getPlayer().setLevel(0);
-            new BukkitRunnable(){
+            attacker.getPlayer().setLevel(0);
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     cool[0] -= 1;
-                    if (cool[0] <= 0){
-                        gamePlayer.getPlayer().removeMetadata("cooltime_magic", TanoRPG.getPlugin());
+                    if (cool[0] <= 0) {
+                        attacker.getPlayer().removeMetadata("cooltime", TanoRPG.getPlugin());
                         this.cancel();
                     }
                 }
-            }.runTaskTimerAsynchronously(TanoRPG.getPlugin(), 0, 1L);
-            new MagicTask(attacker).runTaskTimerAsynchronously(TanoRPG.getPlugin(), 2, 1);
+            }.runTaskTimer(TanoRPG.getPlugin(), 0, 1L);
+        }catch (Exception ex){
             return;
         }
-        int at_lvl = attacker.getLEVEL();
-        int vi_lvl = customEntity.getLEVEL();
-        double atk = DamageManager.getDamage(attacker.getStatus(StatusType.ATK).getLevel(),
-                attacker.getStatus(StatusType.ING).getLevel(),
-                attacker.getStatus(StatusType.AGI).getLevel());
-        long damage = DamageManager.getCompDamage(atk, customEntity.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
-        DamageManager.createMake(damage, attacker.getPlayer(), victim.getCreature());
-        attacker.getPlayer().setMetadata("cooltime", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-        String id = CustomItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
-        final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
-        attacker.getPlayer().setLevel(0);
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                cool[0] -= 1;
-                if (cool[0] <= 0){
-                    attacker.getPlayer().removeMetadata("cooltime", TanoRPG.getPlugin());
-                    this.cancel();
-                }
-            }
-        }.runTaskTimer(TanoRPG.getPlugin(), 0, 1L);
     }
     private void entity(EntityDamageByEntityEvent e) {
         try{
-            if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
+            try{
+                if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
+            }catch (Exception ex) {
+                return;
+            }
+            e.setDamage(0);
+            NewEntity attacker = CustomEntityManager.getNewEntity((Creature) e.getDamager());
+            CustomEntity customEntity = attacker.getCustomEntity();
+            GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
+            ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
+            int at_lvl = customEntity.getLEVEL();
+            int vi_lvl = victim.getLEVEL();
+            double atk = DamageManager.getDamage(customEntity.getATK(), customEntity.getINT(), customEntity.getAGI());
+            long damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
+            victim.setHAS_HP(victim.getHAS_HP() - damage);
+            victim.setHAS_HP(new BigDecimal("" + victim.getHAS_HP()).setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            if (victim.getHAS_HP() <= 0){
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                victim.getPlayer().setGameMode(GameMode.SPECTATOR);
+                                victim.getPlayer().sendTitle("§c死んでしまった！", "", 0, 0, 100);
+                                victim.setHAS_HP(0);
+                            }
+                        }.runTask(TanoRPG.getPlugin());
+                        try {Thread.sleep(5000);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
+                        new BukkitRunnable(){
+                            @Override
+                            public void run() {
+                                victim.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
+                                victim.setHAS_HP(victim.getMAX_HP());
+                                victim.getPlayer().setGameMode(GameMode.ADVENTURE);
+                                Sidebar.updateSidebar((Player) e.getEntity());
+                            }
+                        }.runTask(TanoRPG.getPlugin());
+                    }
+                }.runTaskAsynchronously(TanoRPG.getPlugin());
+            }
+            e.getEntity().sendMessage(TanoRPG.PX + "§c" + damage + "ダメージ！");
+            Sidebar.updateSidebar((Player) e.getEntity());
         }catch (Exception ex) {
             return;
         }
-        e.setDamage(0);
-        NewEntity attacker = CustomEntityManager.getNewEntity((Creature) e.getDamager());
-        CustomEntity customEntity = attacker.getCustomEntity();
-        GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
-        ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
-        int at_lvl = customEntity.getLEVEL();
-        int vi_lvl = victim.getLEVEL();
-        double atk = DamageManager.getDamage(customEntity.getATK(), customEntity.getINT(), customEntity.getAGI());
-        long damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
-        victim.setHAS_HP(victim.getHAS_HP() - damage);
-        victim.setHAS_HP(new BigDecimal("" + victim.getHAS_HP()).setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-        if (victim.getHAS_HP() <= 0){
-            new BukkitRunnable(){
-                @Override
-                public void run() {
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            victim.getPlayer().setGameMode(GameMode.SPECTATOR);
-                            victim.getPlayer().sendTitle("§c死んでしまった！", "", 0, 0, 100);
-                            victim.setHAS_HP(0);
-                        }
-                    }.runTask(TanoRPG.getPlugin());
-                    try {Thread.sleep(5000);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
-                    new BukkitRunnable(){
-                        @Override
-                        public void run() {
-                            victim.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
-                            victim.setHAS_HP(victim.getMAX_HP());
-                            victim.getPlayer().setGameMode(GameMode.ADVENTURE);
-                            Sidebar.updateSidebar((Player) e.getEntity());
-                        }
-                    }.runTask(TanoRPG.getPlugin());
-                }
-            }.runTaskAsynchronously(TanoRPG.getPlugin());
-        }
-        e.getEntity().sendMessage(TanoRPG.PX + "§c" + damage + "ダメージ！");
-        Sidebar.updateSidebar((Player) e.getEntity());
     }
 }

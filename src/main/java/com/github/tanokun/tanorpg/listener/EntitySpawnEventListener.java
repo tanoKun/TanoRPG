@@ -27,6 +27,7 @@ public class EntitySpawnEventListener implements Listener {
             Integer count = counts.get(Key + key2);
             if (count == null) count = 0;
             if (count >= spawnerCount) {
+                e.getEntity().remove();
                 return;
             }
             count += 1;
