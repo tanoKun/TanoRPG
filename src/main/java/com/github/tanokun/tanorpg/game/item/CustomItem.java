@@ -27,6 +27,7 @@ public class CustomItem {
     private CustomItemRarityType rarity;
     private Color color;
     private int lvl = 0;
+    private Integer customModelData = null;
 
     public CustomItem(CustomItemType cit, String id, Material material, String name, ArrayList<String> lores, ArrayList<Status> statuses, boolean glowing){
         this.cit = cit;
@@ -47,6 +48,7 @@ public class CustomItem {
     public void setRarity(CustomItemRarityType rarity) {this.rarity = rarity;}
     public void setColor(Color color) {this.color = color;}
     public void setLvl(int lvl) {this.lvl = lvl;}
+    public void setCustomModelData(Integer customModelData) {this.customModelData = customModelData;}
 
     public CustomItemType getCit() {return cit;}
     public String getId() {return id;}
@@ -101,6 +103,9 @@ public class CustomItem {
         im.setLore(lore);
         if (glowing == true) {
             im.addEnchant(new Glowing(), 1, true);
+        }
+        if (customModelData != null){
+            im.setCustomModelData(customModelData);
         }
         im.setUnbreakable(true);
         is.setItemMeta(im);

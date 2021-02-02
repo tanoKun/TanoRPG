@@ -86,6 +86,9 @@ public class CustomItemManager {
                 long price = config.getConfig().getLong(value + ".price");
                 boolean glowing = config.getConfig().getBoolean(value + ".glowing");
                 CustomItem customItem = new CustomItem(cit, id, material, name, lores, statuses, glowing);
+                if (config.getConfig().isSet(value + ".customModelData")){
+                    customItem.setCustomModelData(config.getConfig().getInt(value + ".customModelData"));
+                }
                 customItem.setRarity(CustomItemRarityType.valueOf((String) config.getConfig().get(value + ".rarity")));
                 customItem.setPrice(price);
                 customItems.put(value, customItem);
@@ -120,6 +123,9 @@ public class CustomItemManager {
                 boolean glowing = config.getConfig().getBoolean(value + ".glowing");
                 CustomItem customItem = new CustomItem(cit, id, material, name, lores, statuses, glowing);
                 customItem.setRarity(CustomItemRarityType.valueOf((String) config.getConfig().get(value + ".rarity")));
+                if (config.getConfig().isSet(value + ".customModelData")){
+                    customItem.setCustomModelData(config.getConfig().getInt(value + ".customModelData"));
+                }
                 customItem.setPrice(price);
                 customItem.setProper(jobs);
                 customItem.setCooltime(ct);
@@ -155,6 +161,9 @@ public class CustomItemManager {
                 long ct = config.getConfig().getLong(value + ".ct");
                 CustomItem customItem = new CustomItem(cit, id, material, name, lores, statuses, glowing);
                 customItem.setRarity(CustomItemRarityType.valueOf((String) config.getConfig().get(value + ".rarity")));
+                if (config.getConfig().isSet(value + ".customModelData")){
+                    customItem.setCustomModelData(config.getConfig().getInt(value + ".customModelData"));
+                }
                 customItem.setPrice(price);
                 customItem.setProper(jobs);
                 customItem.setCooltime(ct);
@@ -197,6 +206,9 @@ public class CustomItemManager {
                 boolean glowing = config.getConfig().getBoolean(value + ".glowing");
                 CustomItem customItem = new CustomItem(cit, id, material, name, lores, statuses, glowing);
                 customItem.setRarity(CustomItemRarityType.valueOf((String) config.getConfig().get(value + ".rarity")));
+                if (config.getConfig().isSet(value + ".customModelData")){
+                    customItem.setCustomModelData(config.getConfig().getInt(value + ".customModelData"));
+                }
                 customItem.setPrice(price);
                 customItem.setProper(jobs);
                 customItem.setLvl(config.getConfig().getInt(value + ".lvl"));
