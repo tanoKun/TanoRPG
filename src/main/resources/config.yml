@@ -6,3 +6,6 @@ first-job-mage-weapon: "初期魔法武器"
 
 #職業選択で「ウォーリア」を選択した人がもらう武器iD
 first-job-warrior-weapon: "初期武器"
+
+#serverIP
+server-ip: "coming soon..."
