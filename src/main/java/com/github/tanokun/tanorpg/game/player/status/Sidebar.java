@@ -4,6 +4,7 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.listener.EditComboEventListener;
+import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,55 +12,53 @@ import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class Sidebar {
+    public final static HashMap<UUID, FastBoard> boards = new HashMap<>();
     public static void setupSidebar(Player p){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                GamePlayer player = GamePlayerManager.getPlayer(p.getUniqueId());
-                Scoreboard scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
-                Objective o = scoreboard.registerNewObjective(p.getName(), "dummy");
-                o.setDisplaySlot(DisplaySlot.SIDEBAR);
-                o.setDisplayName("§a-----==[ TanoRPG ]==-----");
-                o.getScore("§b§lName: §b" + p.getName()).setScore(0);
-                o.getScore("§b§lClass: §b" + player.getJob().getName()).setScore(-1);
-                o.getScore( " ").setScore(-2);
-                o.getScore("§e§lLv: §b" + player.getLEVEL() + "§7 (" + player.getHAS_EXP() + "§e§l/§7" + player.getMAX_EXP() + "§7)").setScore(-3);
-                o.getScore("§d§lHP: §b" + player.getHAS_HP() + "§d§l/§b" + player.getMAX_HP()).setScore(-4);
-                o.getScore("§3§lMP: §b" + player.getHAS_MP() + "§d§l/§b" + player.getMAX_MP()).setScore(-5);
-                o.getScore("  ").setScore(-6);
-                o.getScore("§6§lMoney: §b" + player.getMoney()).setScore(-7);
-                p.setScoreboard(scoreboard);
-            }
-        }.runTaskLater(TanoRPG.getPlugin(), 1);
+        if (boards.containsKey(p.getUniqueId())) return;
+        GamePlayer gamePlayer = GamePlayerManager.getPlayer(p.getUniqueId());
+        FastBoard board = new FastBoard(p);
+        board.updateTitle("§b---==[-| §a§lTanoRPG §b|-]==---");
+        board.updateLines(
+                "§e§l・" + p.getName() + "'s status",
+                "    §b§lName§7>> §b" + p.getName(),
+                "    §b§lClass§7>> §b" + gamePlayer.getJob().getName(),
+                "    §6§lMoney§7>> §b" + gamePlayer.getMoney(),
+                "",
+                "    §d§lHP§7>> §b" + gamePlayer.getHAS_HP() + "§d§l/§b" + gamePlayer.getMAX_HP(),
+                "    §3§lMP§7>> §b" + gamePlayer.getHAS_MP() + "§d§l/§b" + gamePlayer.getMAX_MP(),
+                "    §e§lLv§7>> §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)",
+                "    §a§lCombos§7>> §b",
+                "  ",
+                "§e§l・Server info",
+                "    §bPlayers§7>> §b" + Bukkit.getOnlinePlayers().size() + "§d§l/§b" + Bukkit.getMaxPlayers(),
+                "    §aIP§7>> §b" + TanoRPG.IP,
+                "§b-----==-----------==-----"
+        );
+        if (EditComboEventListener.getCombos(p).size() > 0) {
+            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p));
+        }
+        boards.put(p.getUniqueId(), board);
     }
     public static void updateSidebar(Player p){
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                GamePlayer player = GamePlayerManager.getPlayer(p.getUniqueId());
-                Scoreboard scoreboard = p.getScoreboard();
-                Objective o = scoreboard.getObjective(p.getName());
-                o.unregister();
-                o = scoreboard.registerNewObjective(p.getName(), "dummy");
-                o.setDisplaySlot(DisplaySlot.SIDEBAR);
-                o.setDisplayName("§a-----==[ TanoRPG ]==-----");
-                o.getScore("§b§lName: §b" + p.getName()).setScore(0);
-                o.getScore("§b§lClass: §b" + player.getJob().getName()).setScore(-1);
-                o.getScore(" ").setScore(-2);
-                o.getScore("§e§lLv: §b" + player.getLEVEL() + "§7 (" + player.getHAS_EXP() + "§e§l/§7" + player.getMAX_EXP() + "§7)").setScore(-3);
-                o.getScore("§d§lHP: §b" + player.getHAS_HP() + "§d§l/§b" + player.getMAX_HP()).setScore(-4);
-                o.getScore("§3§lMP: §b" + player.getHAS_MP() + "§d§l/§b" + player.getMAX_MP()).setScore(-5);
-                o.getScore("  ").setScore(-6);
-                o.getScore("§6§lMoney: §b" + player.getMoney()).setScore(-7);
-                if (EditComboEventListener.getCombos(p).size() > 0) {
-                    o.getScore("   ").setScore(-8);
-                    o.getScore("§a§lCB: §b" + EditComboEventListener.getCombos(p)).setScore(-9);
-                }
-                p.setScoreboard(scoreboard);
-            }
-        }.runTaskLater(TanoRPG.getPlugin(), 1);
+        FastBoard board = boards.get(p.getUniqueId());
+        GamePlayer gamePlayer = GamePlayerManager.getPlayer(p.getUniqueId());
+
+        board.updateLine(1,"    §b§lName§7>> §b" + p.getName());
+        board.updateLine(2,"    §b§lClass§7>> §b" + gamePlayer.getJob().getName());
+        board.updateLine(3,"    §6§lMoney§7>> §b" + gamePlayer.getMoney());
+        board.updateLine(5,"    §d§lHP§7>> §b" + gamePlayer.getHAS_HP() + "§d§l/§b" + gamePlayer.getMAX_HP());
+        board.updateLine(6,"    §3§lMP§7>> §b" + gamePlayer.getHAS_MP() + "§d§l/§b" + gamePlayer.getMAX_MP());
+        board.updateLine(7,"    §e§lLv: §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)");
+        board.updateLine(11, "    §bPlayers§7>> §b" + Bukkit.getOnlinePlayers().size() + "§d§l/§b" + Bukkit.getMaxPlayers());
+        if (EditComboEventListener.getCombos(p).size() > 0) {
+            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p));
+        } else {
+            board.updateLine(8, "    §a§lCombos§7>> §b");
+        }
     }
 }
