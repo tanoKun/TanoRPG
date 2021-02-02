@@ -5,6 +5,7 @@ import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
@@ -21,7 +22,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -34,9 +34,10 @@ public final class TanoRPG extends JavaPlugin {
     public static final String PX_BUFF_UP = "§7[-｜ バフ付与 ｜-] §7=> ";
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
     public static final String OPEN_KYE = Coding.decode("a2plb2lqT0lIKSRoMjN1aDUzbzgyaGppanF3bjkpKCNIUklVTzJoOTg=");
-
+    public static String IP;
     public void onEnable() {
         plugin = this;
+        IP = getPlugin().getConfig().getString("server-ip");
         Bukkit.broadcastMessage(TanoRPG.PX + "プレイヤーデータ読み込み中...");
         for(Player player : Bukkit.getOnlinePlayers()){
             GamePlayerManager.loadData(player.getUniqueId());
@@ -59,6 +60,11 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(PX + ShopManager.loadShops());
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         removeEntities();
+        for(Player player : Bukkit.getOnlinePlayers()){
+            Sidebar.setupSidebar(player);
+            player.removeMetadata("COMBO", this);
+        }
+
     }
 
     private void setupEcon() {
