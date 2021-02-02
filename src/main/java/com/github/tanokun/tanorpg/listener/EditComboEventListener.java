@@ -82,12 +82,12 @@ public class EditComboEventListener implements Listener {
             List<String> combos = getCombos(player);
             if (combos.size() >= 3) return;
             combos.add(combo);
-            Sidebar.updateSidebar(player);
             player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
             boolean skill = false;
             if (combos.size() >= 3) {
                 if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()), new ArrayList<>(combos))) skill = true;
             }
+            Sidebar.updateSidebar(player);
             for (int i = 0; i < 40; i++) {
                 if (skill == true) {
                     try {Thread.sleep(150);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
@@ -98,8 +98,8 @@ public class EditComboEventListener implements Listener {
             combos = getCombos(player);
             if (combos.size() > 0) {
                 combos.remove(0);
-                Sidebar.updateSidebar(player);
             }
+            Sidebar.updateSidebar(player);
             if (combos.size() <= 0){player.removeMetadata(COMBO, TanoRPG.getPlugin()); return;}
             player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
         });
