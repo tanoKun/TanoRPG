@@ -98,7 +98,6 @@ public class GamePlayer {
         this.THIS_MAX_HP += job.getHP(); this.MAX_HP = THIS_MAX_HP; this.HAS_HP = MAX_HP;
         this.THIS_MAX_MP += job.getMP(); this.MAX_MP = THIS_MAX_MP; this.HAS_MP = MAX_MP;
         this.statuses = job.getStatuses();
-        Sidebar.setupSidebar(getPlayer());
 
     }
     public Status getStatus(StatusType statusType){
