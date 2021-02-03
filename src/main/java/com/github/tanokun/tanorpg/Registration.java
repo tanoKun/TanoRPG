@@ -64,6 +64,7 @@ public class Registration {
         Register.register(new OpenStatusCommand());
     }
     public void registerListener(){
+        Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new DamageEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new MenuManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new EntitySpawnEventListener(), plugin);
