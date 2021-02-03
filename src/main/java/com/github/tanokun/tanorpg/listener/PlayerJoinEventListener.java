@@ -25,7 +25,7 @@ public class PlayerJoinEventListener implements Listener {
                     public void run() {
                         try {Thread.sleep(100);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
                         Player player = e.getPlayer();
-                        player.setGameMode(GameMode.ADVENTURE);
+                        if (!player.getGameMode().equals(GameMode.CREATIVE))player.setGameMode(GameMode.SURVIVAL);
                         if (GamePlayerManager.loadData(player.getUniqueId()) == null){
                             player.teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
                             player.getInventory().clear();
