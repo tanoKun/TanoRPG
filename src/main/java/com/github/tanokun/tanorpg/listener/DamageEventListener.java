@@ -84,10 +84,8 @@ public class DamageEventListener implements Listener {
                 return;
             }
             if (CustomItemManager.getCustomItem(attacker.getPlayer().getEquipment().getItemInMainHand()).getCit().equals(CustomItemType.MAGIC_WEAPON)) {
-                if (!attacker.isProper(
-                        attacker.getPlayer().getEquipment().getItemInMainHand())) {
-                    attacker
-                            .getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                if (!attacker.isProper(attacker.getPlayer().getEquipment().getItemInMainHand())) {
+                    attacker.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
                     e.setCancelled(true);
                     return;
                 }

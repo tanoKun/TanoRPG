@@ -1,6 +1,7 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.game.item.CustomItem;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemType;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
@@ -26,28 +27,29 @@ public class LeftClickEventListener implements Listener {
     public void onClick(PlayerInteractEvent e) {
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
             GamePlayer gamePlayer = GamePlayerManager.getPlayer(e.getPlayer().getUniqueId());
-            if (!gamePlayer.getJob().equals(GamePlayerJobType.MAGE) && !gamePlayer.getJob().equals(GamePlayerJobType.PRIEST)) return;
-            try {
-                CustomItemType cit = CustomItemManager.getCustomItem(gamePlayer.getPlayer().getEquipment().getItemInMainHand()).getCit();
-                if (cit.equals(CustomItemType.MATERIAL) || cit.equals(CustomItemType.WEAPON) || cit.equals(CustomItemType.NULL) || cit.equals(CustomItemType.EQUIPMENT)){
+            if (!CustomItemManager.isExists(CustomItemManager.getID(e.getPlayer().getEquipment().getItemInMainHand())))
+                return;
+            CustomItem item = CustomItemManager.getCustomItem(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
+            if (!gamePlayer.isProper(e.getPlayer().getEquipment().getItemInMainHand())) {
+                if (item.getCit().equals(CustomItemType.WEAPON) || item.getCit().equals(CustomItemType.MAGIC_WEAPON)) {
                     e.setCancelled(true);
                     e.getPlayer().sendMessage(PX + "§c対応していない武器です");
                     return;
                 }
-            }catch (Exception e2){
                 return;
             }
-            if (!GamePlayerManager.getPlayer(e.getPlayer().getUniqueId()).isCIT(e.getItem(), CustomItemType.MAGIC_WEAPON)) return;
-            if (gamePlayer.getPlayer().hasMetadata("cooltime_magic")) {e.setCancelled(true);return;}
+            if (!item.getCit().equals(CustomItemType.MAGIC_WEAPON)) return;
+            if (gamePlayer.getPlayer().hasMetadata("cooltime_magic")) {
+                e.setCancelled(true);
+                return;
+            }
             gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-            String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
-            final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
-            gamePlayer.getPlayer().setLevel(0);
-            new BukkitRunnable(){
+            final int[] cool = {Math.round(CustomItemManager.getCustomItem(CustomItemManager.getID(e.getPlayer().getEquipment().getItemInMainHand())).getCooltime())};
+            new BukkitRunnable() {
                 @Override
                 public void run() {
                     cool[0] -= 1;
-                    if (cool[0] <= 0){
+                    if (cool[0] <= 0) {
                         gamePlayer.getPlayer().removeMetadata("cooltime_magic", TanoRPG.getPlugin());
                         this.cancel();
                     }
