@@ -12,6 +12,7 @@ import com.github.tanokun.tanorpg.game.player.skill.execute.priest.PlayerSkCoolT
 import com.github.tanokun.tanorpg.game.player.skill.execute.priest.PlayerSkHeal;
 import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkAtkUp;
 import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkJumpAttack;
+import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkLineAttack;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import com.github.tanokun.tanorpg.listener.*;
@@ -116,6 +117,7 @@ public class Registration {
         //ウォーリア
         SkillManager.addWarriorSkill(new PlayerSkAtkUp());
         SkillManager.addWarriorSkill(new PlayerSkJumpAttack());
+        SkillManager.addWarriorSkill(new PlayerSkLineAttack());
 
         //メイジ
         SkillManager.addMageSkill(new PlayerSkLiningAttack());
