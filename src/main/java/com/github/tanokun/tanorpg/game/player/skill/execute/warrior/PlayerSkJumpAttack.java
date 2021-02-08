@@ -57,19 +57,17 @@ public class PlayerSkJumpAttack extends Skill {
         }
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
         for (Entity entity2 : TanoRPG.getNearbyEntities(entity.getLocation(), 10)){
-            {
-                if (entity2 instanceof Player || !CustomEntityManager.isExists(entity2)) continue;
-                ((Creature) entity2).setTarget((LivingEntity) entity);
-                CustomEntity custom = CustomEntityManager.getEntity(entity2);
-                int at_lvl = gamePlayer.getLEVEL();
-                int vi_lvl = custom.getLEVEL();
-                double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),
-                        gamePlayer.getStatus(StatusType.ING).getLevel(),
-                        gamePlayer.getStatus(StatusType.AGI).getLevel());
-                long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.5);
-                DamageManager.createMake(damage, entity, entity2);
-                entity2.setVelocity(new Vector(0, 1, 0));
-            }
+            if (entity2 instanceof Player || !CustomEntityManager.isExists(entity2)) continue;
+            ((Creature) entity2).setTarget((LivingEntity) entity);
+            CustomEntity custom = CustomEntityManager.getEntity(entity2);
+            int at_lvl = gamePlayer.getLEVEL();
+            int vi_lvl = custom.getLEVEL();
+            double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),
+                    gamePlayer.getStatus(StatusType.ING).getLevel(),
+                    gamePlayer.getStatus(StatusType.AGI).getLevel());
+            long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.5);
+            DamageManager.createMake(damage, entity, entity2);
+            entity2.setVelocity(new Vector(0, 1, 0));
         }
     }
 }
