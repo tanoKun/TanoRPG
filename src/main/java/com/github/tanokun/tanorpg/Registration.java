@@ -2,6 +2,7 @@ package com.github.tanokun.tanorpg;
 
 import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
+import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
@@ -79,23 +80,23 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
     }
     public void registerOthers() {
-        try {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, true);
+        {
+            try {
+                Field f = Enchantment.class.getDeclaredField("acceptingNew");
+                f.setAccessible(true);
+                f.set(null, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Glowing glow = new Glowing();
+                Enchantment.registerEnchantment(glow);
+            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Glowing glow = new Glowing();
-            Enchantment.registerEnchantment(glow);
-        }
-        catch (IllegalArgumentException e){
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        WgEvents.setup();
     }
     public void registerTask(){
         new AutoSaveTask().runTaskTimerAsynchronously(plugin, 1, 6000);
