@@ -38,6 +38,7 @@ public class MobSpawnCommand extends Command {
     }
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (!sender.isOp()) return null;
         if (args.length == 0){
             return CustomEntityManager.getEntityIDs();
         }
