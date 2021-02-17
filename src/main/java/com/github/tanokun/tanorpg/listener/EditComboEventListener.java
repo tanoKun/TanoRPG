@@ -49,6 +49,13 @@ public class EditComboEventListener implements Listener {
         if (!e.getPlayer().getGameMode().equals(GameMode.CREATIVE)) e.setCancelled(true);
         if (e.getPlayer().isSneaking()){
             addCombo(e.getPlayer(), "SDR");
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    try {Thread.sleep(1);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
+                    e.getPlayer().removeMetadata("drop", TanoRPG.getPlugin());
+                }
+            }.runTaskAsynchronously(TanoRPG.getPlugin());
             return;
         }
         addCombo(e.getPlayer(), "DR");
@@ -83,13 +90,19 @@ public class EditComboEventListener implements Listener {
             if (combos.size() >= 3) return;
             combos.add(combo);
             player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
-            boolean skill = false;
+            final boolean[] skill = {false};
             if (combos.size() >= 3) {
-                if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()), new ArrayList<>(combos))) skill = true;
+                List<String> finalCombos = combos;
+                new BukkitRunnable(){
+                    @Override
+                    public void run() {
+                        if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()), new ArrayList<>(finalCombos))) skill[0] = true;
+                    }
+                }.runTask(TanoRPG.getPlugin());
             }
             Sidebar.updateSidebar(player);
             for (int i = 0; i < 40; i++) {
-                if (skill == true) {
+                if (skill[0] == true) {
                     try {Thread.sleep(150);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
                     return;
                 }

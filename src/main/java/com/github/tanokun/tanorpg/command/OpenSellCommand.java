@@ -22,6 +22,7 @@ public class OpenSellCommand extends Command {
     }
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
+        if (!sender.isOp()) return null;
         return Arrays.asList(TanoRPG.OPEN_KYE);
     }
 }

@@ -44,6 +44,7 @@ public class GiveMobSpawnerCommand extends Command {
         if (args.length == 0){
             return CustomEntityManager.getEntityIDs();
         }
+        if (!sender.isOp()) return null;
         List<String> texts = new ArrayList<>();
         for (String id : CustomEntityManager.getEntityIDs()){
             if (id.contains(args[0])) texts.add(id);

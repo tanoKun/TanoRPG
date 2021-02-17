@@ -2,6 +2,7 @@ package com.github.tanokun.tanorpg;
 
 import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
+import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
@@ -12,6 +13,7 @@ import com.github.tanokun.tanorpg.game.player.skill.execute.priest.PlayerSkCoolT
 import com.github.tanokun.tanorpg.game.player.skill.execute.priest.PlayerSkHeal;
 import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkAtkUp;
 import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkJumpAttack;
+import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkLineAttack;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import com.github.tanokun.tanorpg.listener.*;
@@ -78,23 +80,23 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
     }
     public void registerOthers() {
-        try {
-            Field f = Enchantment.class.getDeclaredField("acceptingNew");
-            f.setAccessible(true);
-            f.set(null, true);
+        {
+            try {
+                Field f = Enchantment.class.getDeclaredField("acceptingNew");
+                f.setAccessible(true);
+                f.set(null, true);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            try {
+                Glowing glow = new Glowing();
+                Enchantment.registerEnchantment(glow);
+            } catch (IllegalArgumentException e) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            Glowing glow = new Glowing();
-            Enchantment.registerEnchantment(glow);
-        }
-        catch (IllegalArgumentException e){
-        }
-        catch(Exception e){
-            e.printStackTrace();
-        }
+        WgEvents.setup();
     }
     public void registerTask(){
         new AutoSaveTask().runTaskTimerAsynchronously(plugin, 1, 6000);
@@ -116,6 +118,7 @@ public class Registration {
         //ウォーリア
         SkillManager.addWarriorSkill(new PlayerSkAtkUp());
         SkillManager.addWarriorSkill(new PlayerSkJumpAttack());
+        SkillManager.addWarriorSkill(new PlayerSkLineAttack());
 
         //メイジ
         SkillManager.addMageSkill(new PlayerSkLiningAttack());

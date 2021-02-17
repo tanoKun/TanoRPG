@@ -111,7 +111,7 @@ public final class TanoRPG extends JavaPlugin {
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return Register.getCommand(command.getName()).tabComplete(sender, args);
     }
-    public static void playSound(Player player, Sound sound, int volume, int v2){
-        player.playSound(player.getLocation(), sound, volume, v2);
+    public static void playSound(Player player, Sound sound, int volume, double v2){
+        player.playSound(player.getLocation(), sound, volume, (float) v2);
     }
 }
