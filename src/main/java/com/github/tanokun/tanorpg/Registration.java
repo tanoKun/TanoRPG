@@ -64,6 +64,7 @@ public class Registration {
         Register.register(new OpenSellCommand());
         Register.register(new GiveSkItemCommand());
         Register.register(new OpenStatusCommand());
+        Register.register(new CombosInitCommand());
     }
     public void registerListener(){
         Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
