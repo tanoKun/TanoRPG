@@ -15,9 +15,9 @@ public class CustomEntity {
     private CustomEntityDropItems dropItems;
     private String name;
     private EntityType entityType;
-    private int HP = 20;
-    private int LEVEL = 1;
-    private long EXP = 0;
+    private int HP;
+    private int LEVEL;
+    private long EXP;
 
     private String mainHand = "";
     private String offHand = "";
@@ -27,13 +27,6 @@ public class CustomEntity {
     private String boots = "";
 
     private HashMap<StatusType, Status> statuses = new HashMap<>();
-    private double ATK = 0;
-    private double DEF = 0;
-    private double MATK = 0;
-    private double MDEF = 0;
-    private double AGI = 0;
-    private double ING = 0;
-    private double INT = 0;
 
     public CustomEntity(String name, EntityType entityType, int LEVEL, int HP, long EXP){
         this.name = name;
@@ -68,7 +61,7 @@ public class CustomEntity {
 
     public void setStatuses(double i, double i2, double i3, double i4, double i5, double i6, double i7){
         statuses.put(StatusType.ATK, new Status(StatusType.ATK, i));
-        statuses.put(StatusType.DEF, new Status(StatusType.DEF, i2));
+        statuses.put(StatusType.DEF, new  Status(StatusType.DEF, i2));
         statuses.put(StatusType.MATK, new Status(StatusType.MATK, i3));
         statuses.put(StatusType.MDEF, new Status(StatusType.MDEF, i4));
         statuses.put(StatusType.AGI, new Status(StatusType.AGI, i5));

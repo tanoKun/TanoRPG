@@ -22,6 +22,7 @@ commands:
   opencraft:
   openshop:
   opensell:
+  cinit:
   status:
     aliases: [st]
   test:

@@ -16,6 +16,8 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCow;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -23,6 +25,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.security.cert.CertificateRevokedException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -64,7 +67,6 @@ public final class TanoRPG extends JavaPlugin {
             Sidebar.setupSidebar(player);
             player.removeMetadata("COMBO", this);
         }
-
     }
 
     private void setupEcon() {
