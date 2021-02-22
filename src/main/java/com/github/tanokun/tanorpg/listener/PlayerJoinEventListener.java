@@ -13,6 +13,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.ArrayList;
+
 public class PlayerJoinEventListener implements Listener {
     private String join = "§a[§bJoin§a] §f";
     @EventHandler
@@ -30,6 +32,7 @@ public class PlayerJoinEventListener implements Listener {
                 } else {
                     e.setJoinMessage(join + "§a" + player.getName() + "§aがJoinしました！");
                     GamePlayerManager.loadData(player.getUniqueId());
+                    EditComboEventListener.combos.put(player.getUniqueId(), new ArrayList<>());
                     Sidebar.setupSidebar(e.getPlayer());
                 }
             }

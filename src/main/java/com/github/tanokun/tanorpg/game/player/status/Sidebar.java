@@ -58,8 +58,8 @@ public class Sidebar {
         board.updateLine(7,"    §e§lLv: §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)");
         board.updateLine(11, "    §bPing§7>> §b" + ((CraftPlayer)p).getHandle().ping + "ms");
         board.updateLine(12, "    §bPlayers§7>> §b" + Bukkit.getOnlinePlayers().size() + "§d§l/§b" + Bukkit.getMaxPlayers());
-        if (EditComboEventListener.getCombos(p).size() > 0) {
-            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p));
+        if (!(EditComboEventListener.combos.get(p.getUniqueId()).size() == 0)) {
+            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.combos.get(p.getUniqueId()));
         } else {
             board.updateLine(8, "    §a§lCombos§7>> §b");
         }

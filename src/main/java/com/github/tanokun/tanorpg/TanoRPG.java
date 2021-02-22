@@ -8,6 +8,7 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import com.github.tanokun.tanorpg.listener.EditComboEventListener;
 import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
 import com.github.tanokun.tanorpg.util.io.Coding;
 import net.milkbowl.vault.economy.Economy;
@@ -26,6 +27,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.security.cert.CertificateRevokedException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -45,6 +47,7 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.broadcastMessage(TanoRPG.PX + "プレイヤーデータ読み込み中...");
         for(Player player : Bukkit.getOnlinePlayers()){
             GamePlayerManager.loadData(player.getUniqueId());
+            EditComboEventListener.combos.put(player.getUniqueId(), new ArrayList<>());
             player.setMaximumNoDamageTicks(0);
         }
         Bukkit.broadcastMessage(TanoRPG.PX + "完了");

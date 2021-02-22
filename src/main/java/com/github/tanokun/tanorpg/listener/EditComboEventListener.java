@@ -4,6 +4,7 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
+import com.google.common.base.Equivalence;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -19,10 +20,13 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class EditComboEventListener implements Listener {
     private final static String COMBO = "COMBO";
+    public static HashMap<UUID, List<String>> combos = new HashMap<>();
     @EventHandler
     public void onClick(PlayerInteractEvent e){
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK){
@@ -85,36 +89,29 @@ public class EditComboEventListener implements Listener {
         }catch (Exception e){return new ArrayList<>();}
     }
     private void addCombo(Player player, String combo){
-        Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
-            List<String> combos = getCombos(player);
-            if (combos.size() >= 3) return;
-            combos.add(combo);
-            player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
-            final boolean[] skill = {false};
-            if (combos.size() >= 3) {
-                List<String> finalCombos = combos;
-                new BukkitRunnable(){
-                    @Override
-                    public void run() {
-                        if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()), new ArrayList<>(finalCombos))) skill[0] = true;
+        UUID uuid = player.getUniqueId();
+        new BukkitRunnable(){
+            boolean bool = false;
+            boolean skill;
+            @Override
+            public void run() {
+                List<String> playerCombo = combos.get(uuid);
+                if (!bool){
+                    if (playerCombo.size() >= 3) {cancel();return;}
+                    playerCombo.add(combo);
+                    if (playerCombo.size() >= 3) {
+                        if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(uuid), playerCombo))
+                            skill = true;
                     }
-                }.runTask(TanoRPG.getPlugin());
-            }
-            Sidebar.updateSidebar(player);
-            for (int i = 0; i < 40; i++) {
-                if (skill[0] == true) {
-                    try {Thread.sleep(150);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
-                    return;
+                    Sidebar.updateSidebar(player);
+                } else {
+                    if (skill) {cancel();return;}
+                    playerCombo.remove(0);
+                    Sidebar.updateSidebar(player);
+                    cancel();
                 }
-                try {Thread.sleep(50);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
+                bool = true;
             }
-            combos = getCombos(player);
-            if (combos.size() > 0) {
-                combos.remove(0);
-            }
-            Sidebar.updateSidebar(player);
-            if (combos.size() <= 0){player.removeMetadata(COMBO, TanoRPG.getPlugin()); return;}
-            player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
-        });
+        }.runTaskTimer(TanoRPG.getPlugin(), 1, 40);
     }
 }

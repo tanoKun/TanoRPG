@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
+import com.github.tanokun.tanorpg.listener.EditComboEventListener;
 import com.github.tanokun.tanorpg.util.Glowing;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -37,7 +38,7 @@ public class SkillManager {
     public static void addWarriorSkill(Skill skill){warriorSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);skillIDs.add(skill.getName());}
     public static void addPriestSkill(Skill skill){priestSkills.put(skill.getCombo().toString(), skill); skillNames.put(skill.getName(), skill);skillIDs.add(skill.getName());}
 
-    public static boolean runPlayerSkill(GamePlayer player, ArrayList<String> combos){
+    public static boolean runPlayerSkill(GamePlayer player, List<String> combos){
         GamePlayerJobType job = player.getJob();
         if (allSkills.get(combos.toString()) != null){
             if (!player.hasSkill(allSkills.get(combos.toString()).getName())) return false;
@@ -67,7 +68,7 @@ public class SkillManager {
         return false;
     }
     private static void runSkill(Skill skill, GamePlayer player) {
-        player.getPlayer().removeMetadata("COMBO", TanoRPG.getPlugin());
+        EditComboEventListener.combos.remove(player.getUuid());
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter byString = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         if (!player.getPlayer().hasMetadata(CT + "_" + skill.getName())){
