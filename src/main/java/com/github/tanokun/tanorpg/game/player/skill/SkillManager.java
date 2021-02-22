@@ -49,18 +49,36 @@ public class SkillManager {
             case WARRIOR:
                 if (warriorSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(warriorSkills.get(combos.toString()).getName())) return false;
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                        if (warriorSkills.get(combos.toString()) instanceof AttackSkill){
+                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                            return false;
+                        }
+                    }
                     runSkill(warriorSkills.get(combos.toString()), player);
                     return true;
                 }
             case MAGE:
                 if (mageSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(mageSkills.get(combos.toString()).getName())) return false;
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                        if (mageSkills.get(combos.toString()) instanceof AttackSkill){
+                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                            return false;
+                        }
+                    }
                     runSkill(mageSkills.get(combos.toString()), player);
                     return true;
                 }
             case PRIEST:
                 if (priestSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(priestSkills.get(combos.toString()).getName())) return false;
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                        if (priestSkills.get(combos.toString()) instanceof AttackSkill){
+                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                            return false;
+                        }
+                    }
                     runSkill(priestSkills.get(combos.toString()), player);
                     return true;
                 }

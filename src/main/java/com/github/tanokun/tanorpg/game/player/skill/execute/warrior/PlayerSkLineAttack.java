@@ -7,6 +7,7 @@ import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -23,7 +24,7 @@ import java.util.Arrays;
 
 import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.WARRIOR;
 
-public class PlayerSkLineAttack extends Skill {
+public class PlayerSkLineAttack extends Skill implements AttackSkill {
     public PlayerSkLineAttack() {
         super("猪突猛進", 0, 0, 0,
                 new ArrayList<String>(Arrays.asList("DR", "LC", "LC")),

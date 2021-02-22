@@ -7,6 +7,7 @@ import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -33,7 +34,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.MAGE;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class PlayerSkLiningAttack extends Skill {
+public class PlayerSkLiningAttack extends Skill implements AttackSkill {
     public PlayerSkLiningAttack() {
         super("落雷", 5, 30, 25,
                 new ArrayList<String>(Arrays.asList("DR", "SRC", "SRC")),
