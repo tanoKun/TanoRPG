@@ -59,12 +59,21 @@ public class Config {
     }
     public void saveDefaultConfig() {
         if (!file.exists()) {
-            plugin.saveResource(folderPath + File.separator + fileName, false);
+            if (folder != null) {
+                plugin.saveResource(folderPath + File.separator + fileName, false);
+            }else {
+                plugin.saveResource(fileName, false);
+            }
         }
     }
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(file);
-        final InputStream defConfigStream = plugin.getResource(folderPath + File.separator + fileName);
+        InputStream defConfigStream;
+        if (folder != null) {
+            defConfigStream = plugin.getResource(folderPath + File.separator + fileName);
+        }else {
+            defConfigStream = plugin.getResource(fileName);
+        }
         if (defConfigStream == null) {
             return;
         }

@@ -38,6 +38,7 @@ public final class TanoRPG extends JavaPlugin {
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
     public static final String OPEN_KYE = Coding.decode("a2plb2lqT0lIKSRoMjN1aDUzbzgyaGppanF3bjkpKCNIUklVTzJoOTg=");
     public static String IP;
+
     public void onEnable() {
         plugin = this;
         IP = getPlugin().getConfig().getString("server-ip");
@@ -69,6 +70,12 @@ public final class TanoRPG extends JavaPlugin {
         }
     }
 
+    public void onDisable () {
+        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
+        GamePlayerManager.saveDataAll();
+        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
+    }
+
     private void setupEcon() {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         econ = rsp.getProvider();
@@ -76,15 +83,20 @@ public final class TanoRPG extends JavaPlugin {
 
     public static Economy getEcon() {return econ;}
 
-    public void onDisable () {
-        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
-        GamePlayerManager.saveDataAll();
-        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
-    }
     public static Plugin getPlugin () {return plugin;}
+
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return Register.getCommand(command.getName()).tabComplete(sender, args);
+    }
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return Register.getCommand(command.getName()).execute(sender, args);
     }
+
+    public static void playSound(Player player, Sound sound, int volume, double v2){
+        player.playSound(player.getLocation(), sound, volume, (float) v2);
+    }
+
     private static void removeEntities(){
         for(Entity entity : Bukkit.getWorld("world").getEntities()) {
             if (entity instanceof Monster) {
@@ -93,6 +105,7 @@ public final class TanoRPG extends JavaPlugin {
         }
         EntitySpawnEventListener.counts = new HashMap<>();
     }
+
     public static Entity[] getNearbyEntities(Location l, double radius) {
         double chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
         HashSet <Entity> radiusEntities = new HashSet< Entity >();
@@ -107,13 +120,5 @@ public final class TanoRPG extends JavaPlugin {
         }
 
         return radiusEntities.toArray(new Entity[radiusEntities.size()]);
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return Register.getCommand(command.getName()).tabComplete(sender, args);
-    }
-    public static void playSound(Player player, Sound sound, int volume, double v2){
-        player.playSound(player.getLocation(), sound, volume, (float) v2);
     }
 }
