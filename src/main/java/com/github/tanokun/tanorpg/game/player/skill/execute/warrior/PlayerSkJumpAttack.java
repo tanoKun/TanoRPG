@@ -2,8 +2,8 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.warrior;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
@@ -58,9 +58,9 @@ public class PlayerSkJumpAttack extends Skill implements AttackSkill {
         }
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
         for (Entity entity2 : TanoRPG.getNearbyEntities(entity.getLocation(), 10)){
-            if (entity2 instanceof Player || !CustomEntityManager.isExists(entity2)) continue;
+            if (entity2 instanceof Player || EntityManager.getEntityData(entity2) != null) continue;
             ((Creature) entity2).setTarget((LivingEntity) entity);
-            CustomEntity custom = CustomEntityManager.getEntity(entity2);
+            EntityData custom = EntityManager.getEntityData(entity2);
             int at_lvl = gamePlayer.getLEVEL();
             int vi_lvl = custom.getLEVEL();
             double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),

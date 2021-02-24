@@ -49,7 +49,7 @@ public class SkillManager {
             case WARRIOR:
                 if (warriorSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(warriorSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
                         if (warriorSkills.get(combos.toString()) instanceof AttackSkill){
                             player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
                             return false;
@@ -61,7 +61,7 @@ public class SkillManager {
             case MAGE:
                 if (mageSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(mageSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
                         if (mageSkills.get(combos.toString()) instanceof AttackSkill){
                             player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
                             return false;
@@ -73,7 +73,7 @@ public class SkillManager {
             case PRIEST:
                 if (priestSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(priestSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand())){
+                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
                         if (priestSkills.get(combos.toString()) instanceof AttackSkill){
                             player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
                             return false;
@@ -86,7 +86,7 @@ public class SkillManager {
         return false;
     }
     private static void runSkill(Skill skill, GamePlayer player) {
-        EditComboEventListener.combos.remove(player.getUuid());
+        EditComboEventListener.combos.get(player.getUuid()).clear();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter byString = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         if (!player.getPlayer().hasMetadata(CT + "_" + skill.getName())){

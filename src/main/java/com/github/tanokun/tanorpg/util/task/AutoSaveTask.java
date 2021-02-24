@@ -11,5 +11,6 @@ public class AutoSaveTask extends BukkitRunnable {
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
         GamePlayerManager.saveDataAll();
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
+        System.gc();
     }
 }

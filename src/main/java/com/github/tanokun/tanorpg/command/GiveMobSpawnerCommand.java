@@ -2,8 +2,7 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -30,11 +29,11 @@ public class GiveMobSpawnerCommand extends Command {
                 sender.sendMessage(TanoRPG.PX + "§cCONSOLEからは実行できません");
                 return true;
             }
-            if (!(CustomEntityManager.isExists(args[0]))) {
+            if (EntityManager.getEntityData(args[0]) == null) {
                 sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§cは存在しません");
                 return true;
             }
-            CustomEntityManager.getEntity(args[0]).giveSpawnerEntity(player);
+            EntityManager.getEntityData(args[0]).giveSpawnerEntity(player);
             sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§aのスポナーをgiveしました");
         }
         return true;
@@ -42,11 +41,11 @@ public class GiveMobSpawnerCommand extends Command {
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (args.length == 0){
-            return CustomEntityManager.getEntityIDs();
+            return EntityManager.getEntityIDs();
         }
         if (!sender.isOp()) return null;
         List<String> texts = new ArrayList<>();
-        for (String id : CustomEntityManager.getEntityIDs()){
+        for (String id : EntityManager.getEntityIDs()){
             if (id.contains(args[0])) texts.add(id);
         }
         return texts;

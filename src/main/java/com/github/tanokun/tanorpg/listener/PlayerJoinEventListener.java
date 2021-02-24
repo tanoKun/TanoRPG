@@ -32,9 +32,9 @@ public class PlayerJoinEventListener implements Listener {
                 } else {
                     e.setJoinMessage(join + "§a" + player.getName() + "§aがJoinしました！");
                     GamePlayerManager.loadData(player.getUniqueId());
-                    EditComboEventListener.combos.put(player.getUniqueId(), new ArrayList<>());
-                    Sidebar.setupSidebar(e.getPlayer());
                 }
+                EditComboEventListener.combos.put(e.getPlayer().getUniqueId(), new ArrayList<>());
+                Sidebar.setupSidebar(e.getPlayer());
             }
         }.runTask(TanoRPG.getPlugin());
     }

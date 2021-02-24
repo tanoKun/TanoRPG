@@ -2,7 +2,7 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -27,11 +27,11 @@ public class MobSpawnCommand extends Command {
                 sender.sendMessage(TanoRPG.PX + "§cCONSOLEからは実行できません");
                 return true;
             }
-            if (!(CustomEntityManager.isExists(args[0]))) {
+            if (EntityManager.getEntityData(args[0]) == null) {
                 sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§cは存在しません");
                 return true;
             }
-            CustomEntityManager.getEntity(args[0]).spawnEntity(player.getLocation());
+            EntityManager.getEntityData(args[0]).spawnEntity(player.getLocation());
             sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§aを召喚しました");
         }
         return true;
@@ -40,10 +40,10 @@ public class MobSpawnCommand extends Command {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (!sender.isOp()) return null;
         if (args.length == 0){
-            return CustomEntityManager.getEntityIDs();
+            return EntityManager.getEntityIDs();
         }
         List<String> texts = new ArrayList<>();
-        for (String id : CustomEntityManager.getEntityIDs()){
+        for (String id : EntityManager.getEntityIDs()){
             if (id.contains(args[0])) texts.add(id);
         }
         return texts;

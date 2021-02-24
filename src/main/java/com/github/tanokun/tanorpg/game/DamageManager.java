@@ -1,8 +1,8 @@
 package com.github.tanokun.tanorpg.game;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
@@ -13,6 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import static com.github.tanokun.tanorpg.game.entity.EntityManager.*;
 import static com.github.tanokun.tanorpg.game.player.status.buff.Buff.getBuffPercent;
 
 public class DamageManager {
@@ -35,10 +36,10 @@ public class DamageManager {
             public void run() {
                 ((Creature)target).setTarget((LivingEntity) attacker);
                 String[] name = target.getName().split(" ");
-                if (CustomEntityManager.getNewEntity((Creature) target) == null) return;
-                CustomEntity customEntity;
+                if (getEntity((Creature) target) == null) return;
+                EntityData customEntity;
                 try {
-                    customEntity = CustomEntityManager.getNewEntity((Creature) target).getCustomEntity();
+                    customEntity = getEntity((Creature) target).getEntityData();
                 }catch (NullPointerException e){return;}
                 GamePlayer gamePlayer = GamePlayerManager.getPlayer(attacker.getUniqueId());
                 boolean NULL = false;
@@ -50,7 +51,7 @@ public class DamageManager {
                 }
                 if (((Creature) target).getHealth() - damage <= 0) {
                     customEntity.getDropItems().giveDropItems((Player) attacker);
-                    gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + CustomEntityManager.getEntity(name[0]).getEXP());
+                    gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getEntityData(name[0]).getEXP());
                     if (NULL == false) {
                         Integer count;
                         if (key != null) {

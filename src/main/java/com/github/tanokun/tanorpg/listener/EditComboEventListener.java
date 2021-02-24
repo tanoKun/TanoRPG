@@ -90,14 +90,14 @@ public class EditComboEventListener implements Listener {
     }
     private void addCombo(Player player, String combo){
         UUID uuid = player.getUniqueId();
+        List<String> playerCombo = combos.get(uuid);
+        if (playerCombo.size() >= 3) {return;}
         new BukkitRunnable(){
             boolean bool = false;
             boolean skill;
             @Override
             public void run() {
-                List<String> playerCombo = combos.get(uuid);
                 if (!bool){
-                    if (playerCombo.size() >= 3) {cancel();return;}
                     playerCombo.add(combo);
                     if (playerCombo.size() >= 3) {
                         if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(uuid), playerCombo))
@@ -106,9 +106,12 @@ public class EditComboEventListener implements Listener {
                     Sidebar.updateSidebar(player);
                 } else {
                     if (skill) {cancel();return;}
-                    playerCombo.remove(0);
+                    if (!(playerCombo.size() == 0)) {
+                        playerCombo.remove(0);
+                    }
                     Sidebar.updateSidebar(player);
                     cancel();
+
                 }
                 bool = true;
             }

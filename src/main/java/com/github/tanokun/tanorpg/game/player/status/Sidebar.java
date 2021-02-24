@@ -20,6 +20,7 @@ import java.util.UUID;
 public class Sidebar {
     public final static HashMap<UUID, FastBoard> boards = new HashMap<>();
     public static void setupSidebar(Player p){
+        if (GamePlayerManager.getPlayer(p.getUniqueId()) == null) return;
         if (boards.containsKey(p.getUniqueId())) return;
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(p.getUniqueId());
         FastBoard board = new FastBoard(p);

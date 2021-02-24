@@ -2,11 +2,11 @@ package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
+import com.github.tanokun.tanorpg.game.entity.Entity;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemType;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
-import com.github.tanokun.tanorpg.game.mob.NewEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
@@ -63,11 +63,11 @@ public class DamageEventListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (CustomEntityManager.getNewEntity((Creature) e.getEntity()) == null) return;
+            if (EntityManager.getEntity((Creature) e.getEntity()) == null) return;
             e.setCancelled(true);
             GamePlayer attacker = GamePlayerManager.getPlayer(e.getDamager().getUniqueId());
-            NewEntity victim = CustomEntityManager.getNewEntity((Creature) e.getEntity());
-            CustomEntity customEntity = victim.getCustomEntity();
+            Entity victim = EntityManager.getEntity((Creature) e.getEntity());
+            EntityData customEntity = victim.getEntityData();
             if (attacker.getPlayer().hasMetadata("cooltime")) {
                 e.setCancelled(true);
                 return;
@@ -140,13 +140,13 @@ public class DamageEventListener implements Listener {
     private void entity(EntityDamageByEntityEvent e) {
         try{
             try{
-                if (CustomEntityManager.getNewEntity((Creature) e.getDamager()) == null) return;
+                if (EntityManager.getEntity((Creature) e.getDamager()) == null) return;
             }catch (Exception ex) {
                 return;
             }
             e.setDamage(0);
-            NewEntity attacker = CustomEntityManager.getNewEntity((Creature) e.getDamager());
-            CustomEntity customEntity = attacker.getCustomEntity();
+            Entity attacker = EntityManager.getEntity((Creature) e.getDamager());
+            EntityData customEntity = attacker.getEntityData();
             GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
             ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
             int at_lvl = customEntity.getLEVEL();

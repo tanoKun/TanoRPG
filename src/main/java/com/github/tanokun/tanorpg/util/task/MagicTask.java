@@ -2,10 +2,10 @@ package com.github.tanokun.tanorpg.util.task;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.CustomItem;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -15,7 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -42,10 +41,10 @@ public class MagicTask extends BukkitRunnable {
         if (time > 4) {this.cancel();}
         ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
         for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
-            if (CustomEntityManager.isExists(entity)){
+            if (EntityManager.getEntityData(entity) != null){
                 if (entities.get(entity) == null) {
                     entities.put(entity, true);
-                    CustomEntity entity2 = CustomEntityManager.getEntity(entity);
+                    EntityData entity2 = EntityManager.getEntityData(entity);
                     int at_lvl = gamePlayer.getLEVEL();
                     int vi_lvl = entity2.getLEVEL();
                     double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
