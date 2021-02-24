@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.game.mob;
+package com.github.tanokun.tanorpg.game.entity;
 
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.player.status.Status;
@@ -10,9 +10,10 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import org.bukkit.entity.EntityType;
 
-public class CustomEntity {
-    private CustomEntityDropItems dropItems;
+public class EntityData {
+    private EntityDropItems dropItems;
     private String name;
     private EntityType entityType;
     private int HP;
@@ -28,7 +29,7 @@ public class CustomEntity {
 
     private HashMap<StatusType, Status> statuses = new HashMap<>();
 
-    public CustomEntity(String name, EntityType entityType, int LEVEL, int HP, long EXP){
+    public EntityData(String name, EntityType entityType, int LEVEL, int HP, long EXP){
         this.name = name;
         this.entityType = entityType;
         this.HP = HP;
@@ -36,7 +37,7 @@ public class CustomEntity {
         this.EXP = EXP;
     }
 
-    public void setDropItems(CustomEntityDropItems dropItems) {this.dropItems = dropItems;}
+    public void setDropItems(EntityDropItems dropItems) {this.dropItems = dropItems;}
     public void setArmors(String mainHand, String offHand, String helmet, String chestPlate, String leggings, String boots) {
         this.mainHand = mainHand;
         this.offHand = offHand;
@@ -69,7 +70,7 @@ public class CustomEntity {
         statuses.put(StatusType.INT, new Status(StatusType.INT, i7));
     }
 
-    public CustomEntityDropItems getDropItems() {return dropItems;}
+    public EntityDropItems getDropItems() {return dropItems;}
 
     public Creature spawnEntity(Location location){
         Creature entity = (Creature) location.getWorld().spawnEntity(location, entityType);
@@ -82,7 +83,7 @@ public class CustomEntity {
         if (!(boots.equals(""))){entity.getEquipment().setBoots(CustomItemManager.getCustomItem(boots).getItem());}
         entity.setMaxHealth(HP);
         entity.setHealth(HP);
-        CustomEntityManager.addNewEntity(new NewEntity(entity, this));
+        EntityManager.addEntity(new Entity(entity, this));
         return entity;
     }
     public void giveSpawnerEntity(Player player){
@@ -98,29 +99,10 @@ public class CustomEntity {
                         "\"text\":\"" + name +"\"}'},SpawnPotentials:[{Weight:1,Entity:{" +
                         "id:\"minecraft:villager\",Tags:[\"entitymarker\"],CustomName:'{\"text\":\"" + name + "\"}'}}]}} 1"); }
 
-    public static boolean chance(double percent) {
-        double count = percent / 100;
-        if (Math.random() <= count) {
-            return true;
-        }
-        return false;
-    }
-    public String getMainHand() {
-        return mainHand;
-    }
-    public String getOffHand() {
-        return offHand;
-    }
-    public String getHelmet() {
-        return helmet;
-    }
-    public String getChestPlate() {
-        return chestPlate;
-    }
-    public String getLeggings() {
-        return leggings;
-    }
-    public String getBoots() {
-        return boots;
-    }
+    public String getMainHand() {return mainHand;}
+    public String getOffHand() {return offHand;}
+    public String getHelmet() {return helmet;}
+    public String getChestPlate() {return chestPlate;}
+    public String getLeggings() {return leggings;}
+    public String getBoots() {return boots;}
 }
