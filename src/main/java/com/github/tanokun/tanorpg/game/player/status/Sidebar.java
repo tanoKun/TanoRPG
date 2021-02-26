@@ -3,18 +3,13 @@ package com.github.tanokun.tanorpg.game.player.status;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.listener.EditComboEventListener;
+import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
 import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
 import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.DisplaySlot;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 public class Sidebar {
@@ -42,8 +37,8 @@ public class Sidebar {
                 "    §aIP§7>> §b" + TanoRPG.IP,
                 "§b-----==-----------==-----"
         );
-        if (EditComboEventListener.getCombos(p).size() > 0) {
-            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p));
+        if (!(EditComboEventListener.getCombos(p.getUniqueId()).size() == 0)) {
+            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p.getUniqueId()));
         }
         boards.put(p.getUniqueId(), board);
     }
@@ -59,8 +54,8 @@ public class Sidebar {
         board.updateLine(7,"    §e§lLv: §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)");
         board.updateLine(11, "    §bPing§7>> §b" + ((CraftPlayer)p).getHandle().ping + "ms");
         board.updateLine(12, "    §bPlayers§7>> §b" + Bukkit.getOnlinePlayers().size() + "§d§l/§b" + Bukkit.getMaxPlayers());
-        if (!(EditComboEventListener.combos.get(p.getUniqueId()).size() == 0)) {
-            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.combos.get(p.getUniqueId()));
+        if (!(EditComboEventListener.getCombos(p.getUniqueId()).size() == 0)) {
+            board.updateLine(8, "    §a§lCombos§7>> §b" + EditComboEventListener.getCombos(p.getUniqueId()));
         } else {
             board.updateLine(8, "    §a§lCombos§7>> §b");
         }

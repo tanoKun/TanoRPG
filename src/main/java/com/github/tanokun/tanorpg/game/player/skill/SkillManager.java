@@ -6,7 +6,6 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
-import com.github.tanokun.tanorpg.listener.EditComboEventListener;
 import com.github.tanokun.tanorpg.util.Glowing;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -86,7 +85,6 @@ public class SkillManager {
         return false;
     }
     private static void runSkill(Skill skill, GamePlayer player) {
-        EditComboEventListener.combos.get(player.getUuid()).clear();
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter byString = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         if (!player.getPlayer().hasMetadata(CT + "_" + skill.getName())){

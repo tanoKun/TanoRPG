@@ -2,23 +2,22 @@ package com.github.tanokun.tanorpg;
 
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
-import com.github.tanokun.tanorpg.listener.EditComboEventListener;
+import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
 import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
 import com.github.tanokun.tanorpg.util.io.Coding;
 import net.milkbowl.vault.economy.Economy;
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCow;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -26,11 +25,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.security.cert.CertificateRevokedException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public final class TanoRPG extends JavaPlugin {
     private static Plugin plugin;
@@ -47,11 +42,10 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.broadcastMessage(TanoRPG.PX + "プレイヤーデータ読み込み中...");
         for(Player player : Bukkit.getOnlinePlayers()){
             GamePlayerManager.loadData(player.getUniqueId());
-            EditComboEventListener.combos.put(player.getUniqueId(), new ArrayList<>());
+            EditComboEventListener.comboRunnable.put(player.getUniqueId(), new ArrayList<>());
             player.setMaximumNoDamageTicks(0);
         }
         Bukkit.broadcastMessage(TanoRPG.PX + "完了");
-        CustomEntityManager.loadCustomEntity();
         setupEcon();
         Buff.start();
         Registration registration = new Registration(this);
@@ -63,7 +57,7 @@ public final class TanoRPG extends JavaPlugin {
         registration.registerListener();
         registration.registerSkills();
         Bukkit.getConsoleSender().sendMessage(PX + CustomItemManager.loadCustomItemAll());
-        Bukkit.getConsoleSender().sendMessage(PX + CustomEntityManager.loadCustomEntity());
+        Bukkit.getConsoleSender().sendMessage(PX + EntityManager.loadData());
         Bukkit.getConsoleSender().sendMessage(PX + ShopManager.loadShops());
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         removeEntities();
@@ -112,16 +106,19 @@ public final class TanoRPG extends JavaPlugin {
     public static Entity[] getNearbyEntities(Location l, double radius) {
         double chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
         HashSet <Entity> radiusEntities = new HashSet< Entity >();
-        for (double chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
-            for (double chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
-                int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
-                for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
-                    if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock())
-                        radiusEntities.add(e);
+        try {
+            for (double chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
+                for (double chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
+                    int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
+                    for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
+                        if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock())
+                            radiusEntities.add(e);
+                    }
                 }
             }
+        }catch (NoSuchElementException | NullPointerException e){
+            return radiusEntities.toArray(new Entity[radiusEntities.size()]);
         }
-
         return radiusEntities.toArray(new Entity[radiusEntities.size()]);
     }
 }
