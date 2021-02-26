@@ -2,11 +2,12 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.warrior;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -23,9 +24,9 @@ import java.util.Arrays;
 
 import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.WARRIOR;
 
-public class PlayerSkLineAttack extends Skill {
+public class PlayerSkLineAttack extends Skill implements AttackSkill {
     public PlayerSkLineAttack() {
-        super("猪突猛進", 0, 0, 0,
+        super("猪突猛進", 12, 40, 32,
                 new ArrayList<String>(Arrays.asList("DR", "LC", "LC")),
                 new ArrayList<String>(Arrays.asList("§f前方に突進してダメージを与えます")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.BLAZE_ROD);
@@ -50,9 +51,9 @@ public class PlayerSkLineAttack extends Skill {
                     entity.teleport(loc);
                     entity.setVelocity(loc.getDirection());
                     for (Entity target : TanoRPG.getNearbyEntities(loc, 2)){
-                        if (target instanceof Player || !CustomEntityManager.isExists(target)) continue;
+                        if (target instanceof Player || EntityManager.getEntityData(target) != null) continue;
                         ((Creature) target).setTarget((LivingEntity) entity);
-                        CustomEntity custom = CustomEntityManager.getEntity(target);
+                        EntityData custom = EntityManager.getEntityData(target);
                         int at_lvl = gamePlayer.getLEVEL();
                         int vi_lvl = custom.getLEVEL();
                         double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),

@@ -73,7 +73,7 @@ public class SetJobMenu extends Menu {
 
     @Override
     public void onClose(InventoryCloseEvent e) {
-        Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
+        Bukkit.getScheduler().runTask(TanoRPG.getPlugin(), () -> {
             if (GamePlayerManager.getPlayer(e.getPlayer().getUniqueId()) == null){
                 openInv((Player) e.getPlayer());
             }

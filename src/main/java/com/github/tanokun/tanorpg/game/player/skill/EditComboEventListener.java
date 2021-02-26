@@ -1,9 +1,10 @@
-package com.github.tanokun.tanorpg.listener;
+package com.github.tanokun.tanorpg.game.player.skill;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
+import com.google.common.base.Equivalence;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -19,10 +20,14 @@ import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class EditComboEventListener implements Listener {
     private final static String COMBO = "COMBO";
+    public static HashMap<UUID, List<ComboRunnable>> comboRunnable = new HashMap<>();
+
     @EventHandler
     public void onClick(PlayerInteractEvent e){
         if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK){
@@ -67,54 +72,19 @@ public class EditComboEventListener implements Listener {
             }
         }.runTaskAsynchronously(TanoRPG.getPlugin());
     }
-    public static List<String> getCombos(Player p){
-        MetadataValue m = null;
-        List<String> combos = new ArrayList<>();
-        if (p.getPlayer().hasMetadata(COMBO)) {
-            for (MetadataValue v : p.getPlayer().getMetadata(COMBO)) {
-                if (v.getOwningPlugin().getName().equals(TanoRPG.getPlugin().getName())) {
-                    m = v;
-                    break;
-                }
-            }
-        } else {
-            return new ArrayList<>();
-        }
-        try{
-            return (List<String>) m.value();
-        }catch (Exception e){return new ArrayList<>();}
-    }
+
     private void addCombo(Player player, String combo){
-        Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
-            List<String> combos = getCombos(player);
-            if (combos.size() >= 3) return;
-            combos.add(combo);
-            player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
-            final boolean[] skill = {false};
-            if (combos.size() >= 3) {
-                List<String> finalCombos = combos;
-                new BukkitRunnable(){
-                    @Override
-                    public void run() {
-                        if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()), new ArrayList<>(finalCombos))) skill[0] = true;
-                    }
-                }.runTask(TanoRPG.getPlugin());
-            }
-            Sidebar.updateSidebar(player);
-            for (int i = 0; i < 40; i++) {
-                if (skill[0] == true) {
-                    try {Thread.sleep(150);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
-                    return;
-                }
-                try {Thread.sleep(50);} catch (InterruptedException interruptedException) {interruptedException.printStackTrace();}
-            }
-            combos = getCombos(player);
-            if (combos.size() > 0) {
-                combos.remove(0);
-            }
-            Sidebar.updateSidebar(player);
-            if (combos.size() <= 0){player.removeMetadata(COMBO, TanoRPG.getPlugin()); return;}
-            player.setMetadata(COMBO, new FixedMetadataValue(TanoRPG.getPlugin(), combos));
-        });
+        UUID playerUuid = player.getUniqueId();
+        if (getCombos(playerUuid).size() >= 3) {return;}
+
+        List<ComboRunnable> playerComboRunnable = comboRunnable.get(playerUuid);
+        playerComboRunnable.add(new ComboRunnable(combo, player));
+    }
+    public static ArrayList<String> getCombos(UUID uuid){
+        ArrayList<String> combos = new ArrayList<>();
+        for(ComboRunnable runnable : comboRunnable.get(uuid)){
+            combos.add(runnable.getCombo());
+        }
+        return combos;
     }
 }

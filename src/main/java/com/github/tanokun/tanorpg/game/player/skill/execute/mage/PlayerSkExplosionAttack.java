@@ -2,11 +2,12 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.mage;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -29,7 +30,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.MAGE;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class PlayerSkExplosionAttack extends Skill {
+public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
     public PlayerSkExplosionAttack() {
         super("爆散", 8, 40, 40,
                 new ArrayList<String>(Arrays.asList("LC", "DR", "SLC")),
@@ -45,7 +46,7 @@ public class PlayerSkExplosionAttack extends Skill {
         for (int i = 0; i < 10; i++) {
             location.add(vector.getX(), vector.getY(), vector.getZ());
             for (Entity temp_target : TanoRPG.getNearbyEntities(location, 3)){
-                if (!CustomEntityManager.isExists(temp_target)) continue;
+                if (EntityManager.getEntityData(temp_target) != null) continue;
                 target = temp_target;
             }
         }
@@ -67,7 +68,7 @@ public class PlayerSkExplosionAttack extends Skill {
                     this.cancel();
                     ((Creature) finalTarget).getEquipment().setHelmet(helmet);
                     ParticleEffect.EXPLOSION_HUGE.display(finalTarget.getLocation(), 0, 0, 0, 0, 4, null, Bukkit.getOnlinePlayers());
-                    CustomEntity custom = CustomEntityManager.getEntity(finalTarget);
+                    EntityData custom = EntityManager.getEntityData(finalTarget);
                     double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                             gamePlayer.getStatus(StatusType.INT).getLevel(),
                             gamePlayer.getStatus(StatusType.AGI).getLevel());
@@ -76,7 +77,7 @@ public class PlayerSkExplosionAttack extends Skill {
                     long damage = DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 2;
                     DamageManager.createMake(damage, entity, finalTarget);
                     for (Entity damager : TanoRPG.getNearbyEntities(finalTarget.getLocation(), 3)){
-                         custom = CustomEntityManager.getEntity(damager);
+                         custom = EntityManager.getEntityData(damager);
                         atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.INT).getLevel(),
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());

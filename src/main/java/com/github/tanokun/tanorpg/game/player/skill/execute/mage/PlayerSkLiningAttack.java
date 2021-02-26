@@ -2,11 +2,12 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.mage;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntity;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -33,7 +34,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.MAGE;
 import static java.lang.Math.cos;
 import static java.lang.Math.sin;
 
-public class PlayerSkLiningAttack extends Skill {
+public class PlayerSkLiningAttack extends Skill implements AttackSkill {
     public PlayerSkLiningAttack() {
         super("落雷", 5, 30, 25,
                 new ArrayList<String>(Arrays.asList("DR", "SRC", "SRC")),
@@ -65,9 +66,9 @@ public class PlayerSkLiningAttack extends Skill {
                     GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
                     for (Entity entity2 : TanoRPG.getNearbyEntities(location, 2.5)) {
                         {
-                            if (entity2 instanceof Player || !CustomEntityManager.isExists(entity2)) continue;
+                            if (entity2 instanceof Player || EntityManager.getEntityData(entity2) != null) continue;
                             ((Creature) entity2).setTarget((LivingEntity) entity);
-                            CustomEntity custom = CustomEntityManager.getEntity(entity2);
+                            EntityData custom = EntityManager.getEntityData(entity2);
                             int at_lvl = gamePlayer.getLEVEL();
                             int vi_lvl = custom.getLEVEL();
                             double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),

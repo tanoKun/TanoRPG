@@ -2,22 +2,22 @@ package com.github.tanokun.tanorpg;
 
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
 import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
 import com.github.tanokun.tanorpg.util.io.Coding;
 import net.milkbowl.vault.economy.Economy;
+import org.apache.commons.lang.ObjectUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftCow;
-import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
@@ -25,10 +25,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.security.cert.CertificateRevokedException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public final class TanoRPG extends JavaPlugin {
     private static Plugin plugin;
@@ -38,16 +35,17 @@ public final class TanoRPG extends JavaPlugin {
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
     public static final String OPEN_KYE = Coding.decode("a2plb2lqT0lIKSRoMjN1aDUzbzgyaGppanF3bjkpKCNIUklVTzJoOTg=");
     public static String IP;
+
     public void onEnable() {
         plugin = this;
         IP = getPlugin().getConfig().getString("server-ip");
         Bukkit.broadcastMessage(TanoRPG.PX + "プレイヤーデータ読み込み中...");
         for(Player player : Bukkit.getOnlinePlayers()){
             GamePlayerManager.loadData(player.getUniqueId());
+            EditComboEventListener.comboRunnable.put(player.getUniqueId(), new ArrayList<>());
             player.setMaximumNoDamageTicks(0);
         }
         Bukkit.broadcastMessage(TanoRPG.PX + "完了");
-        CustomEntityManager.loadCustomEntity();
         setupEcon();
         Buff.start();
         Registration registration = new Registration(this);
@@ -59,7 +57,7 @@ public final class TanoRPG extends JavaPlugin {
         registration.registerListener();
         registration.registerSkills();
         Bukkit.getConsoleSender().sendMessage(PX + CustomItemManager.loadCustomItemAll());
-        Bukkit.getConsoleSender().sendMessage(PX + CustomEntityManager.loadCustomEntity());
+        Bukkit.getConsoleSender().sendMessage(PX + EntityManager.loadData());
         Bukkit.getConsoleSender().sendMessage(PX + ShopManager.loadShops());
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         removeEntities();
@@ -69,6 +67,12 @@ public final class TanoRPG extends JavaPlugin {
         }
     }
 
+    public void onDisable () {
+        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
+        GamePlayerManager.saveDataAll();
+        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
+    }
+
     private void setupEcon() {
         RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
         econ = rsp.getProvider();
@@ -76,15 +80,20 @@ public final class TanoRPG extends JavaPlugin {
 
     public static Economy getEcon() {return econ;}
 
-    public void onDisable () {
-        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
-        GamePlayerManager.saveDataAll();
-        Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
-    }
     public static Plugin getPlugin () {return plugin;}
+
+    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
+        return Register.getCommand(command.getName()).tabComplete(sender, args);
+    }
+
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return Register.getCommand(command.getName()).execute(sender, args);
     }
+
+    public static void playSound(Player player, Sound sound, int volume, double v2){
+        player.playSound(player.getLocation(), sound, volume, (float) v2);
+    }
+
     private static void removeEntities(){
         for(Entity entity : Bukkit.getWorld("world").getEntities()) {
             if (entity instanceof Monster) {
@@ -93,27 +102,23 @@ public final class TanoRPG extends JavaPlugin {
         }
         EntitySpawnEventListener.counts = new HashMap<>();
     }
+
     public static Entity[] getNearbyEntities(Location l, double radius) {
         double chunkRadius = radius < 16 ? 1 : (radius - (radius % 16)) / 16;
         HashSet <Entity> radiusEntities = new HashSet< Entity >();
-        for (double chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
-            for (double chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
-                int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
-                for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
-                    if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock())
-                        radiusEntities.add(e);
+        try {
+            for (double chX = 0 - chunkRadius; chX <= chunkRadius; chX++) {
+                for (double chZ = 0 - chunkRadius; chZ <= chunkRadius; chZ++) {
+                    int x = (int) l.getX(), y = (int) l.getY(), z = (int) l.getZ();
+                    for (Entity e: new Location(l.getWorld(), x + (chX * 16), y, z + (chZ * 16)).getChunk().getEntities()) {
+                        if (e.getLocation().distance(l) <= radius && e.getLocation().getBlock() != l.getBlock())
+                            radiusEntities.add(e);
+                    }
                 }
             }
+        }catch (NoSuchElementException | NullPointerException e){
+            return radiusEntities.toArray(new Entity[radiusEntities.size()]);
         }
-
         return radiusEntities.toArray(new Entity[radiusEntities.size()]);
-    }
-
-    @Override
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        return Register.getCommand(command.getName()).tabComplete(sender, args);
-    }
-    public static void playSound(Player player, Sound sound, int volume, double v2){
-        player.playSound(player.getLocation(), sound, volume, (float) v2);
     }
 }

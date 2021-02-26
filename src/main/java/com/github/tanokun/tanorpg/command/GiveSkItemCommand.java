@@ -2,8 +2,6 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
-import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

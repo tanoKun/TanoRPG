@@ -1,6 +1,6 @@
 package com.github.tanokun.tanorpg.listener;
 
-import com.github.tanokun.tanorpg.game.mob.CustomEntityManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import org.bukkit.entity.Creature;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +11,7 @@ public class DeathEventListener implements Listener {
     public void onDeath(EntityDeathEvent e){
         if (e.getEntity() instanceof Creature) {
             e.getDrops().clear();
-            CustomEntityManager.removeNewEntity((Creature) e.getEntity());
+            EntityManager.removeEntity((Creature) e.getEntity());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
 import org.bukkit.entity.Player;
@@ -16,6 +17,8 @@ public class PlayerQuitEventListener implements Listener {
         e.setQuitMessage(quit + player.getName() + "がQuitしました！");
         GamePlayerManager.saveData(player.getUniqueId());
         GamePlayerManager.removeData(player.getUniqueId());
+        EditComboEventListener.comboRunnable.remove(e.getPlayer().getUniqueId());
+
         FastBoard board = Sidebar.boards.remove(player.getUniqueId());
         if (board != null) {board.delete();}
     }
