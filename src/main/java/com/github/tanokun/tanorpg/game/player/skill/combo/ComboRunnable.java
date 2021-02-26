@@ -1,15 +1,13 @@
-package com.github.tanokun.tanorpg.game.player.skill;
+package com.github.tanokun.tanorpg.game.player.skill.combo;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
 
 public class ComboRunnable extends BukkitRunnable {
     public final String combo;
@@ -27,15 +25,15 @@ public class ComboRunnable extends BukkitRunnable {
     @Override
     public void run() {
         if (!bool) {
-            if (EditComboEventListener.getCombos(player.getUniqueId()).size() >= 3) {
+            if (ComboManager.getCombos(player.getUniqueId()).size() >= 3) {
                 if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()),
-                        new ArrayList<>(EditComboEventListener.getCombos(player.getUniqueId())))){
+                        new ArrayList<>(ComboManager.getCombos(player.getUniqueId())))){
                     skill = true;
-                    for(ComboRunnable runnable : EditComboEventListener.comboRunnable.get(player.getUniqueId())){
+                    for(ComboRunnable runnable : ComboManager.comboRunnable.get(player.getUniqueId())){
                         runnable.setStop();
                     }
-                    EditComboEventListener.comboRunnable.get(player.getUniqueId()).clear();
-                    EditComboEventListener.comboRunnable.put(player.getUniqueId(), EditComboEventListener.comboRunnable.get(player.getUniqueId()));
+                    ComboManager.comboRunnable.get(player.getUniqueId()).clear();
+                    ComboManager.comboRunnable.put(player.getUniqueId(), ComboManager.comboRunnable.get(player.getUniqueId()));
                     Sidebar.updateSidebar(player);
                     cancel();
                     return;
@@ -43,8 +41,8 @@ public class ComboRunnable extends BukkitRunnable {
             }
             Sidebar.updateSidebar(player);
         } else {
-            if (stop && EditComboEventListener.comboRunnable.get(player.getUniqueId()).size() != 0) {
-                EditComboEventListener.comboRunnable.get(player.getUniqueId()).remove(0);
+            if (stop && ComboManager.comboRunnable.get(player.getUniqueId()).size() != 0) {
+                ComboManager.comboRunnable.get(player.getUniqueId()).remove(0);
             }
             Sidebar.updateSidebar(player);
             if (!skill) {

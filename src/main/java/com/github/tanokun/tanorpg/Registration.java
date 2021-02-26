@@ -4,7 +4,7 @@ import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
-import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
+import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
 import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerSkExplosionAttack;
@@ -74,7 +74,7 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new EntitySpawnEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new EditComboEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ComboManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new LeftClickEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new DeathEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ShopManager(), plugin);

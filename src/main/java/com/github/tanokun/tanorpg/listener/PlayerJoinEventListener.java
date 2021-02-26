@@ -2,7 +2,7 @@ package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.skill.EditComboEventListener;
+import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
@@ -15,7 +15,6 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class PlayerJoinEventListener implements Listener {
     private String join = "§a[§bJoin§a] §f";
@@ -35,7 +34,7 @@ public class PlayerJoinEventListener implements Listener {
                     e.setJoinMessage(join + "§a" + player.getName() + "§aがJoinしました！");
                     GamePlayerManager.loadData(player.getUniqueId());
                 }
-                EditComboEventListener.comboRunnable.put(e.getPlayer().getUniqueId(), new ArrayList<>());
+                ComboManager.comboRunnable.put(e.getPlayer().getUniqueId(), new ArrayList<>());
                 Sidebar.setupSidebar(e.getPlayer());
             }
         }.runTask(TanoRPG.getPlugin());

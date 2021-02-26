@@ -1,22 +1,15 @@
-package com.github.tanokun.tanorpg.game.player.skill;
+package com.github.tanokun.tanorpg.game.player.skill.combo;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
-import com.github.tanokun.tanorpg.game.player.status.Sidebar;
-import com.google.common.base.Equivalence;
-import org.bukkit.Bukkit;
+import com.github.tanokun.tanorpg.game.player.skill.combo.ComboRunnable;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerChangedMainHandEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.metadata.MetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
@@ -24,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-public class EditComboEventListener implements Listener {
+public class ComboManager implements Listener {
     private final static String COMBO = "COMBO";
     public static HashMap<UUID, List<ComboRunnable>> comboRunnable = new HashMap<>();
 
