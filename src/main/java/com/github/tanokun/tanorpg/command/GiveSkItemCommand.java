@@ -33,10 +33,10 @@ public class GiveSkItemCommand extends Command {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (!sender.isOp()) return null;
         if (args.length == 0){
-            return SkillManager.getSkillNames();
+            return SkillManager.getSkillName();
         }
         List<String> texts = new ArrayList<>();
-        for (String id : SkillManager.getSkillNames()){
+        for (String id : SkillManager.getSkillName()){
             if (id.contains(args[0])) texts.add(id);
         }
         return texts;

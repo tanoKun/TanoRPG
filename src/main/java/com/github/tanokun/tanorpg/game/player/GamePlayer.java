@@ -40,13 +40,13 @@ public class GamePlayer {
     private HashMap<StatusType, Status> statuses;
     private ArrayList<String> skills = new ArrayList<>();
 
-    private Skill skill_f;
-    private Skill skill_shift_F;
+    private String skill_f;
+    private String skill_shift_F;
 
-    public void setSkill_F(Skill f) {this.skill_f = f;}
-    public void setSkill_Shift_F(Skill shift_F) {this.skill_shift_F = shift_F;}
-    public Skill getSkill_F() {return skill_f;}
-    public Skill getSkill_Shift_F() {return skill_shift_F;}
+    public void setSkill_F(String f) {this.skill_f = f;}
+    public void setSkill_Shift_F(String shift_F) {this.skill_shift_F = shift_F;}
+    public String getSkill_F() {return skill_f;}
+    public String getSkill_Shift_F() {return skill_shift_F;}
 
     public HashMap<StatusType, Status>  getStatuses() {return statuses;}
     public String getName() {return name;}

@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public abstract class Skill {
 
@@ -43,4 +44,17 @@ public abstract class Skill {
     }
     public ArrayList<GamePlayerJobType> getJobs() {return job;}
     public Material getItem() {return item;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Skill skill = (Skill) o;
+        return lvl == skill.lvl && mp == skill.mp && ct == skill.ct && Objects.equals(name, skill.name) && Objects.equals(combo, skill.combo) && Objects.equals(lore, skill.lore) && Objects.equals(job, skill.job) && item == skill.item;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, lvl, mp, combo, ct, lore, job, item);
+    }
 }
