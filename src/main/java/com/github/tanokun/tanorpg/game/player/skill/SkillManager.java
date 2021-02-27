@@ -138,8 +138,8 @@ public class SkillManager {
         return skillNames.get(name) == null ? false : true;
     }
 
-    public static Skill getSkillNames(String name) {return skillNames.get(name);}
-    public static ArrayList<String> getSkillNames() {return skillIDs;}
+    public static Skill getSkillName(String name) {return skillNames.get(name);}
+    public static ArrayList<String> getSkillName() {return skillIDs;}
 
     public static HashMap<String, Skill> getAllSkills() {return allSkills;}
     public static HashMap<String, Skill> getMageSkills() {return mageSkills;}

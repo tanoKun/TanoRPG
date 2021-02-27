@@ -46,7 +46,8 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
         for (int i = 0; i < 10; i++) {
             location.add(vector.getX(), vector.getY(), vector.getZ());
             for (Entity temp_target : TanoRPG.getNearbyEntities(location, 3)){
-                if (EntityManager.getEntityData(temp_target) != null) continue;
+                if (temp_target instanceof Player) continue;
+                if (EntityManager.getEntity((Creature) temp_target) != null) continue;
                 target = temp_target;
             }
         }

@@ -80,6 +80,7 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new ShopManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new CraftManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
+        Bukkit.getPluginManager().registerEvents(new SkillShortCutListener(), plugin);
     }
     public void registerOthers() {
         {

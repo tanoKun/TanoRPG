@@ -5,12 +5,10 @@ import com.github.tanokun.tanorpg.game.item.CustomItem;
 import com.github.tanokun.tanorpg.game.item.CustomItemManager;
 import com.github.tanokun.tanorpg.game.item.CustomItemType;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
-import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.util.task.MagicTask;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,7 +64,7 @@ public class LeftClickEventListener implements Listener {
             if (e.getItem().getItemMeta().getDisplayName().contains("§bスキル習得書: ")){
                 String[] skillName = e.getItem().getItemMeta().getDisplayName().split("§6");
                 if (!SkillManager.isExists(skillName[1])) return;
-                Skill skill = SkillManager.getSkillNames(skillName[1]);
+                Skill skill = SkillManager.getSkillName(skillName[1]);
                 GamePlayer player = GamePlayerManager.getPlayer(e.getPlayer().getUniqueId());
                 if (!skill.getJobs().contains(player.getJob())){
                     player.getPlayer().sendMessage(PX + "§c職業が違うため習得できません");

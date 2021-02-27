@@ -1,5 +1,6 @@
 package com.github.tanokun.tanorpg.menu.player;
 
+import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
@@ -7,9 +8,12 @@ import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.menu.Menu;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +49,18 @@ public class StatusSkillMenu extends Menu {
                 lore.add("§7必要MP: §b" + skill.getMp());
                 lore.add("§7必要コンボ: §b" + skill.getCombo());
                 lore.add("§7クールタイム: §b" + skill.getCT() + "秒");
+                if (gamePlayer.getSkill_F() != null){
+                    if (gamePlayer.getSkill_F().equals(skill.getName())){
+                        lore.add(" ");
+                        lore.add("§aスキルショートカット「F」に設定されています");
+                    }
+                }
+                if (gamePlayer.getSkill_Shift_F() != null){
+                    if (gamePlayer.getSkill_Shift_F().equals(skill.getName())) {
+                        lore.add(" ");
+                        lore.add("§aスキルショートカット「Shift_F」に設定されています");
+                    }
+                }
                 setItem(t, MenuManager.createItem(skill.getItem(), "§a" + skill.getName(), lore, 1, true));
             } else {
                 lore.add("§e〇=-=-=-=-=§b説明§e=-=-=-=-=-〇");
@@ -68,6 +84,18 @@ public class StatusSkillMenu extends Menu {
                 lore.add("§7必要MP: §b" + skill.getMp());
                 lore.add("§7必要コンボ: §b" + skill.getCombo());
                 lore.add("§7クールタイム: §b" + skill.getCT() + "秒");
+                if (gamePlayer.getSkill_F() != null){
+                    if (gamePlayer.getSkill_F().equals(skill.getName())){
+                        lore.add(" ");
+                        lore.add("§aスキルショートカット「F」に設定されています");
+                    }
+                }
+                if (gamePlayer.getSkill_Shift_F() != null){
+                    if (gamePlayer.getSkill_Shift_F().equals(skill.getName())) {
+                        lore.add(" ");
+                        lore.add("§aスキルショートカット「Shift_F」に設定されています");
+                    }
+                }
                 setItem(t, MenuManager.createItem(skill.getItem(), "§a" + skill.getName(), lore, 1, true));
             } else {
                 lore.add("§e〇=-=-=-=-=§b説明§e=-=-=-=-=-〇");
@@ -84,7 +112,24 @@ public class StatusSkillMenu extends Menu {
     }
 
     @Override
-    public void onClick(InventoryClickEvent e) {e.setCancelled(true);}
+    public void onClick(InventoryClickEvent e) {
+        e.setCancelled(true);
+        if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR) || e.getCurrentItem().getType().equals(Material.BARRIER)) return;
+        ItemMeta item = e.getCurrentItem().getItemMeta();
+        String skill_name = item.getDisplayName().replace("§a", "");
+        GamePlayer player = GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId());
+        if (e.getClick().equals(ClickType.LEFT)){
+            player.setSkill_F(skill_name);
+            TanoRPG.playSound((Player)e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
+            player.getPlayer().sendMessage(TanoRPG.PX + "「" + skill_name + "」をスキルショートカット「F」に設定しました");
+            new StatusSkillMenu((Player)e.getWhoClicked()).openInv((Player) e.getWhoClicked());
+        } else if (e.getClick().equals(ClickType.SHIFT_LEFT)) {
+            player.setSkill_Shift_F(skill_name);
+            TanoRPG.playSound((Player)e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
+            player.getPlayer().sendMessage(TanoRPG.PX + "「" + skill_name + "」をスキルショートカット「Shift_F」に設定しました");
+            new StatusSkillMenu((Player)e.getWhoClicked()).openInv((Player) e.getWhoClicked());
+        }
+    }
 
     public void onClose(InventoryCloseEvent e) {}
 }
