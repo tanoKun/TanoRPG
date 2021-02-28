@@ -30,7 +30,7 @@ public class DamageManager {
         return atk + ing/2 + agi/3;
     }
 
-    public static void createMake(long damage, Entity attacker, Entity target){
+    public static void createDamage(long damage, Entity attacker, Entity target){
         new BukkitRunnable(){
             @Override
             public void run() {

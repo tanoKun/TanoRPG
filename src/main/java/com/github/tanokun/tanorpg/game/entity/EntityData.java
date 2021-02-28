@@ -10,7 +10,6 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
-import org.bukkit.entity.EntityType;
 
 public class EntityData {
     private EntityDropItems dropItems;
@@ -83,7 +82,7 @@ public class EntityData {
         if (!(boots.equals(""))){entity.getEquipment().setBoots(CustomItemManager.getCustomItem(boots).getItem());}
         entity.setMaxHealth(HP);
         entity.setHealth(HP);
-        EntityManager.addEntity(new Entity(entity, this));
+        EntityManager.addEntity(new EntityCreature(entity, this));
         return entity;
     }
     public void giveSpawnerEntity(Player player){

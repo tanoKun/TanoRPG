@@ -51,7 +51,7 @@ public class PlayerSkLineAttack extends Skill implements AttackSkill {
                     entity.teleport(loc);
                     entity.setVelocity(loc.getDirection());
                     for (Entity target : TanoRPG.getNearbyEntities(loc, 2)){
-                        if (target instanceof Player || EntityManager.getEntityData(target) != null) continue;
+                        if (target instanceof Player || EntityManager.getEntity((Creature) target) == null) continue;
                         ((Creature) target).setTarget((LivingEntity) entity);
                         EntityData custom = EntityManager.getEntityData(target);
                         int at_lvl = gamePlayer.getLEVEL();
@@ -60,7 +60,7 @@ public class PlayerSkLineAttack extends Skill implements AttackSkill {
                                 gamePlayer.getStatus(StatusType.ING).getLevel(),
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());
                         long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.8);
-                        DamageManager.createMake(damage, entity, target);
+                        DamageManager.createDamage(damage, entity, target);
                     }
                     ParticleEffect.CLOUD.display(loc, 1, 1, 1, 0f, 10, null, Bukkit.getOnlinePlayers());
                     loc.subtract(x, 0, z);

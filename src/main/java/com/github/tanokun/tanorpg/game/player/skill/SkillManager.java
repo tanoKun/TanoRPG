@@ -45,36 +45,18 @@ public class SkillManager {
             case WARRIOR:
                 if (warriorSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(warriorSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
-                        if (warriorSkills.get(combos.toString()) instanceof AttackSkill){
-                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
-                            return false;
-                        }
-                    }
                     runSkill(warriorSkills.get(combos.toString()), player);
                     return true;
                 }
             case MAGE:
                 if (mageSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(mageSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
-                        if (mageSkills.get(combos.toString()) instanceof AttackSkill){
-                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
-                            return false;
-                        }
-                    }
                     runSkill(mageSkills.get(combos.toString()), player);
                     return true;
                 }
             case PRIEST:
                 if (priestSkills.get(combos.toString()) != null) {
                     if (!player.hasSkill(priestSkills.get(combos.toString()).getName())) return false;
-                    if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
-                        if (priestSkills.get(combos.toString()) instanceof AttackSkill){
-                            player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
-                            return false;
-                        }
-                    }
                     runSkill(priestSkills.get(combos.toString()), player);
                     return true;
                 }
@@ -82,6 +64,12 @@ public class SkillManager {
         return false;
     }
     private static void runSkill(Skill skill, GamePlayer player) {
+        if (!player.isProper(player.getPlayer().getEquipment().getItemInMainHand()) || !player.isLv(player.getPlayer().getEquipment().getItemInMainHand())){
+            if (skill instanceof AttackSkill) {
+                player.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
+                return;
+            }
+        }
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter byString = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         if (!player.getPlayer().hasMetadata(CT + "_" + skill.getName())){
@@ -103,7 +91,7 @@ public class SkillManager {
                 + Buff.getBuffPercent(player.getPlayer(), BuffType.SKILL_COOL_TIME_25);
         long ct = skill.getCT() - Math.round(skill.getCT() * down);
         long show = ct - seconds;
-        if (!(seconds > ct)) {
+        if (!(seconds >= ct)) {
             player.getPlayer().sendMessage(TanoRPG.PX + "§cクールタイム中です §7(残り: " + show + "秒)");
             return;
         }

@@ -24,6 +24,7 @@ public class ComboRunnable extends BukkitRunnable {
     }
     @Override
     public void run() {
+        if (!player.isOnline()) {cancel(); return;}
         if (!bool) {
             if (ComboManager.getCombos(player.getUniqueId()).size() >= 3) {
                 if (SkillManager.runPlayerSkill(GamePlayerManager.getPlayer(player.getUniqueId()),

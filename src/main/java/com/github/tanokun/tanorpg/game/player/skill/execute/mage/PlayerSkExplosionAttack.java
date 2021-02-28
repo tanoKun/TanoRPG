@@ -45,9 +45,9 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
         Vector vector = location.getDirection();
         for (int i = 0; i < 10; i++) {
             location.add(vector.getX(), vector.getY(), vector.getZ());
-            for (Entity temp_target : TanoRPG.getNearbyEntities(location, 3)){
+            for (Entity temp_target : TanoRPG.getNearbyEntities(location, 6)){
                 if (temp_target instanceof Player) continue;
-                if (EntityManager.getEntity((Creature) temp_target) != null) continue;
+                if (EntityManager.getEntity((Creature) temp_target) == null) continue;
                 target = temp_target;
             }
         }
@@ -76,7 +76,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                     int at_lvl = gamePlayer.getLEVEL();
                     int vi_lvl = custom.getLEVEL();
                     long damage = DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 2;
-                    DamageManager.createMake(damage, entity, finalTarget);
+                    DamageManager.createDamage(damage, entity, finalTarget);
                     for (Entity damager : TanoRPG.getNearbyEntities(finalTarget.getLocation(), 3)){
                          custom = EntityManager.getEntityData(damager);
                         atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
@@ -86,7 +86,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                         vi_lvl = custom.getLEVEL();
                         damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.2);
                         if (damager.equals(finalTarget)) continue;
-                        DamageManager.createMake(damage, entity, damager);
+                        DamageManager.createDamage(damage, entity, damager);
                     }
                 }
                 for (int i = 0; i < 80; i++) {

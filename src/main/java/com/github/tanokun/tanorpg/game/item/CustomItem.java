@@ -14,11 +14,11 @@ import java.util.Arrays;
 import java.util.List;
 
 public class CustomItem {
-    private CustomItemType cit = CustomItemType.NULL;
-    private String id = "null";
-    private Material material = Material.STONE;
-    private String name = "null";
-    private ArrayList<String> lores = new ArrayList<>(Arrays.asList(" "));
+    private CustomItemType cit;
+    private String id;
+    private Material material;
+    private String name;
+    private ArrayList<String> lores;
     private ArrayList<Status> statuses;
     private boolean glowing = false;
     private long price = 0;

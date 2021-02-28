@@ -14,6 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.World;
+import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -41,7 +42,7 @@ public class MagicTask extends BukkitRunnable {
         if (time > 4) {this.cancel();}
         ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
         for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
-            if (EntityManager.getEntityData(entity) != null){
+            if (EntityManager.getEntity((Creature) entity) != null){
                 if (entities.get(entity) == null) {
                     entities.put(entity, true);
                     EntityData entity2 = EntityManager.getEntityData(entity);
@@ -51,7 +52,7 @@ public class MagicTask extends BukkitRunnable {
                             gamePlayer.getStatus(StatusType.INT).getLevel(),
                             gamePlayer.getStatus(StatusType.AGI).getLevel());
                     long damage = DamageManager.getCompDamage(atk, entity2.getMDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer());
-                    DamageManager.createMake(damage, gamePlayer.getPlayer(), entity);
+                    DamageManager.createDamage(damage, gamePlayer.getPlayer(), entity);
                     this.cancel();
                 }
             }

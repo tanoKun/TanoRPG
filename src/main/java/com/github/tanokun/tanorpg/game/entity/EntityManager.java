@@ -12,12 +12,13 @@ import org.bukkit.entity.EntityType;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
 
 public class EntityManager {
     private static HashMap<String, EntityData> customEntities = new HashMap<>();
     private static List<String> customEntityIDs = new ArrayList<>();
 
-    private static HashMap<Creature, Entity> existsEntities = new HashMap<>();
+    private static HashMap<UUID, EntityCreature> existsEntities = new HashMap<>();
 
     private static Config mobEntity;
 
@@ -98,9 +99,9 @@ public class EntityManager {
         return message;
     }
 
-    public static void addEntity(Entity entity){existsEntities.put(entity.getCreature(), entity);}
-    public static void removeEntity(Creature creature){existsEntities.remove(creature);}
-    public static Entity getEntity(Creature creature){return existsEntities.get(creature);}
+    public static void addEntity(EntityCreature entityCreature){existsEntities.put(entityCreature.getCreature().getUniqueId(), entityCreature);}
+    public static void removeEntity(Creature creature){existsEntities.remove(creature.getUniqueId());}
+    public static EntityCreature getEntity(Creature creature){return existsEntities.get(creature.getUniqueId());}
 
     public static EntityData getEntityData(String name) {
         return customEntities.get(name);

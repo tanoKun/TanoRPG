@@ -13,7 +13,6 @@ import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import net.minecraft.server.v1_15_R1.EntityLightning;
 import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityWeather;
-import net.minecraft.server.v1_15_R1.WorldServer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -66,7 +65,7 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
                     GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
                     for (Entity entity2 : TanoRPG.getNearbyEntities(location, 2.5)) {
                         {
-                            if (entity2 instanceof Player || EntityManager.getEntityData(entity2) != null) continue;
+                            if (entity2 instanceof Player || EntityManager.getEntity((Creature) entity2) == null) continue;
                             ((Creature) entity2).setTarget((LivingEntity) entity);
                             EntityData custom = EntityManager.getEntityData(entity2);
                             int at_lvl = gamePlayer.getLEVEL();
@@ -76,7 +75,7 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
                                     gamePlayer.getStatus(StatusType.AGI).getLevel());
                             long damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.5);
                             ((LivingEntity) entity2).damage(damage);
-                            DamageManager.createMake(damage, entity, entity2);
+                            DamageManager.createDamage(damage, entity, entity2);
                         }
                     }
                 }
@@ -92,9 +91,7 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
         }.runTaskTimer(TanoRPG.getPlugin(), 0, 7);
     }
     private void lining(Location loc){
-        WorldServer s = ((CraftWorld)loc.getWorld()).getHandle();
-        EntityLightning lightning = new EntityLightning(s, 0, 0, 0, false);
-        lightning.setLocation(loc.getX(), loc.getY(), loc.getZ(), 0, 0);
+        EntityLightning lightning = new EntityLightning(((CraftWorld) Bukkit.getWorld(loc.getWorld().getName())).getHandle(), loc.getX(), loc.getY(), loc.getZ(), true);
         PacketPlayOutSpawnEntityWeather packet = new PacketPlayOutSpawnEntityWeather(lightning);
         for (Player player : Bukkit.getOnlinePlayers())
             ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);

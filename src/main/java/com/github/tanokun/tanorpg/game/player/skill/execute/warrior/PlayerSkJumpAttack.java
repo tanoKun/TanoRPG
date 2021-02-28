@@ -39,6 +39,7 @@ public class PlayerSkJumpAttack extends Skill implements AttackSkill {
     @Override
     public void execute(Entity entity) {
         TanoRPG.playSound((Player) entity, Sound.ENTITY_WITHER_SHOOT, 10, 1);
+        entity.setVelocity(new Vector(0, -10, 0));
         Location location = entity.getLocation();
         location.add(0, 0.5, 0);
         int i = 0;
@@ -58,7 +59,7 @@ public class PlayerSkJumpAttack extends Skill implements AttackSkill {
         }
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
         for (Entity entity2 : TanoRPG.getNearbyEntities(entity.getLocation(), 10)){
-            if (entity2 instanceof Player || EntityManager.getEntityData(entity2) != null) continue;
+            if (entity2 instanceof Player || EntityManager.getEntity((Creature) entity2) == null) continue;
             ((Creature) entity2).setTarget((LivingEntity) entity);
             EntityData custom = EntityManager.getEntityData(entity2);
             int at_lvl = gamePlayer.getLEVEL();
@@ -67,7 +68,7 @@ public class PlayerSkJumpAttack extends Skill implements AttackSkill {
                     gamePlayer.getStatus(StatusType.ING).getLevel(),
                     gamePlayer.getStatus(StatusType.AGI).getLevel());
             long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.5);
-            DamageManager.createMake(damage, entity, entity2);
+            DamageManager.createDamage(damage, entity, entity2);
             entity2.setVelocity(new Vector(0, 1, 0));
         }
     }

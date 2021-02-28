@@ -2,11 +2,11 @@ package com.github.tanokun.tanorpg.game.entity;
 
 import org.bukkit.entity.Creature;
 
-public class Entity {
+public class EntityCreature {
     private Creature creature;
     private EntityData entityData;
 
-    public Entity(Creature creature, EntityData entityData){
+    public EntityCreature(Creature creature, EntityData entityData){
         this.creature = creature;
         this.entityData = entityData;
     }
