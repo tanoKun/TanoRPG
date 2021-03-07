@@ -33,8 +33,8 @@ public class ItemManager {
     final public static String firstMagicWeapon = TanoRPG.getPlugin().getConfig().getString("first-job-mage-weapon");
     final public static String firstWeapon = TanoRPG.getPlugin().getConfig().getString("first-job-warrior-weapon");
 
-    public static ArrayList<String> loadMaterialItem(){
-        ArrayList<String> errors = new ArrayList<>();
+    public static HashSet<String> loadMaterialItem(){
+        HashSet<String> errors = new HashSet<>();
 
         for (Config config : new Folder("items" + File.separator + "material", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
@@ -135,8 +135,8 @@ public class ItemManager {
 
         return errors;
     }
-    public static ArrayList<String> loadWeaponItem(){
-        ArrayList<String> errors = new ArrayList<>();
+    public static HashSet<String> loadWeaponItem(){
+        HashSet<String> errors = new HashSet<>();
 
         for (Config config : new Folder("items" + File.separator + "weapon", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
@@ -268,8 +268,8 @@ public class ItemManager {
 
         return errors;
     }
-    public static ArrayList<String> loadMagicWeaponItem(){
-        ArrayList<String> errors = new ArrayList<>();
+    public static HashSet<String> loadMagicWeaponItem(){
+        HashSet<String> errors = new HashSet<>();
 
         for (Config config : new Folder("items" + File.separator + "magicWeapon", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
@@ -401,8 +401,8 @@ public class ItemManager {
 
         return errors;
     }
-    public static ArrayList<String> loadEquipmentItem(){
-        ArrayList<String> errors = new ArrayList<>();
+    public static HashSet<String> loadEquipmentItem(){
+        HashSet<String> errors = new HashSet<>();
 
         for (Config config : new Folder("items" + File.separator + "equip", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
