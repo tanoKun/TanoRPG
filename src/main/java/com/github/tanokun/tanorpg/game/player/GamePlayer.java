@@ -1,9 +1,14 @@
 package com.github.tanokun.tanorpg.game.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.item.CustomItemType;
-import com.github.tanokun.tanorpg.game.player.skill.Skill;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemType;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemEquipment;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemMagicWeapon;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemMaterial;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemWeapon;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.ItemJob;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.Status;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
@@ -125,22 +130,23 @@ public class GamePlayer {
                 i += 1;
                 if (item == null) item = new ItemStack(Material.AIR);
                 if (!item.getType().equals(Material.AIR)) {
-                    if (CustomItemManager.getID(item).equals("")) continue;
-                    if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)) == null) continue;
-                    if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getStatuses() == null) continue;
-                    CustomItemType cit = CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getCit();
-                    if (cit.equals(CustomItemType.MATERIAL)) continue;
-                    if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getJobs().contains(job)) {
+                    if (ItemManager.getID(item).equals("")) continue;
+                    if (ItemManager.getItem(ItemManager.getID(item)) == null) continue;
+                    if (ItemManager.getItem(ItemManager.getID(item)).getStatuses() == null) continue;
+                    if (ItemManager.getItem(ItemManager.getID(item)) instanceof ItemMaterial) continue;
+                    ItemJob playerItemMeta = (ItemJob) ItemManager.getItem(ItemManager.getID(item));
+                    Item playerItem = ItemManager.getItem(ItemManager.getID(item));
+                    if (playerItemMeta.getJobs().contains(job)) {
                         if (i == 1){
-                            if (cit.equals(CustomItemType.MAGIC_WEAPON) || cit.equals(CustomItemType.WEAPON)) {
-                                for (Status status : CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getStatuses()) {
+                            if (playerItem instanceof ItemMagicWeapon || playerItem instanceof ItemWeapon) {
+                                for (Status status : ItemManager.getItem(ItemManager.getID(item)).getStatuses()) {
                                     if (status.getStatusType().equals(returnS[0].getStatusType())) {
                                         returnS[0].addLevel(status.getLevel());
                                     }
                                 }
                             }
-                        } else if (cit.equals(CustomItemType.EQUIPMENT)){
-                            for (Status status : CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getStatuses()) {
+                        } else if (playerItem instanceof ItemEquipment){
+                            for (Status status : ItemManager.getItem(ItemManager.getID(item)).getStatuses()) {
                                 if (status.getStatusType().equals(returnS[0].getStatusType())) {
                                     returnS[0].addLevel(status.getLevel());
                                 }
@@ -165,7 +171,7 @@ public class GamePlayer {
 
     public boolean isProper(ItemStack item){
         try {
-            if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getJobs().contains(getJob())){
+            if (((ItemJob) ItemManager.getItem(ItemManager.getID(item))).getJobs().contains(getJob())){
                 return true;
             }
         } catch (Exception e2){return false;}
@@ -173,15 +179,15 @@ public class GamePlayer {
     }
     public boolean isLv(ItemStack item){
         try {
-            if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getLvl() <= getLEVEL()){
+            if (((ItemJob) ItemManager.getItem(ItemManager.getID(item))).getLvl() <= getLEVEL()){
                 return true;
             }
         } catch (Exception e2){return false;}
         return false;
     }
-    public boolean isCIT(ItemStack item, CustomItemType cit){
+    public boolean isCIT(ItemStack item, ItemType cit){
         try {
-            if (CustomItemManager.getCustomItem(CustomItemManager.getID(item)).getCit().equals(cit)){
+            if (ItemManager.getItem(ItemManager.getID(item)).getItemType().equals(cit)){
                 return true;
             }
         } catch (Exception e2){return false;}

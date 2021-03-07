@@ -12,7 +12,9 @@ import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
 import net.minecraft.server.v1_15_R1.EntityLightning;
-import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntityWeather;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntity;
+import net.minecraft.server.v1_15_R1.Vec3D;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -91,9 +93,11 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
         }.runTaskTimer(TanoRPG.getPlugin(), 0, 7);
     }
     private void lining(Location loc){
-        EntityLightning lightning = new EntityLightning(((CraftWorld) Bukkit.getWorld(loc.getWorld().getName())).getHandle(), loc.getX(), loc.getY(), loc.getZ(), true);
-        PacketPlayOutSpawnEntityWeather packet = new PacketPlayOutSpawnEntityWeather(lightning);
-        for (Player player : Bukkit.getOnlinePlayers())
-            ((CraftPlayer)player).getHandle().playerConnection.sendPacket(packet);
+        EntityLightning lightning = new EntityLightning(((CraftWorld)loc.getWorld()).getHandle(), loc.getX(), loc.getY(), loc.getZ(), true);
+        Vec3D vec = new Vec3D(0, 0, 0);
+        PacketPlayOutSpawnEntity lightningPacket = new PacketPlayOutSpawnEntity(lightning.getId(), lightning.getUniqueID(), loc.getX(), loc.getY(), loc.getZ(), 0f, 0f, EntityTypes.LIGHTNING_BOLT, 0, vec);
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            ((CraftPlayer) player).getHandle().playerConnection.sendPacket(lightningPacket);
+        }
     }
 }

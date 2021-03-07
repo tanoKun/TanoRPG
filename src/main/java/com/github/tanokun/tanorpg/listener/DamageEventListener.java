@@ -5,8 +5,9 @@ import com.github.tanokun.tanorpg.game.DamageManager;
 import com.github.tanokun.tanorpg.game.entity.EntityCreature;
 import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.item.CustomItemType;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemMagicWeapon;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.ItemJob;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
@@ -83,7 +84,7 @@ public class DamageEventListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (CustomItemManager.getCustomItem(attacker.getPlayer().getEquipment().getItemInMainHand()).getCit().equals(CustomItemType.MAGIC_WEAPON)) {
+            if (ItemManager.getItem(attacker.getPlayer().getEquipment().getItemInMainHand()) instanceof ItemMagicWeapon){
                 if (!attacker.isProper(attacker.getPlayer().getEquipment().getItemInMainHand())) {
                     attacker.getPlayer().sendMessage(TanoRPG.PX + "§c対応していない武器です");
                     e.setCancelled(true);
@@ -96,8 +97,8 @@ public class DamageEventListener implements Listener {
                     return;
                 }
                 gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-                String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
-                final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
+                String id = ItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
+                final int[] cool = {Math.round(((ItemJob)ItemManager.getItem(id)).getCoolTime())};
                 gamePlayer.getPlayer().setLevel(0);
                 new BukkitRunnable() {
                     @Override
@@ -120,8 +121,8 @@ public class DamageEventListener implements Listener {
             long damage = DamageManager.getCompDamage(atk, customEntity.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
             DamageManager.createDamage(damage, attacker.getPlayer(), victim.getCreature());
             attacker.getPlayer().setMetadata("cooltime", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-            String id = CustomItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
-            final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
+            String id = ItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
+            final int[] cool = {Math.round(((ItemJob)ItemManager.getItem(id)).getCoolTime())};
             attacker.getPlayer().setLevel(0);
             new BukkitRunnable() {
                 @Override

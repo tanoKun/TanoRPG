@@ -13,7 +13,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static com.github.tanokun.tanorpg.game.entity.EntityManager.*;
+import static com.github.tanokun.tanorpg.game.entity.EntityManager.getEntity;
 import static com.github.tanokun.tanorpg.game.player.status.buff.Buff.getBuffPercent;
 
 public class DamageManager {

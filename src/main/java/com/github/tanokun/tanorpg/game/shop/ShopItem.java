@@ -1,10 +1,9 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.menu.MenuManager;
-import com.github.tanokun.tanorpg.util.ShortColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,11 +17,11 @@ import java.util.UUID;
 
 public class ShopItem {
     private String owner;
-    private CustomItem item;
+    private Item item;
     private long price;
     private String uuid;
     private Inventory inv;
-    public ShopItem(CustomItem item, long price, String owner){
+    public ShopItem(Item item, long price, String owner){
         this.item = item;
         this.price = price;
         this.uuid = UUID.randomUUID().toString();
@@ -44,7 +43,7 @@ public class ShopItem {
         inv.setItem(26, MenuManager.createItem(Material.GREEN_WOOL, "§a購入する", 1, true));
     }
 
-    public CustomItem getItem() {return item;}
+    public Item getItem() {return item;}
     public String getUuid() {return uuid;}
     public long getPrice() {return price;}
     public void openCheck(Player player){

@@ -2,10 +2,10 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
+import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import org.bukkit.command.CommandSender;
 
 import java.util.List;
@@ -18,8 +18,11 @@ public class TanoRPGCommand extends Command {
         if (args.length == 0) {error(sender); return true;}
         if (args[0].equals("rei")){
             sender.sendMessage(TanoRPG.PX + "reloading item configs....");
-            CustomItemManager.deleteCustomItems();
-            sender.sendMessage(TanoRPG.PX + CustomItemManager.loadCustomItemAll());
+            ItemManager.deleteItems();
+            for (String error : ItemManager.loadMaterialItem()) sender.sendMessage(TanoRPG.PX + error);
+            for (String error : ItemManager.loadWeaponItem()) sender.sendMessage(TanoRPG.PX + error);
+            for (String error : ItemManager.loadMagicWeaponItem()) sender.sendMessage(TanoRPG.PX + error);
+            for (String error : ItemManager.loadEquipmentItem()) sender.sendMessage(TanoRPG.PX + error);
         }
         else if (args[0].equals("rem")) {
             sender.sendMessage(TanoRPG.PX + "reloading entity configs....");

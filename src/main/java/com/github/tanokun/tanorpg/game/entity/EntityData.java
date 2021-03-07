@@ -1,6 +1,6 @@
 package com.github.tanokun.tanorpg.game.entity;
 
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.status.Status;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import org.bukkit.Bukkit;
@@ -74,12 +74,12 @@ public class EntityData {
     public Creature spawnEntity(Location location){
         Creature entity = (Creature) location.getWorld().spawnEntity(location, entityType);
         entity.setCustomName(name + " §7[§dLv:§e" + LEVEL + "§7]");
-        if (!(mainHand.equals(""))){entity.getEquipment().setItemInMainHand(CustomItemManager.getCustomItem(mainHand).getItem());}
-        if (!(offHand.equals(""))){entity.getEquipment().setItemInOffHand(CustomItemManager.getCustomItem(offHand).getItem());}
-        if (!(helmet.equals(""))){entity.getEquipment().setHelmet(CustomItemManager.getCustomItem(helmet).getItem());}
-        if (!(chestPlate.equals(""))){entity.getEquipment().setChestplate(CustomItemManager.getCustomItem(chestPlate).getItem());}
-        if (!(leggings.equals(""))){entity.getEquipment().setLeggings(CustomItemManager.getCustomItem(leggings).getItem());}
-        if (!(boots.equals(""))){entity.getEquipment().setBoots(CustomItemManager.getCustomItem(boots).getItem());}
+        if (!(mainHand.equals(""))){entity.getEquipment().setItemInMainHand(ItemManager.getItem(mainHand).getItem());}
+        if (!(offHand.equals(""))){entity.getEquipment().setItemInOffHand(ItemManager.getItem(offHand).getItem());}
+        if (!(helmet.equals(""))){entity.getEquipment().setHelmet(ItemManager.getItem(helmet).getItem());}
+        if (!(chestPlate.equals(""))){entity.getEquipment().setChestplate(ItemManager.getItem(chestPlate).getItem());}
+        if (!(leggings.equals(""))){entity.getEquipment().setLeggings(ItemManager.getItem(leggings).getItem());}
+        if (!(boots.equals(""))){entity.getEquipment().setBoots(ItemManager.getItem(boots).getItem());}
         entity.setMaxHealth(HP);
         entity.setHealth(HP);
         EntityManager.addEntity(new EntityCreature(entity, this));

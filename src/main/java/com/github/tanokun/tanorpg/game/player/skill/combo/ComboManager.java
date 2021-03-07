@@ -1,7 +1,6 @@
 package com.github.tanokun.tanorpg.game.player.skill.combo;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.player.skill.combo.ComboRunnable;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

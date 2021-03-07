@@ -4,8 +4,8 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
 import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -16,6 +16,7 @@ import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -42,6 +43,7 @@ public class MagicTask extends BukkitRunnable {
         if (time > 4) {this.cancel();}
         ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
         for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
+            if (entity instanceof Player) continue;
             if (EntityManager.getEntity((Creature) entity) != null){
                 if (entities.get(entity) == null) {
                     entities.put(entity, true);
@@ -65,10 +67,8 @@ public class MagicTask extends BukkitRunnable {
         dire = loc.getDirection().normalize();
         world = loc.getWorld();
         gamePlayer.getPlayer().setMetadata("cooltime_magic", new FixedMetadataValue(TanoRPG.getPlugin(), true));
-        String id = CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand());
-        final int[] cool = {Math.round(CustomItemManager.getCustomItem(id).getCooltime())};
         TanoRPG.playSound(gamePlayer.getPlayer(), Sound.ENTITY_GHAST_SHOOT, 2, 1);
-        CustomItem item = CustomItemManager.getCustomItem(CustomItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand()));
+        Item item = ItemManager.getItem(ItemManager.getID(gamePlayer.getPlayer().getEquipment().getItemInMainHand()));
         if (item == null) {
             regularColor = new RegularColor(new Color(255, 255, 255));
         } else {

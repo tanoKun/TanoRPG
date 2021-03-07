@@ -1,9 +1,8 @@
 package com.github.tanokun.tanorpg.game.shop.sell;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
-import com.github.tanokun.tanorpg.game.player.GamePlayer;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
@@ -20,7 +19,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.omg.CORBA.INV_FLAG;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -117,8 +115,8 @@ public class Sell implements Listener {
     private static long check(ItemStack[] items){
         long price = 0;
         for (ItemStack item : items){
-            if (!CustomItemManager.isExists(CustomItemManager.getID(item))) continue;
-            CustomItem sell_item = CustomItemManager.getCustomItem(item);
+            if (!ItemManager.isExists(ItemManager.getID(item))) continue;
+            Item sell_item = ItemManager.getItem(item);
             price += sell_item.getPrice() * item.getAmount();
         }
         return price;

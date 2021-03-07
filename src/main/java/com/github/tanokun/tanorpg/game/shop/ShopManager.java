@@ -1,13 +1,12 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -33,7 +32,7 @@ public class ShopManager implements Listener {
                     String name = (String) config.getConfig().get(value + ".name");
                     ArrayList<ShopItem> items = new ArrayList<>();
                     for (String key : config.getConfig().getConfigurationSection(value + ".items").getKeys(false)) {
-                        CustomItem customItem = CustomItemManager.getCustomItem(key);
+                        Item customItem = ItemManager.getItem(key);
                         ShopItem item = new ShopItem(customItem, config.getConfig().getLong(value + ".items." + key), id);
                         items.add(item);
                     }

@@ -1,8 +1,8 @@
 package com.github.tanokun.tanorpg.game.entity;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -81,7 +81,7 @@ public class EntityManager {
                     for (String drop : drops){
                         String[] temp = drop.split("@");
                         int percent = Integer.valueOf(temp[1]);
-                        CustomItem ci = CustomItemManager.getCustomItem(temp[0]);
+                        Item ci = ItemManager.getItem(temp[0]);
                         customEntityDropItems.addItem(ci, percent);
                     }
                     customEntity = new EntityData(value, entityType, lvl, hp, exp);

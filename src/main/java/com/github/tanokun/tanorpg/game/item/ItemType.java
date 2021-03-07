@@ -1,6 +1,6 @@
 package com.github.tanokun.tanorpg.game.item;
 
-public enum CustomItemType {
+public enum ItemType {
     MATERIAL("素材"),
     WEAPON("武器"),
     MAGIC_WEAPON("魔法武器"),
@@ -9,6 +9,6 @@ public enum CustomItemType {
 
     private String name;
 
-    private CustomItemType(String name){this.name = name;}
+    private ItemType(String name){this.name = name;}
     public String getName() {return name;}
 }

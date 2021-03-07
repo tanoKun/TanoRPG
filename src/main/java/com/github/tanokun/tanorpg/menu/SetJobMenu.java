@@ -2,18 +2,16 @@ package com.github.tanokun.tanorpg.menu;
 
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Bukkit;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 
@@ -50,23 +48,23 @@ public class SetJobMenu extends Menu {
                 GamePlayerManager.saveData(p.getUniqueId());
                 p.closeInventory();
                 p.sendMessage(TanoRPG.PX + "職業を「ウォーリア」にしました！");
-                p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstWeapon).getItem());
+                p.getInventory().addItem(ItemManager.getItem(ItemManager.firstWeapon).getItem());
             }
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§5§lメイジ")) {
                 GamePlayerManager.createData(p.getUniqueId(), GamePlayerJobType.MAGE);
                 GamePlayerManager.saveData(p.getUniqueId());
                 p.closeInventory();
                 p.sendMessage(TanoRPG.PX + "職業を「メイジ」にしました！");
-                p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstMagicWeapon).getItem());
+                p.getInventory().addItem(ItemManager.getItem(ItemManager.firstMagicWeapon).getItem());
             }
             if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§d§lプリースト")){
                 GamePlayerManager.createData(p.getUniqueId(), GamePlayerJobType.PRIEST);
                 GamePlayerManager.saveData(p.getUniqueId());
                 p.closeInventory();
                 p.sendMessage(TanoRPG.PX + "職業を「プリースト」にしました！");
-                p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstMagicWeapon).getItem());
+                p.getInventory().addItem(ItemManager.getItem(ItemManager.firstMagicWeapon).getItem());
             }
-            p.getInventory().addItem(CustomItemManager.getCustomItem(CustomItemManager.firstArmor).getItem());
+            p.getInventory().addItem(ItemManager.getItem(ItemManager.firstArmor).getItem());
             Sidebar.setupSidebar(p);
         }
     }

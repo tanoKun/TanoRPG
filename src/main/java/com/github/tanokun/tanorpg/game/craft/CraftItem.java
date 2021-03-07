@@ -1,9 +1,8 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.menu.MenuManager;
-import com.github.tanokun.tanorpg.util.ShortColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -17,14 +16,14 @@ import java.util.List;
 import java.util.UUID;
 
 public class CraftItem {
-    private CustomItem afterItem;
-    private ArrayList<CustomItem> beforeItems = new ArrayList<>();
-    private ArrayList<Integer> beforeItemsCount = new ArrayList<>();
+    private Item afterItem;
+    private ArrayList<Item> beforeItems;
+    private ArrayList<Integer> beforeItemsCount;
     private long price;
     private String owner;
     private Inventory inv;
     private String uuid;
-    public CraftItem(ArrayList<CustomItem> beforeItems, ArrayList<Integer> beforeItemsCount, CustomItem afterItem, long price, String owner){
+    public CraftItem(ArrayList<Item> beforeItems, ArrayList<Integer> beforeItemsCount, Item afterItem, long price, String owner){
         this.afterItem = afterItem;
         this.beforeItems = beforeItems;
         this.beforeItemsCount = beforeItemsCount;
@@ -65,9 +64,9 @@ public class CraftItem {
         }
     }
 
-    public CustomItem getItem() {return afterItem;}
+    public Item getItem() {return afterItem;}
     public String getUuid() {return uuid;}
-    public ArrayList<CustomItem> getBeforeItems(){return beforeItems;}
+    public ArrayList<Item> getBeforeItems(){return beforeItems;}
     public ArrayList<Integer> getBeforeItemsCount() {return beforeItemsCount;}
 
     public void openCheck(Player player) {
@@ -76,7 +75,7 @@ public class CraftItem {
     }
     public long getPrice() {return price;}
 
-    public CustomItem getAfterItem() {
+    public Item getAfterItem() {
         return afterItem;
     }
 }

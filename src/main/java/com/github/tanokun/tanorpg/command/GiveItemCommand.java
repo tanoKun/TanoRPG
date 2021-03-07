@@ -2,7 +2,12 @@ package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemEquipment;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemMagicWeapon;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemMaterial;
+import com.github.tanokun.tanorpg.game.item.itemtype.ItemWeapon;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
@@ -28,12 +33,24 @@ public class GiveItemCommand extends Command {
                 sender.sendMessage(TanoRPG.PX + "§cConsoleにアイテムを与えることはできません");
                 return true;
             }
-            if (!(CustomItemManager.isExists(args[0]))) {
+            if (!(ItemManager.isExists(args[0]))) {
                 sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§cは存在しません");
                 return true;
             }
             PlayerInventory inventory = player.getInventory();
-            inventory.addItem(CustomItemManager.getCustomItem(args[0]).getItem());
+            Item item = ItemManager.getItem(args[0]);
+            if (item instanceof ItemMaterial){
+                inventory.addItem(((ItemMaterial)item).getItem());
+            }
+            if (item instanceof ItemWeapon){
+                inventory.addItem(((ItemWeapon)item).getItem());
+            }
+            if (item instanceof ItemMagicWeapon){
+                inventory.addItem(((ItemMagicWeapon)item).getItem());
+            }
+            if (item instanceof ItemEquipment){
+                inventory.addItem(((ItemEquipment)item).getItem());
+            }
             sender.sendMessage(TanoRPG.PX + "§a" + sender.getName() + "§aに" + "§bID「" + args[0] + "§b」" + "§aを渡しました");
         }
         return true;
@@ -42,10 +59,10 @@ public class GiveItemCommand extends Command {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (!sender.isOp()) return null;
         if (args.length == 0){
-            return CustomItemManager.getItemIDs();
+            return ItemManager.getItemIDs();
         }
         List<String> texts = new ArrayList<>();
-        for (String id : CustomItemManager.getItemIDs()){
+        for (String id : ItemManager.getItemIDs()){
             if (id.contains(args[0])) texts.add(id);
         }
         return texts;

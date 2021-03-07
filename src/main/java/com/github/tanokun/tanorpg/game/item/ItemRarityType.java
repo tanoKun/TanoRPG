@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.game.item;
 
 
-public enum CustomItemRarityType {
+public enum ItemRarityType {
     COMMON("§fCommon", "§f", 255, 255, 255),
     UN_COMMON("§8unCommon", "§8", 110, 110, 110),
     RARE("§eRare", "§e", 255, 255, 100),
@@ -14,7 +14,7 @@ public enum CustomItemRarityType {
     private int green;
     private int blue;
 
-    private CustomItemRarityType(String name, String color, int r, int g, int b){
+    private ItemRarityType(String name, String color, int r, int g, int b){
         this.name = name;
         this.color = color;
         red = r;

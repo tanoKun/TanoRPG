@@ -1,12 +1,11 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.CustomItem;
-import com.github.tanokun.tanorpg.game.item.CustomItemManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -35,12 +34,12 @@ public class CraftManager implements Listener {
                     ArrayList<CraftItem> craftItem = new ArrayList<>();
                     for (String afterItem : config.getConfig().getConfigurationSection(value + ".items").getKeys(false)) {
                         long price = config.getConfig().getLong(value + ".items." + afterItem + ".price");
-                        ArrayList<CustomItem> before = new ArrayList<>();
+                        ArrayList<Item> before = new ArrayList<>();
                         ArrayList<Integer> beforeCount = new ArrayList<>();
-                        CustomItem after = CustomItemManager.getCustomItem(afterItem);
+                        Item after = ItemManager.getItem(afterItem);
                         for (String beforeItem : config.getConfig().getConfigurationSection(value + ".items." + afterItem + ".beforeItems").
                                 getKeys(false)) {
-                            before.add(CustomItemManager.getCustomItem(beforeItem));
+                            before.add(ItemManager.getItem(beforeItem));
                             beforeCount.add(config.getConfig().getInt(value + ".items." + afterItem + ".beforeItems." + beforeItem));
                         }
                         craftItem.add(new CraftItem(before, beforeCount, after, price, id));
@@ -101,8 +100,8 @@ public class CraftManager implements Listener {
                         amount.put(craftItem.getBeforeItems().get(i - 1).getId(), craftItem.getBeforeItemsCount().get(i - 1));
                     }
                 }
-                for (CustomItem item2 : craft.getItem(uuid).getBeforeItems()) {
-                    if (!(CustomItemManager.getAmount((Player) e.getWhoClicked(), item2.getItem()) >= amount.get(item2.getId()))) {
+                for (Item item2 : craft.getItem(uuid).getBeforeItems()) {
+                    if (!(ItemManager.getAmount((Player) e.getWhoClicked(), item2.getItem()) >= amount.get(item2.getId()))) {
                         TanoRPG.playSound((Player)e.getWhoClicked(), Sound.BLOCK_NOTE_BLOCK_BASS, 10, 1);
                         e.getWhoClicked().sendMessage(TanoRPG.PX + "§c素材が足りません");
                         e.getWhoClicked().closeInventory();

@@ -4,8 +4,8 @@ import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
-import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
+import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
 import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerSkExplosionAttack;
 import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerSkLiningAttack;
@@ -33,7 +33,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 
-import java.io.File;
 import java.lang.reflect.Field;
 
 public class Registration {
@@ -42,13 +41,7 @@ public class Registration {
 
     public void registerConfigs() {
         plugin.saveDefaultConfig();
-        new Config("itemMaterial.yml", "items" + File.separator + "material", plugin).saveDefaultConfig();
-        new Config("itemWeapon.yml", "items" + File.separator + "weapon", plugin).saveDefaultConfig();
-        new Config("itemMagicWeapon.yml", "items" + File.separator + "magicWeapon", plugin).saveDefaultConfig();
-        new Config("itemEquipment.yml", "items" + File.separator + "equip", plugin).saveDefaultConfig();
-
         new Config("mobEntity.yml", "mobs", plugin).saveDefaultConfig();
-        new Config("mobBoss.yml", "mobs", plugin).saveDefaultConfig();
 
         new Folder("player_database", plugin).createExists();
         new Folder("shop", plugin).createExists();
