@@ -1,8 +1,10 @@
 package com.github.tanokun.tanorpg.game.shop;
 
+import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -57,8 +59,7 @@ public class Shop {
         this.inventory = inventory;
     }
     public void openShop(Player player){
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
-            "execute " + player.getName() + " ~ ~ ~ playsound minecraft:entity.shulker.open player @s ~ ~ ~ 10 1");
+        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
         player.openInventory(inventory);}
     public ShopItem getItem(String uuid) {
         try {
