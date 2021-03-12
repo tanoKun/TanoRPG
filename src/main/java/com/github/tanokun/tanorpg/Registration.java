@@ -46,25 +46,24 @@ public class Registration {
         new Folder("player_database", plugin).createExists();
         new Folder("shop", plugin).createExists();
         new Folder("craft", plugin).createExists();
+        new Folder("spawner", plugin).createExists();
     }
     public void registerCommand(){
         Register.register(new TanoRPGCommand());
         Register.register(new GiveItemCommand());
         Register.register(new TestCommand());
         Register.register(new MobSpawnCommand());
-        Register.register(new GiveMobSpawnerCommand());
         Register.register(new OpenCraftCommand());
         Register.register(new OpenShopCommand());
         Register.register(new OpenSellCommand());
         Register.register(new GiveSkItemCommand());
         Register.register(new OpenStatusCommand());
-        Register.register(new CombosInitCommand());
+        Register.register(new HatCommand());
     }
     public void registerListener(){
         Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new DamageEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new MenuManager(), plugin);
-        Bukkit.getPluginManager().registerEvents(new EntitySpawnEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ComboManager(), plugin);
@@ -94,11 +93,13 @@ public class Registration {
         }
         WgEvents.setup();
     }
+
     public void registerTask(){
         new AutoSaveTask().runTaskTimerAsynchronously(plugin, 1, 6000);
         new EditStatusTask().runTaskTimerAsynchronously(plugin, 1, 1);
         new PlayerRegenerationTask().runTaskTimerAsynchronously(plugin, 1, 80);
         new SidebarTask().runTaskTimerAsynchronously(plugin, 1, 100);
+        TanoRPG.getEntitySpawnerManager().runTaskTimerAsynchronously(plugin, 1, 20);
     }
 
     public void registerMenus() {

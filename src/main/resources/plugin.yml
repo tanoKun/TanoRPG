@@ -13,16 +13,14 @@ commands:
   mobspawn:
     permission: tanorpg.command.mobspawn
     aliases: [ms]
-  givemobspawner:
-    permission: tanorpg.command.givemobspawner
-    aliases: [gms]
   giveskitem:
     permission: tanorpg.command.giveskitem
     aliases: [gs]
   opencraft:
   openshop:
   opensell:
-  cinit:
+  hat:
+    aliases: [h]
   status:
     aliases: [st]
   test:

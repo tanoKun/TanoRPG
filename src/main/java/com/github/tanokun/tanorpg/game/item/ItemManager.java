@@ -117,7 +117,6 @@ public class ItemManager {
                         }
                     } else {throw new NullPointerException("レアリティが設定されていません");}
                 } catch (Exception e) {
-                    e.printStackTrace();
                     successFull = false;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
@@ -247,7 +246,6 @@ public class ItemManager {
 
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     successFull = false;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
@@ -380,7 +378,6 @@ public class ItemManager {
 
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     successFull = false;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
@@ -526,7 +523,6 @@ public class ItemManager {
                     }
 
                 } catch (Exception e) {
-                    e.printStackTrace();
                     successFull = false;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
@@ -548,7 +544,7 @@ public class ItemManager {
         return errors;
     }
 
-    private static MapNode<String, Object> get(String path, Config config){
+    public static MapNode<String, Object> get(String path, Config config){
         try {
             if (!config.getConfig().isSet(path)) throw new NullPointerException();
             return new MapNode<>(path.replace(".", "/"), String.valueOf(config.getConfig().getString(path)));

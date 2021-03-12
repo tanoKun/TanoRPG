@@ -16,6 +16,7 @@ public class SkillShortCutListener implements Listener {
         if (player.getSkill_F() != null || player.getSkill_Shift_F() != null){
             e.setCancelled(true);
             if (!e.getPlayer().isSneaking()){
+                if (player.getSkill_F() != null);
                 List<String> combo = SkillManager.getSkillName(player.getSkill_F()).getCombo();
                 SkillManager.runPlayerSkill(player, combo);
             } else {

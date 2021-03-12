@@ -6,7 +6,6 @@ import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
-import com.github.tanokun.tanorpg.listener.EntitySpawnEventListener;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -42,25 +41,9 @@ public class DamageManager {
                     customEntity = getEntity((Creature) target).getEntityData();
                 }catch (NullPointerException e){return;}
                 GamePlayer gamePlayer = GamePlayerManager.getPlayer(attacker.getUniqueId());
-                boolean NULL = false;
-                String key = null;
-                try {
-                    key = (String) target.getMetadata("custom_entity").get(0).value();
-                }catch (IndexOutOfBoundsException e){
-                    NULL = true;
-                }
                 if (((Creature) target).getHealth() - damage <= 0) {
                     customEntity.getDropItems().giveDropItems((Player) attacker);
                     gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getEntityData(name[0]).getEXP());
-                    if (NULL == false) {
-                        Integer count;
-                        if (key != null) {
-                            count = EntitySpawnEventListener.counts.get(key);
-                            if (count == null) count = 1;
-                            count -= 1;
-                            EntitySpawnEventListener.counts.put(key, count);
-                        }
-                    }
                 }
                 ((Creature) target).damage(damage);
                 gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");

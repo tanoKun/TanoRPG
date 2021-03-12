@@ -58,7 +58,7 @@ public class ShopManager implements Listener {
             String id = name[3].replace(")", "");
             if (isExists(id) == false) return;
             e.setCancelled(true);
-            if (!e.getCurrentItem().getType().equals(Material.AIR) && !(e.getCurrentItem() == null)){
+            if (!(e.getCurrentItem() == null) && !e.getCurrentItem().getType().equals(Material.AIR)){
                 Shop shop = getShop(id);
                 if (e.getCurrentItem().getItemMeta().getLore() == null) return;
                 String uuid = e.getCurrentItem().getItemMeta().getLore().get(e.getCurrentItem().getItemMeta().getLore().size() - 1).replace("§7", "");

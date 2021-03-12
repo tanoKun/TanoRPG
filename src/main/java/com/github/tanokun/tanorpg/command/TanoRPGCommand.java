@@ -6,11 +6,17 @@ import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class TanoRPGCommand extends Command {
+
+    private ArrayList<String> mainTab = new ArrayList<>(Arrays.asList("rei", "rem", "res", "rec", "resp"));
+
     public TanoRPGCommand(){super("tanorpg");}
 
     @Override
@@ -35,6 +41,9 @@ public class TanoRPGCommand extends Command {
             sender.sendMessage(TanoRPG.PX + "reloading craft configs....");
             CraftManager.deleteCrafts();
             sender.sendMessage(TanoRPG.PX + CraftManager.loadCrafts());
+        } else if (args[0].equals("resp")){
+            sender.sendMessage(TanoRPG.PX + "reloading spawners....");
+            for (String error : TanoRPG.getEntitySpawnerManager().loadSpawner()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX +  "  " + error);
         }
         else{error(sender); return true;}
 
@@ -50,6 +59,6 @@ public class TanoRPGCommand extends Command {
     }
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        return null;
+        return mainTab;
     }
 }

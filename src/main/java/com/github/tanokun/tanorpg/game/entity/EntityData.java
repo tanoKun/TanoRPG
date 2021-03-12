@@ -3,11 +3,9 @@ package com.github.tanokun.tanorpg.game.entity;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.status.Status;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 
 import java.util.HashMap;
 
@@ -71,7 +69,7 @@ public class EntityData {
 
     public EntityDropItems getDropItems() {return dropItems;}
 
-    public Creature spawnEntity(Location location){
+    public Creature spawnEntity(Location location) {
         Creature entity = (Creature) location.getWorld().spawnEntity(location, entityType);
         entity.setCustomName(name + " §7[§dLv:§e" + LEVEL + "§7]");
         if (!(mainHand.equals(""))){entity.getEquipment().setItemInMainHand(ItemManager.getItem(mainHand).getItem());}
@@ -85,18 +83,6 @@ public class EntityData {
         EntityManager.addEntity(new EntityCreature(entity, this));
         return entity;
     }
-    public void giveSpawnerEntity(Player player){
-        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(),
-                "give " + player.getName() + " spawner{" +
-                        "display:{" +
-                        "Name:'{" +
-                        "\"text\":\"" + name +"\"" +
-                        "}'" +
-                        "},BlockEntityTag:{" +
-                        "SpawnCount:1,SpawnRange:2,Delay:-20,MinSpawnDelay:150,MaxSpawnDelay:300,MaxNearbyEntities:10,RequiredPlayerRange:15,SpawnData:" +
-                        "{id:\"minecraft:villager\",Tags:[\"entitymarker\"],CustomName:'{" +
-                        "\"text\":\"" + name +"\"}'},SpawnPotentials:[{Weight:1,Entity:{" +
-                        "id:\"minecraft:villager\",Tags:[\"entitymarker\"],CustomName:'{\"text\":\"" + name + "\"}'}}]}} 1"); }
 
     public String getMainHand() {return mainHand;}
     public String getOffHand() {return offHand;}

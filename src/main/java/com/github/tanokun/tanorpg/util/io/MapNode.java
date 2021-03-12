@@ -12,5 +12,5 @@ public class MapNode<K, V> {
     public void setValue(V value) {this.value = value;}
 
     public K getKey() {return key;}
-    public Object getValue() {return value;}
+    public V getValue() {return value;}
 }
