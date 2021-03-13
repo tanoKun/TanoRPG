@@ -23,9 +23,13 @@ public class EntitySpawner {
     private final int nextSpawnTime;
     private int nextSpawnTimeTemp = 0;
 
+    private final int entityTeleportRadius;
+
     private final HashSet<Entity> activeEntities = new HashSet<>();
 
-    public EntitySpawner(EntityData entity, Location spawnerLocation, int spawnInRadius, int playerInRadius, int maxSpawnCount, int oneTimeSpawnCount, int nextSpawnTime) {
+    public EntitySpawner(EntityData entity, Location spawnerLocation,
+                         int spawnInRadius, int playerInRadius, int maxSpawnCount, int oneTimeSpawnCount, int nextSpawnTime,
+                         int entityTeleportRadius) {
         this.entity = entity;
         this.spawnerLocation = spawnerLocation;
         this.spawnInRadius = spawnInRadius;
@@ -33,6 +37,7 @@ public class EntitySpawner {
         this.maxSpawnCount = maxSpawnCount;
         this.oneTimeSpawnCount = oneTimeSpawnCount;
         this.nextSpawnTime = nextSpawnTime;
+        this.entityTeleportRadius = entityTeleportRadius;
     }
 
 
@@ -44,11 +49,17 @@ public class EntitySpawner {
     public int getOneTimeSpawnCount() {return oneTimeSpawnCount;}
     public int getNextSpawnTime() {return nextSpawnTime;}
     public int getNextSpawnTimeTemp() {return nextSpawnTimeTemp;}
+    public int getEntityTeleportRadius() {return entityTeleportRadius;}
     public HashSet<Entity> getActiveEntities() {return activeEntities;}
 
     public void spawnEntities(){
         nextSpawnTimeTemp++;
         cleanActiveEntities();
+        for (Entity entity : activeEntities){
+            if (spawnerLocation.distance(entity.getLocation()) > entityTeleportRadius){
+                entity.teleport(randomizeSpawnLocation(spawnerLocation, spawnInRadius));
+            }
+        }
         if (nextSpawnTimeTemp != nextSpawnTime) return;
         nextSpawnTimeTemp = 0;
         if (TanoRPG.getNearbyPlayers(spawnerLocation, playerInRadius).length == 0) return;
@@ -59,6 +70,7 @@ public class EntitySpawner {
                     for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
                         activeEntities.add(entity.spawnEntity(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
                     }
+                    cancel();
                 }
             }.runTask(TanoRPG.getPlugin());
         return;

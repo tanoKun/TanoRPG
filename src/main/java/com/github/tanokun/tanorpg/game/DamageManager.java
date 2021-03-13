@@ -30,9 +30,12 @@ public class DamageManager {
     }
 
     public static void createDamage(long damage, Entity attacker, Entity target){
+        final String[] hp = {null};
         new BukkitRunnable(){
             @Override
             public void run() {
+                if (!(target instanceof Creature)) return;
+                Creature creature = (Creature) target;
                 ((Creature)target).setTarget((LivingEntity) attacker);
                 String[] name = target.getName().split(" ");
                 if (getEntity((Creature) target) == null) return;
@@ -45,8 +48,19 @@ public class DamageManager {
                     customEntity.getDropItems().giveDropItems((Player) attacker);
                     gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getEntityData(name[0]).getEXP());
                 }
+
                 ((Creature) target).damage(damage);
                 gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
+
+                int hasHP = (int) Math.floor((creature.getHealth() / customEntity.getHP()) * 20);
+                for (int i = 0; i < hasHP; i++) {
+                    hp[0] = (hp[0] == null) ? "§a❘" :  "§a❘" + hp[0];
+                }
+                for (int i = 0; i < 20 - hasHP; i++) {
+                    hp[0] = hp[0] + "§c❘";
+                }
+                hp[0].replace("null", "");
+                creature.setCustomName(customEntity.getName() + " §7[§dLv:§e" + customEntity.getLEVEL() + "§7] " + hp[0]);
             }
         }.runTask(TanoRPG.getPlugin());
     }

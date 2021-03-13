@@ -84,7 +84,7 @@ public class Sell implements Listener {
             if (nulls.contains(e.getSlot())){
                 e.setCancelled(true);
                 if (e.getCurrentItem().getItemMeta().getDisplayName().contains("§d§l合計値段: ")){
-                    TanoRPG.playSound((Player) e.getWhoClicked(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);
+                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "execute at " + e.getWhoClicked().getName() + " run playsound minecraft:shop.buy master @p ~ ~ ~ 3 1");
                     long price = check(e.getClickedInventory().getContents());
                     e.getWhoClicked().sendMessage(TanoRPG.PX + "§d売却しました！ (合計価格: " + price + ")");
                     GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).addMoney(price);

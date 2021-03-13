@@ -26,7 +26,7 @@ public class PlayerJoinEventListener implements Listener {
                 Player player = e.getPlayer();
                 if (!player.getGameMode().equals(GameMode.CREATIVE)) player.setGameMode(GameMode.SURVIVAL);
                 if (GamePlayerManager.loadData(player.getUniqueId()) == null){
-                    player.teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
+                    player.teleport(new Location(Bukkit.getWorld("world"), -814, 47, 97, 0, 0));
                     player.getInventory().clear();
                     MenuManager.getMenu("§c§l職業選択 §7説明をよく読んで選択しよう！").openInv(player);
                     e.setJoinMessage(join + "§d" + player.getName() + "§dが初Joinしました！");

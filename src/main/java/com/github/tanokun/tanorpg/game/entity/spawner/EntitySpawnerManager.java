@@ -10,6 +10,7 @@ import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashSet;
@@ -29,10 +30,16 @@ public class EntitySpawnerManager extends BukkitRunnable {
     }
 
     public HashSet<String> loadSpawner(){
+        for (EntitySpawner spawner : spawners){
+            for (Entity entity : spawner.getActiveEntities()){
+                entity.remove();
+            }
+        }
         spawners.clear();
+
         HashSet<String> errors = new HashSet<>();
-        Folder folder = new Folder("spawner", TanoRPG.getPlugin());
-        for (Config config : folder.getFiles()) {
+
+        for (Config config : new Folder("spawner", TanoRPG.getPlugin()).getFiles()) {
             for (String key : config.getConfig().getKeys(false)) {
                 boolean successFull = true;
                 MapNode<String, Object> data = null;
@@ -45,6 +52,7 @@ public class EntitySpawnerManager extends BukkitRunnable {
                 int maxSpawnCount = 0;
                 int oneTimeSpawnCount = 0;
                 int nextSpawnTime = 0;
+                int entityTeleportRadius = 25;
 
                 try {
                     data = ItemManager.get(key + ".entity", config);
@@ -128,6 +136,15 @@ public class EntitySpawnerManager extends BukkitRunnable {
                         throw new NullPointerException("スポーン間隔時間が設定されていません");
                     }
 
+                    data = ItemManager.get(key + ".entityTeleportRadius", config);
+                    if (data.getValue() != null) {
+                        if (!StringUtils.isNumeric((String) data.getValue()))
+                            throw new NumberFormatException("テレポート範囲は数字で入力してください");
+                        entityTeleportRadius = Integer.valueOf((String) data.getValue());
+                    } else {
+
+                    }
+
                 } catch (Exception e) {
                     successFull = false;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
@@ -135,7 +152,8 @@ public class EntitySpawnerManager extends BukkitRunnable {
 
                 if (successFull) {
                     TanoRPG.getEntitySpawnerManager().registerSpawner(new EntitySpawner(EntityManager.getEntityData(entityName),
-                            spawnerLocation, spawnInRadius, playerInRadius, maxSpawnCount, oneTimeSpawnCount, nextSpawnTime));
+                            spawnerLocation, spawnInRadius, playerInRadius, maxSpawnCount, oneTimeSpawnCount, nextSpawnTime,
+                            entityTeleportRadius));
                     errors.add("§aEntitySpawners loaded without errors.");
                 }
             }

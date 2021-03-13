@@ -43,7 +43,7 @@ public class TanoRPGCommand extends Command {
             sender.sendMessage(TanoRPG.PX + CraftManager.loadCrafts());
         } else if (args[0].equals("resp")){
             sender.sendMessage(TanoRPG.PX + "reloading spawners....");
-            for (String error : TanoRPG.getEntitySpawnerManager().loadSpawner()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX +  "  " + error);
+            for (String error : TanoRPG.getEntitySpawnerManager().loadSpawner()) sender.sendMessage(TanoRPG.PX +  "  " + error);
         }
         else{error(sender); return true;}
 

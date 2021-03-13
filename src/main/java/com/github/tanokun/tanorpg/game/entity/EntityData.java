@@ -71,7 +71,7 @@ public class EntityData {
 
     public Creature spawnEntity(Location location) {
         Creature entity = (Creature) location.getWorld().spawnEntity(location, entityType);
-        entity.setCustomName(name + " §7[§dLv:§e" + LEVEL + "§7]");
+        entity.setCustomName(name + " §7[§dLv:§e" + LEVEL + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         if (!(mainHand.equals(""))){entity.getEquipment().setItemInMainHand(ItemManager.getItem(mainHand).getItem());}
         if (!(offHand.equals(""))){entity.getEquipment().setItemInOffHand(ItemManager.getItem(offHand).getItem());}
         if (!(helmet.equals(""))){entity.getEquipment().setHelmet(ItemManager.getItem(helmet).getItem());}

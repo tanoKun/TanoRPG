@@ -16,10 +16,6 @@ public class TestCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
-        Player player = (Player) sender;
-        EntitySpawner entitySpawner = new EntitySpawner(EntityManager.getEntityData("ゴブリントロル"), player.getLocation(),
-                5, 16, 4, 1, 5);
-        TanoRPG.getEntitySpawnerManager().registerSpawner(entitySpawner);
         return true;
     }
     @Override

@@ -172,7 +172,7 @@ public class DamageEventListener implements Listener {
                         new BukkitRunnable(){
                             @Override
                             public void run() {
-                                victim.getPlayer().teleport(new Location(Bukkit.getWorld("world"), 729, 25, -73, 90 ,0));
+                                victim.getPlayer().teleport(new Location(Bukkit.getWorld("world"), -814, 47, 97, 0, 0));
                                 victim.setHAS_HP(victim.getMAX_HP());
                                 victim.getPlayer().setGameMode(GameMode.ADVENTURE);
                                 Sidebar.updateSidebar((Player) e.getEntity());
