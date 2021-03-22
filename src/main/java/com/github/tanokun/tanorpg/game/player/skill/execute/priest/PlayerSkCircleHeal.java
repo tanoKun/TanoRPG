@@ -45,7 +45,7 @@ public class PlayerSkCircleHeal extends Skill {
                     for (Entity player : TanoRPG.getNearbyEntities(location, 5)){
                         if (GamePlayerManager.getPlayer(player.getUniqueId()) == null) continue;
                         GamePlayer gamePlayer = GamePlayerManager.getPlayer(player.getUniqueId());
-                        gamePlayer.setHAS_HP(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25);
+                        gamePlayer.setHAS_HP((int) Math.floor(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25));
                         if (gamePlayer.getHAS_HP() > gamePlayer.getMAX_HP()) gamePlayer.setHAS_HP(gamePlayer.getMAX_HP());
                         gamePlayer.getPlayer().sendMessage(TanoRPG.PX + "回復しました！");
                         TanoRPG.playSound((Player) entity, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 10, 1);

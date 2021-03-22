@@ -30,13 +30,13 @@ public class GamePlayer {
     private String name;
     private UUID uuid;
 
-    private double THIS_MAX_HP = 200;
-    private double MAX_HP = 200;
-    private double HAS_HP = 200;
+    private int THIS_MAX_HP = 200;
+    private int MAX_HP = 200;
+    private int HAS_HP = 200;
 
-    private double MAX_MP = 100;
-    private double THIS_MAX_MP = 100;
-    private double HAS_MP = 100;
+    private int MAX_MP = 100;
+    private int THIS_MAX_MP = 100;
+    private int HAS_MP = 100;
 
     private int LEVEL = 1;
     private long MAX_EXP = 100;
@@ -47,6 +47,8 @@ public class GamePlayer {
 
     private String skill_f;
     private String skill_shift_F;
+
+    private int active_mission_NPC_ID = -1;
 
     public void setSkill_F(String f) {this.skill_f = f;}
     public void setSkill_Shift_F(String shift_F) {this.skill_shift_F = shift_F;}
@@ -60,15 +62,18 @@ public class GamePlayer {
     public long getMoney() {
         return Math.round(TanoRPG.getEcon().getBalance(getOfflinePlayer(uuid)));
     }
-    public double getMAX_HP() {return MAX_HP;}
-    public double getTHIS_MAX_HP() {return THIS_MAX_HP;}
-    public double getHAS_HP() {return HAS_HP;}
-    public double getHAS_MP() {return HAS_MP;}
-    public double getMAX_MP() {return MAX_MP;}
-    public double getTHIS_MAX_MP() {return THIS_MAX_MP;}
+    public int getMAX_HP() {return MAX_HP;}
+    public int getTHIS_MAX_HP() {return THIS_MAX_HP;}
+    public int getHAS_HP() {return HAS_HP;}
+    public int getHAS_MP() {return HAS_MP;}
+    public int getMAX_MP() {return MAX_MP;}
+    public int getTHIS_MAX_MP() {return THIS_MAX_MP;}
     public int getLEVEL() {return LEVEL;}
     public long getMAX_EXP() {return MAX_EXP;}
     public long getHAS_EXP() {return HAS_EXP;}
+
+    public void setActive_mission_NPC_ID(int active_mission_NPC_ID) {this.active_mission_NPC_ID = active_mission_NPC_ID;}
+    public int getActive_mission_NPC_ID() {return active_mission_NPC_ID;}
 
     public void setMoney(long money) {
         TanoRPG.getEcon().depositPlayer(Bukkit.getPlayer(uuid), getMoney() - money);
@@ -82,13 +87,13 @@ public class GamePlayer {
         TanoRPG.getEcon().depositPlayer(Bukkit.getPlayer(uuid), money);
         Sidebar.updateSidebar(getPlayer());
     }
-    public void setTHIS_MAX_HP(double THIS_MAX_HP) {this.THIS_MAX_HP = THIS_MAX_HP; Sidebar.updateSidebar(getPlayer());}
-    public void setMAX_HP(double MAX_HP) {this.MAX_HP = MAX_HP; Sidebar.updateSidebar(getPlayer());}
-    public void setHAS_HP(double HAS_HP) {this.HAS_HP = HAS_HP; Sidebar.updateSidebar(getPlayer());}
-    public void setMAX_MP(double MAX_MP) {this.MAX_MP = MAX_MP; Sidebar.updateSidebar(getPlayer());}
-    public void setTHIS_MAX_MP(double THIS_MAX_MP) {this.THIS_MAX_MP = THIS_MAX_MP; Sidebar.updateSidebar(getPlayer());}
-    public void setHAS_MP (double HAS_MP){this.HAS_MP = HAS_MP; Sidebar.updateSidebar(getPlayer());}
-    public void setLEVEL ( int LEVEL){this.LEVEL = LEVEL; Sidebar.updateSidebar(getPlayer());}
+    public void setTHIS_MAX_HP(int THIS_MAX_HP) {this.THIS_MAX_HP = THIS_MAX_HP; Sidebar.updateSidebar(getPlayer());}
+    public void setMAX_HP(int MAX_HP) {this.MAX_HP = MAX_HP; Sidebar.updateSidebar(getPlayer());}
+    public void setHAS_HP(int HAS_HP) {this.HAS_HP = HAS_HP; Sidebar.updateSidebar(getPlayer());}
+    public void setMAX_MP(int MAX_MP) {this.MAX_MP = MAX_MP; Sidebar.updateSidebar(getPlayer());}
+    public void setTHIS_MAX_MP(int THIS_MAX_MP) {this.THIS_MAX_MP = THIS_MAX_MP; Sidebar.updateSidebar(getPlayer());}
+    public void setHAS_MP (int HAS_MP){this.HAS_MP = HAS_MP; Sidebar.updateSidebar(getPlayer());}
+    public void setLEVEL (int LEVEL){this.LEVEL = LEVEL; Sidebar.updateSidebar(getPlayer());}
     public void setMAX_EXP (long MAX_EXP){this.MAX_EXP = MAX_EXP; Sidebar.updateSidebar(getPlayer());}
 
     public void setHAS_EXP (long HAS_EXP){

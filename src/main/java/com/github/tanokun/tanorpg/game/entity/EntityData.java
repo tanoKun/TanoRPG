@@ -8,6 +8,7 @@ import org.bukkit.entity.Creature;
 import org.bukkit.entity.EntityType;
 
 import java.util.HashMap;
+import java.util.Objects;
 
 public class EntityData {
     private EntityDropItems dropItems;
@@ -57,7 +58,7 @@ public class EntityData {
     public double getING() {return statuses.get(StatusType.ING).getLevel();}
     public double getINT() {return statuses.get(StatusType.INT).getLevel();}
 
-    public void setStatuses(double i, double i2, double i3, double i4, double i5, double i6, double i7){
+    public void setStatuses(int i, int i2, int i3, int i4, int i5, int i6, int i7){
         statuses.put(StatusType.ATK, new Status(StatusType.ATK, i));
         statuses.put(StatusType.DEF, new  Status(StatusType.DEF, i2));
         statuses.put(StatusType.MATK, new Status(StatusType.MATK, i3));
@@ -80,6 +81,7 @@ public class EntityData {
         if (!(boots.equals(""))){entity.getEquipment().setBoots(ItemManager.getItem(boots).getItem());}
         entity.setMaxHealth(HP);
         entity.setHealth(HP);
+        entity.setCustomNameVisible(true);
         EntityManager.addEntity(new EntityCreature(entity, this));
         return entity;
     }
@@ -90,4 +92,17 @@ public class EntityData {
     public String getChestPlate() {return chestPlate;}
     public String getLeggings() {return leggings;}
     public String getBoots() {return boots;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        EntityData that = (EntityData) o;
+        return HP == that.HP && LEVEL == that.LEVEL && EXP == that.EXP && Objects.equals(dropItems, that.dropItems) && Objects.equals(name, that.name) && entityType == that.entityType && Objects.equals(mainHand, that.mainHand) && Objects.equals(offHand, that.offHand) && Objects.equals(helmet, that.helmet) && Objects.equals(chestPlate, that.chestPlate) && Objects.equals(leggings, that.leggings) && Objects.equals(boots, that.boots) && Objects.equals(statuses, that.statuses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(dropItems, name, entityType, HP, LEVEL, EXP, mainHand, offHand, helmet, chestPlate, leggings, boots, statuses);
+    }
 }

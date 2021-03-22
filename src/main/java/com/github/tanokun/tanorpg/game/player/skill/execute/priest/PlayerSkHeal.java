@@ -41,7 +41,7 @@ public class PlayerSkHeal extends Skill {
             location.subtract(x, 0, z);
         }
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
-        gamePlayer.setHAS_HP(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25);
+        gamePlayer.setHAS_HP((int) Math.floor(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25));
         if (gamePlayer.getHAS_HP() > gamePlayer.getMAX_HP()) gamePlayer.setHAS_HP(gamePlayer.getMAX_HP());
         gamePlayer.getPlayer().sendMessage(TanoRPG.PX + "回復しました！");
     }

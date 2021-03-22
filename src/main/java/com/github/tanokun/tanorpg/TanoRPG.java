@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.entity.spawner.EntitySpawnerManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
@@ -38,6 +39,7 @@ public final class TanoRPG extends JavaPlugin {
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
     public static final String OPEN_KYE = Coding.decode("a2plb2lqT0lIKSRoMjN1aDUzbzgyaGppanF3bjkpKCNIUklVTzJoOTg=");
     public static String IP;
+    public static String MONEY = "TANO";
 
     public void onEnable() {
         plugin = this;
@@ -70,7 +72,11 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.getConsoleSender().sendMessage(PX + ShopManager.loadShops());
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         for (String error : entitySpawnerManager.loadSpawner()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX + error);
+        registration.registerMissions();
         removeEntities();
+        for(Player player : Bukkit.getOnlinePlayers()) {
+            MissionManager.loadData(player.getUniqueId());
+        }
         for(Player player : Bukkit.getOnlinePlayers()){
             Sidebar.setupSidebar(player);
             player.removeMetadata("COMBO", this);
@@ -80,6 +86,7 @@ public final class TanoRPG extends JavaPlugin {
     public void onDisable () {
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
         GamePlayerManager.saveDataAll();
+        MissionManager.saveDataAll();
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
     }
 

@@ -153,9 +153,8 @@ public class DamageEventListener implements Listener {
             int at_lvl = customEntity.getLEVEL();
             int vi_lvl = victim.getLEVEL();
             double atk = DamageManager.getDamage(customEntity.getATK(), customEntity.getINT(), customEntity.getAGI());
-            long damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
+            int damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
             victim.setHAS_HP(victim.getHAS_HP() - damage);
-            victim.setHAS_HP(new BigDecimal("" + victim.getHAS_HP()).setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
             if (victim.getHAS_HP() <= 0){
                 new BukkitRunnable(){
                     @Override

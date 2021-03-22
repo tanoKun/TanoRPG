@@ -3,6 +3,7 @@ package com.github.tanokun.tanorpg.game.entity.spawner;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.EntityData;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -68,6 +69,10 @@ public class EntitySpawner {
                 @Override
                 public void run() {
                     for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
+                        if (activeEntities.size() >= maxSpawnCount) {cancel(); continue;}
+                        Location location = randomizeSpawnLocation(spawnerLocation, spawnInRadius);
+                        Material material = location.getBlock().getType();
+                        if (!material.equals(Material.WATER) && !material.equals(Material.AIR)) {cancel(); continue;}
                         activeEntities.add(entity.spawnEntity(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
                     }
                     cancel();

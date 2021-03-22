@@ -7,7 +7,6 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -133,7 +132,7 @@ public class Sell implements Listener {
             long money = check(player.getOpenInventory().getTopInventory().getContents());
             ItemStack item = player.getOpenInventory().getItem(49);
             ItemMeta itemM = item.getItemMeta();
-            itemM.setDisplayName("§d§l合計値段: " + money);
+            itemM.setDisplayName("§d§l合計値段: " + money + " " + TanoRPG.MONEY);
             item.setItemMeta(itemM);
             player.getOpenInventory().setItem(49, item);
         }

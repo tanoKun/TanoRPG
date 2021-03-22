@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.menu;
+package com.github.tanokun.tanorpg.menu.player;
 
 
 import com.github.tanokun.tanorpg.TanoRPG;
@@ -6,6 +6,8 @@ import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
+import com.github.tanokun.tanorpg.menu.Menu;
+import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;

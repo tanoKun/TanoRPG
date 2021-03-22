@@ -2,7 +2,7 @@ name: TanoRPG
 version: ${project.version}
 main: com.github.tanokun.tanorpg.TanoRPG
 api-version: 1.15
-depend: [ProtocolLib, Vault, WorldGuard]
+depend: [ProtocolLib, Vault, WorldGuard, Citizens]
 commands:
   tanorpg:
     permission: tanorpg.command.tanorpg

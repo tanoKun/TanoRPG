@@ -6,6 +6,7 @@ import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.ItemJob;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.status.Status;
+import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.Glowing;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -37,6 +38,7 @@ public class ItemWeapon extends Item implements ItemJob {
     public ItemStack getItem() {
         List<String> statuses2 = new ArrayList<>();
         for(Status status : getStatuses()){
+            if (status.getStatusType().equals(StatusType.NONE)) continue;
             if (status.getLevel() > 0){
                 statuses2.add("§a" + status.getStatusType().getName() + " +" + status.getLevel());
             } else {

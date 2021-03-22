@@ -22,9 +22,9 @@ import java.io.File;
 import java.util.*;
 
 public class ItemManager {
-    private static HashMap<String, Item> items = new HashMap<>();
+    private static final HashMap<String, Item> items = new HashMap<>();
 
-    private static List<String> itemIDs = new ArrayList<>();
+    private static final List<String> itemIDs = new ArrayList<>();
     public static final String LORE = "§e〇=-=-=-=-=§b説明§e=-=-=-=-=-〇";
     public static final String FIRST_STATUS = "§e〇=-=-=-§bステータス§e-=-=-=-〇";
     public static final String FINAL_STATUS = "§e〇=-=-=-=-=-=-=-=-=-=-=-=-〇";
@@ -72,7 +72,7 @@ public class ItemManager {
                             try {
                                 StatusType statusType = StatusType.valueOf(key);
                                 data = get(value + ".status." + key, config);
-                                Status status2 = new Status(statusType, Double.valueOf((String) data.getValue()));
+                                Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
                             }catch (NumberFormatException e){
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
@@ -89,7 +89,7 @@ public class ItemManager {
                         if (!data.getValue().equals("true") && !data.getValue().equals("false")){
                             throw new IllegalArgumentException("Glowingは「true or false」で入力してください");
                         }
-                        glowing = Boolean.getBoolean((String) data.getValue());
+                        glowing = Boolean.valueOf((String) data.getValue());
                     }
 
                     try {
@@ -178,7 +178,7 @@ public class ItemManager {
                             try {
                                 StatusType statusType = StatusType.valueOf(key);
                                 data = get(value + ".status." + key, config);
-                                Status status2 = new Status(statusType, Double.valueOf((String) data.getValue()));
+                                Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
                             }catch (NumberFormatException e){
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
@@ -310,7 +310,7 @@ public class ItemManager {
                             try {
                                 StatusType statusType = StatusType.valueOf(key);
                                 data = get(value + ".status." + key, config);
-                                Status status2 = new Status(statusType, Double.valueOf((String) data.getValue()));
+                                Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
                             }catch (NumberFormatException e){
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
@@ -443,7 +443,7 @@ public class ItemManager {
                             try {
                                 StatusType statusType = StatusType.valueOf(key);
                                 data = get(value + ".status." + key, config);
-                                Status status2 = new Status(statusType, Double.valueOf((String) data.getValue()));
+                                Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
                             }catch (NumberFormatException e){
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
