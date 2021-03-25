@@ -27,14 +27,14 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.math.BigDecimal;
-
 public class DamageEventListener implements Listener {
 
 
     @EventHandler
     public void onDamage(EntityDamageEvent event){
-        if (event.getCause() == EntityDamageEvent.DamageCause.FALL || event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION){
+        if (event.getCause() == EntityDamageEvent.DamageCause.FALL ||
+                event.getCause() == EntityDamageEvent.DamageCause.SUFFOCATION ||
+                event.getCause() == EntityDamageEvent.DamageCause.FIRE){
             event.setCancelled(true);
             return;
         }
@@ -109,7 +109,7 @@ public class DamageEventListener implements Listener {
                             this.cancel();
                         }
                     }
-                }.runTaskTimerAsynchronously(TanoRPG.getPlugin(), 0, 1L);
+                }.runTaskTimer(TanoRPG.getPlugin(), 0, 1L);
                 new MagicTask(attacker).runTaskTimerAsynchronously(TanoRPG.getPlugin(), 2, 1);
                 return;
             }
@@ -124,6 +124,7 @@ public class DamageEventListener implements Listener {
             String id = ItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
             final int[] cool = {Math.round(((ItemJob)ItemManager.getItem(id)).getCoolTime())};
             attacker.getPlayer().setLevel(0);
+            if (cool[0] == 0 ) {attacker.getPlayer().removeMetadata("cooltime", TanoRPG.getPlugin());return;}
             new BukkitRunnable() {
                 @Override
                 public void run() {

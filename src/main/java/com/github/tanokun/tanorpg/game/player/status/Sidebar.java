@@ -8,8 +8,6 @@ import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
-import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -21,8 +19,15 @@ public class Sidebar {
         if (boards.containsKey(p.getUniqueId())) return;
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(p.getUniqueId());
 
-        if (!MissionManager.isActive(p.getUniqueId(), MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID()))){
+        Mission mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(),
+                gamePlayer.getActive_mission_NPC_Name());
+
+        if (mission == null){
             gamePlayer.setActive_mission_NPC_ID(-1);
+        }else {
+            if (!MissionManager.isActive(p.getUniqueId(), mission)) {
+                gamePlayer.setActive_mission_NPC_ID(-1);
+            }
         }
 
         FastBoard board = new FastBoard(p);
@@ -54,9 +59,9 @@ public class Sidebar {
                     "    §eLv§7>> §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)",
                     "    §aCombos§7>> §b",
                     "  ",
-                    "§e§l・Mission: §d「" + MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID()).getMissionName() + "」"
+                    "§e§l・Mission: §d「" + MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(), gamePlayer.getActive_mission_NPC_Name()).getMissionName() + "」"
             ));
-            Mission mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID());
+            mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(), gamePlayer.getActive_mission_NPC_Name());
             for (MissionTask missionTask : mission.getMissionTasks()){
                 lines.add("    " + missionTask.getMessage(p));
             }
@@ -67,10 +72,18 @@ public class Sidebar {
     }
     public static void updateSidebar(Player p){
         FastBoard board = boards.get(p.getUniqueId());
+        if (GamePlayerManager.getPlayer(p.getUniqueId()) == null) return;
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(p.getUniqueId());
 
-        if (!MissionManager.isActive(p.getUniqueId(), MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID()))){
+        Mission mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(),
+                gamePlayer.getActive_mission_NPC_Name());
+
+        if (mission == null){
             gamePlayer.setActive_mission_NPC_ID(-1);
+        }else {
+            if (MissionManager.isClear(p.getUniqueId(), mission)) {
+                gamePlayer.setActive_mission_NPC_ID(-1);
+            }
         }
 
         if (gamePlayer.getActive_mission_NPC_ID() == -1) {
@@ -100,9 +113,11 @@ public class Sidebar {
                     "    §eLv§7>> §b" + gamePlayer.getLEVEL() + "§7 (" + gamePlayer.getHAS_EXP() + "§e§l/§7" + gamePlayer.getMAX_EXP() + "§7)",
                     "    §aCombos§7>> §b",
                     "  ",
-                    "§e§l・Mission: §d「" + MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID()).getMissionName() + "」"
+                    "§e§l・Mission: §d「" + MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(),
+                            gamePlayer.getActive_mission_NPC_Name()).getMissionName() + "」"
             ));
-            Mission mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID());
+            mission = MissionManager.getMission(gamePlayer.getActive_mission_NPC_ID(),
+                    gamePlayer.getActive_mission_NPC_Name());
             for (MissionTask missionTask : mission.getMissionTasks()){
                 lines.add("    " + missionTask.getMessage(p));
             }

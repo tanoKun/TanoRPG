@@ -44,6 +44,7 @@ public class MagicTask extends BukkitRunnable {
         ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
         for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
             if (entity instanceof Player) continue;
+            if (!(entity instanceof Creature)) continue;
             if (EntityManager.getEntity((Creature) entity) != null){
                 if (entities.get(entity) == null) {
                     entities.put(entity, true);

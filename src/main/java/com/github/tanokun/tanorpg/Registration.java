@@ -2,13 +2,12 @@ package com.github.tanokun.tanorpg;
 
 import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
-import com.github.tanokun.tanorpg.event.CustomEntityKillEvent;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.listener.EventKillListener;
+import com.github.tanokun.tanorpg.game.player.mission.listener.EntityKillMissionEvent;
 import com.github.tanokun.tanorpg.game.player.mission.listener.NpcClickListener;
 import com.github.tanokun.tanorpg.game.player.mission.model.FirstKillMission;
+import com.github.tanokun.tanorpg.game.player.mission.model.FishermanGuardianKillMission;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
@@ -24,6 +23,7 @@ import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import com.github.tanokun.tanorpg.listener.*;
 import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.menu.mission.AllMissionMenu;
 import com.github.tanokun.tanorpg.menu.mission.MissionCheck;
 import com.github.tanokun.tanorpg.menu.player.MissionMenu;
 import com.github.tanokun.tanorpg.menu.player.SetJobMenu;
@@ -40,7 +40,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.plugin.Plugin;
 
-import java.awt.*;
 import java.lang.reflect.Field;
 
 public class Registration {
@@ -67,6 +66,7 @@ public class Registration {
         Register.register(new GiveSkItemCommand());
         Register.register(new OpenStatusCommand());
         Register.register(new HatCommand());
+        Register.register(new ReloadCommand());
     }
     public void registerListener(){
         Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
@@ -82,7 +82,7 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
         Bukkit.getPluginManager().registerEvents(new SkillShortCutListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new NpcClickListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new EventKillListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new EntityKillMissionEvent(), plugin);
     }
     public void registerOthers() {
         {
@@ -118,6 +118,7 @@ public class Registration {
         MenuManager.registerMenu(new StatusSkillMenu(null));
         MenuManager.registerMenu(new MissionMenu(null));
         MenuManager.registerMenu(new MissionCheck());
+        MenuManager.registerMenu(new AllMissionMenu(null));
     }
 
     public void registerSkills() {
@@ -140,6 +141,7 @@ public class Registration {
     }
 
     public void registerMissions(){
-        MissionManager.registerMission(new FirstKillMission());
+        com.github.tanokun.tanorpg.game.player.mission.MissionManager.registerMission(new FirstKillMission());
+        com.github.tanokun.tanorpg.game.player.mission.MissionManager.registerMission(new FishermanGuardianKillMission());
     }
 }

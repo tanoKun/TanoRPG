@@ -49,6 +49,7 @@ public class GamePlayer {
     private String skill_shift_F;
 
     private int active_mission_NPC_ID = -1;
+    private String active_mission_NPC_Name = "";
 
     public void setSkill_F(String f) {this.skill_f = f;}
     public void setSkill_Shift_F(String shift_F) {this.skill_shift_F = shift_F;}
@@ -74,6 +75,9 @@ public class GamePlayer {
 
     public void setActive_mission_NPC_ID(int active_mission_NPC_ID) {this.active_mission_NPC_ID = active_mission_NPC_ID;}
     public int getActive_mission_NPC_ID() {return active_mission_NPC_ID;}
+
+    public void setActive_mission_NPC_Name(String active_mission_NPC_Name) {this.active_mission_NPC_Name = active_mission_NPC_Name;}
+    public String getActive_mission_NPC_Name() {return active_mission_NPC_Name;}
 
     public void setMoney(long money) {
         TanoRPG.getEcon().depositPlayer(Bukkit.getPlayer(uuid), getMoney() - money);

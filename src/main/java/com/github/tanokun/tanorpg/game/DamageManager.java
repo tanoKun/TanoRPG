@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.game;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.event.CustomEntityKillEvent;
+import com.github.tanokun.tanorpg.event.tanorpg.CustomEntityKillEvent;
 import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;

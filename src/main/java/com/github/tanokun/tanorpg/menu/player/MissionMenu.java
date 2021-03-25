@@ -1,33 +1,25 @@
 package com.github.tanokun.tanorpg.menu.player;
 
-import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.mission.Mission;
 import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.listener.EventKillListener;
 import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
-import com.github.tanokun.tanorpg.game.player.skill.Skill;
-import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.menu.Menu;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Material;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 
 public class MissionMenu extends Menu {
     public MissionMenu(Player player) {
         super("§d§lPlayerStatus §7>> §aMissions", 3);
         if (player == null) return;
-        GamePlayer gamePlayer = GamePlayerManager.getPlayer(player.getUniqueId());
         ItemStack item = MenuManager.createItem(Material.PURPLE_STAINED_GLASS_PANE, "  ", 1, false);
         int slot = 0;
         int slot2 = 0;
@@ -76,7 +68,8 @@ public class MissionMenu extends Menu {
         for(Mission mission : MissionManager.getActiveMissions(p.getUniqueId())){
             if (!mission.getMissionName().equals(name)) continue;
             GamePlayerManager.getPlayer(p.getUniqueId()).setActive_mission_NPC_ID(mission.getNPC_ID());
-            p.sendMessage(EventKillListener.PX + "アクティブミッションを§d「" + name + "」§aに設定しました。");
+            GamePlayerManager.getPlayer(p.getUniqueId()).setActive_mission_NPC_Name(name);
+            p.sendMessage(MissionManager.PX + "アクティブミッションを§d「" + name + "」§aに設定しました。");
             Sidebar.updateSidebar(p);
         }
     }

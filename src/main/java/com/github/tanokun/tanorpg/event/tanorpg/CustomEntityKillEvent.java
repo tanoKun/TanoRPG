@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.event;
+package com.github.tanokun.tanorpg.event.tanorpg;
 
 import com.github.tanokun.tanorpg.game.entity.EntityData;
 import org.bukkit.entity.Entity;

@@ -16,6 +16,7 @@ public abstract class MissionTask<V> {
     abstract public String getMessage(Player player);
 
     abstract public void setValue(UUID uuid, Object value);
+    abstract public void removeValue(UUID uuid);
     abstract public V getValue(UUID uuid);
 
     abstract public boolean isClearTask(UUID uuid);

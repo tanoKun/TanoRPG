@@ -255,7 +255,7 @@ public class ItemManager {
                     item.setRarity(rarity);
                     item.setCustomModelData(customModelData);
                     item.setCoolTime(ct);
-                    item.setLvl((int) lvl);
+                    item.setLvl(lvl);
                     item.setJobs(jobs);
                     items.put(value, item);
                     itemIDs.add(value);

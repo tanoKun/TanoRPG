@@ -1,20 +1,11 @@
 package com.github.tanokun.tanorpg.game.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.player.status.Status;
-import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.UUID;
 

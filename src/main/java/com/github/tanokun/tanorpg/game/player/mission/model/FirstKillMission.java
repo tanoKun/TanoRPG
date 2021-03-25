@@ -6,14 +6,10 @@ import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.mission.Mission;
 import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.listener.EventKillListener;
-import com.github.tanokun.tanorpg.game.player.mission.listener.NpcClickListener;
 import com.github.tanokun.tanorpg.game.player.mission.task.EntityKillTask;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-
-import java.util.concurrent.TimeUnit;
 
 public class FirstKillMission extends Mission {
     private final String PX = "§a§lロバート>> §f";
@@ -47,7 +43,7 @@ public class FirstKillMission extends Mission {
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
         playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 2);
-        sendMessage(player, EventKillListener.PX + "§aミッション「" + getMissionName() + "」を開始しました。");
+        sendMessage(player, MissionManager.PX + "§aミッション「" + getMissionName() + "」を開始しました。");
         MissionManager.addActiveMission(player.getUniqueId(), this);
     }
     public void finishMission(Player player) throws Exception {
@@ -64,14 +60,15 @@ public class FirstKillMission extends Mission {
         playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
         MissionManager.addClearMission(player.getUniqueId(), this);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);
-        sendMessage(player, EventKillListener.PX + "§e〇=-=-=-=-=-=-=-=〇");
-        sendMessage(player, EventKillListener.PX + "§a+350" + " " + TanoRPG.MONEY);
-        sendMessage(player, EventKillListener.PX + "§a+2 apples");
-        sendMessage(player, EventKillListener.PX + "§e〇=-=-=-=-=-=-=-=〇");
-        sendMessage(player, EventKillListener.PX + "ミッションをクリアしました。");
+        sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
+        sendMessage(player, MissionManager.PX + "§a+350" + " " + TanoRPG.MONEY);
+        sendMessage(player, MissionManager.PX + "§a+2 apples");
+        sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
+        sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(350);
         player.getInventory().addItem(ItemManager.getItem("apple").getItem(), ItemManager.getItem("apple").getItem());
         Sidebar.updateSidebar(player);
+
     }
 
     public void cancelMission(Player player) throws Exception {
@@ -79,6 +76,6 @@ public class FirstKillMission extends Mission {
         sendMessage(player, PX + "そうかい。急に頼んで悪かったね。気が変わったら頼むよ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
-        sendMessage(player, EventKillListener.PX + "§aミッションを取り消しました。");
+        sendMessage(player, MissionManager.PX + "§aミッションを取り消しました。");
     }
 }

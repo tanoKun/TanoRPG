@@ -69,11 +69,14 @@ public class EntitySpawner {
                 @Override
                 public void run() {
                     for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
-                        if (activeEntities.size() >= maxSpawnCount) {cancel(); continue;}
-                        Location location = randomizeSpawnLocation(spawnerLocation, spawnInRadius);
-                        Material material = location.getBlock().getType();
-                        if (!material.equals(Material.WATER) && !material.equals(Material.AIR)) {cancel(); continue;}
-                        activeEntities.add(entity.spawnEntity(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
+                        Location location;
+                        Material material;
+                            if (activeEntities.size() >= maxSpawnCount) {cancel(); continue;}
+                            location = randomizeSpawnLocation(spawnerLocation, spawnInRadius);
+                            material = location.getBlock().getBlockData().getMaterial();
+                            if (material.equals(Material.WATER) || material.equals(Material.AIR)) {
+                                activeEntities.add(entity.spawnEntity(location));
+                            }
                     }
                     cancel();
                 }
