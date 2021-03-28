@@ -41,7 +41,7 @@ public class Registration {
 
     public void registerConfigs() {
         plugin.saveDefaultConfig();
-        new Config("mobEntity.yml", "mobs", plugin).saveDefaultConfig();
+        new Folder("mobs", plugin).createExists();
 
         new Folder("player_database", plugin).createExists();
         new Folder("shop", plugin).createExists();
