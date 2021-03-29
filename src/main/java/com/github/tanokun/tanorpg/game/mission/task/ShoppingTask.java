@@ -1,16 +1,17 @@
-package com.github.tanokun.tanorpg.game.player.mission.task;
+package com.github.tanokun.tanorpg.game.mission.task;
 
-import com.github.tanokun.tanorpg.game.entity.EntityData;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
 import java.util.UUID;
 
-public class EntityKillTask extends MissionTask<Integer>{
+public class ShoppingTask extends MissionTask<Integer>{
     private final int clearCount;
-    private final EntityData target;
+    private final String itemId;
 
-    public EntityKillTask(EntityData entityData, int clearCount, String message){this.target = entityData; this.clearCount = clearCount; setMessage(message);}
+    public ShoppingTask(int clearCount, String itemId, String message){this.clearCount = clearCount;
+        this.itemId = itemId;
+        setMessage(message);}
 
     public String getMessage(Player player) {
         if (isClearTask(player.getUniqueId()))
@@ -24,13 +25,13 @@ public class EntityKillTask extends MissionTask<Integer>{
         playerData.put(uuid, count); if (playerData.get(uuid) >= clearCount) playerData.put(uuid, clearCount);
     }
 
+    public String getItemId() {return itemId;}
+
     public void removeValue(UUID uuid) {
         playerData.remove(uuid);
     }
 
     public Integer getValue(UUID uuid) {return (playerData.get(uuid) == null) ? 0 : playerData.get(uuid);}
-
-    public EntityData getTarget() {return target;}
 
     public boolean isClearTask(UUID uuid) {
         if (getValue(uuid) >= clearCount) return true;
@@ -42,12 +43,12 @@ public class EntityKillTask extends MissionTask<Integer>{
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         if (!super.equals(o)) return false;
-        EntityKillTask killTask = (EntityKillTask) o;
-        return clearCount == killTask.clearCount && Objects.equals(target, killTask.target);
+        ShoppingTask shoppingTask = (ShoppingTask) o;
+        return clearCount == shoppingTask.clearCount;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), clearCount, target);
+        return Objects.hash(super.hashCode(), clearCount);
     }
 }

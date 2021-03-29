@@ -4,10 +4,15 @@ import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
-import com.github.tanokun.tanorpg.game.player.mission.listener.EntityKillMissionEvent;
-import com.github.tanokun.tanorpg.game.player.mission.listener.NpcClickListener;
-import com.github.tanokun.tanorpg.game.player.mission.model.FirstKillMission;
-import com.github.tanokun.tanorpg.game.player.mission.model.FishermanGuardianKillMission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.listener.CraftEventListener;
+import com.github.tanokun.tanorpg.game.mission.listener.EntityKillMissionEventListener;
+import com.github.tanokun.tanorpg.game.mission.listener.NpcClickListener;
+import com.github.tanokun.tanorpg.game.mission.listener.ShoppingEventListener;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_FirstShoppingMission;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_GoblinKillMission;
+import com.github.tanokun.tanorpg.game.mission.model.Merchant_GuardianKillMission;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_firstCraftMission;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
@@ -82,7 +87,9 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
         Bukkit.getPluginManager().registerEvents(new SkillShortCutListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new NpcClickListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new EntityKillMissionEvent(), plugin);
+        Bukkit.getPluginManager().registerEvents(new EntityKillMissionEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ShoppingEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new CraftEventListener(), plugin);
     }
     public void registerOthers() {
         {
@@ -141,7 +148,10 @@ public class Registration {
     }
 
     public void registerMissions(){
-        com.github.tanokun.tanorpg.game.player.mission.MissionManager.registerMission(new FirstKillMission());
-        com.github.tanokun.tanorpg.game.player.mission.MissionManager.registerMission(new FishermanGuardianKillMission());
+        MissionManager.registerMission(new Robert_FirstShoppingMission());
+        MissionManager.registerMission(new Robert_firstCraftMission());
+        MissionManager.registerMission(new Robert_GoblinKillMission());
+
+        MissionManager.registerMission(new Merchant_GuardianKillMission());
     }
 }

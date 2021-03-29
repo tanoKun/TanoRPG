@@ -1,8 +1,8 @@
-package com.github.tanokun.tanorpg.game.player.mission;
+package com.github.tanokun.tanorpg.game.mission;
 
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
+import com.github.tanokun.tanorpg.game.mission.task.MissionTask;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

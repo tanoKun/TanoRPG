@@ -1,9 +1,9 @@
 package com.github.tanokun.tanorpg.menu.player;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
+import com.github.tanokun.tanorpg.game.mission.Mission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.task.MissionTask;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.menu.Menu;
 import com.github.tanokun.tanorpg.menu.MenuManager;

@@ -1,12 +1,12 @@
-package com.github.tanokun.tanorpg.game.player.mission;
+package com.github.tanokun.tanorpg.game.mission;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
-import com.github.tanokun.tanorpg.game.player.mission.condition.ClearMissionCondition;
-import com.github.tanokun.tanorpg.game.player.mission.condition.JobMissionCondition;
-import com.github.tanokun.tanorpg.game.player.mission.condition.LvlMissionCondition;
-import com.github.tanokun.tanorpg.game.player.mission.condition.MissionCondition;
-import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
+import com.github.tanokun.tanorpg.game.mission.condition.ClearMissionCondition;
+import com.github.tanokun.tanorpg.game.mission.condition.JobMissionCondition;
+import com.github.tanokun.tanorpg.game.mission.condition.LvlMissionCondition;
+import com.github.tanokun.tanorpg.game.mission.condition.MissionCondition;
+import com.github.tanokun.tanorpg.game.mission.task.MissionTask;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -59,6 +59,7 @@ public class MissionManager {
         } else {
             activeMissions.get(uuid).add(mission);
         }
+        System.out.println(activeMissions.get(uuid).size());
     }
     public static void removeActiveMission(UUID uuid, Mission mission){
         if (activeMissions.get(uuid) == null) return;
@@ -122,6 +123,8 @@ public class MissionManager {
         }
         for (String id : ids){
             for (Mission mission : getMission(Integer.parseInt(id))) {
+                if (!config.getConfig().isSet("mission_data.ID_" + id + "."
+                        + mission.getMissionName() + ".clear")) continue;
                 if (config.getConfig().getBoolean("mission_data.ID_" + id + "."
                         + mission.getMissionName() + ".clear")) {
                     addClearMission(uuid, mission);

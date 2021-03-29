@@ -32,7 +32,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
     public PlayerSkExplosionAttack() {
-        super("爆散", 8, 40, 40,
+        super("爆散", 8, 40, 19,
                 new ArrayList<String>(Arrays.asList("LC", "DR", "SLC")),
                 new ArrayList<String>(Arrays.asList("§f視点の先にいる敵を爆破します")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(MAGE)), Material.TNT);
@@ -84,7 +84,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());
                         at_lvl = gamePlayer.getLEVEL();
                         vi_lvl = custom.getLEVEL();
-                        damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.2);
+                        damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.5);
                         if (damager.equals(finalTarget)) continue;
                         DamageManager.createDamage(damage, entity, damager);
                     }

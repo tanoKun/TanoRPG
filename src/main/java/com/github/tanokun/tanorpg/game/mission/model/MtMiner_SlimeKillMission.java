@@ -1,14 +1,12 @@
-package com.github.tanokun.tanorpg.game.player.mission.model;
+package com.github.tanokun.tanorpg.game.mission.model;
 
-import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.task.EntityKillTask;
+import com.github.tanokun.tanorpg.game.mission.Mission;
 import org.bukkit.entity.Player;
 
-public class MtMinerSlimeKillMission extends Mission {
+public class MtMiner_SlimeKillMission extends Mission {
     private final String PX = "§a§l鉱夫>> §f";
 
-    public MtMinerSlimeKillMission() {
+    public MtMiner_SlimeKillMission() {
         super("鉱石が欲しくばお願いを聞け", 210);
     }
 

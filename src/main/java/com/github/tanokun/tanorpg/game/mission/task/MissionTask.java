@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.game.player.mission.task;
+package com.github.tanokun.tanorpg.game.mission.task;
 
 import org.bukkit.entity.Player;
 

@@ -2,10 +2,10 @@ package com.github.tanokun.tanorpg.menu.mission;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.listener.NpcClickListener;
-import com.github.tanokun.tanorpg.game.player.mission.task.MissionTask;
+import com.github.tanokun.tanorpg.game.mission.Mission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.listener.NpcClickListener;
+import com.github.tanokun.tanorpg.game.mission.task.MissionTask;
 import com.github.tanokun.tanorpg.menu.Menu;
 import com.github.tanokun.tanorpg.menu.MenuManager;
 import org.bukkit.Material;
@@ -26,6 +26,7 @@ public class AllMissionMenu extends Menu {
         int slot = 0;
         for(Mission mission : MissionManager.getMission(NpcClickListener.flag_selNPC_ID.get(player.getUniqueId()))) {
             if (MissionManager.isClear(player.getUniqueId(), mission)) continue;
+            if (mission.isActiveClear(player.getUniqueId())) continue;
             if (!MissionManager.isFit(GamePlayerManager.getPlayer(player.getUniqueId()), mission)) continue;
             String name = mission.getMissionName();
             List<String> lines = new ArrayList<>();

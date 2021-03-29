@@ -1,23 +1,23 @@
-package com.github.tanokun.tanorpg.game.player.mission.model;
+package com.github.tanokun.tanorpg.game.mission.model;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.task.EntityKillTask;
+import com.github.tanokun.tanorpg.game.mission.Mission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.task.EntityKillTask;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import static com.github.tanokun.tanorpg.game.player.mission.MissionManager.addClearMission;
+import static com.github.tanokun.tanorpg.game.mission.MissionManager.addClearMission;
 
-public class FishermanGuardianKillMission extends Mission {
+public class Merchant_GuardianKillMission extends Mission {
     private final String PX = "§a§l商人>> §f";
 
-    public FishermanGuardianKillMission() {
+    public Merchant_GuardianKillMission() {
         super("商人の手伝い", 207);
         addMissionTask(new EntityKillTask(EntityManager.getEntityData("ディファニー"), 12, "ディファニーを12体倒す"));
     }
@@ -81,9 +81,11 @@ public class FishermanGuardianKillMission extends Mission {
         sendMessage(player, MissionManager.PX + "§a+500" + " " + TanoRPG.MONEY);
         sendMessage(player, MissionManager.PX + "§a+5 fish");
         sendMessage(player, MissionManager.PX + "§a+3 iron_ore");
+        sendMessage(player, MissionManager.PX + "§a+70 EXP");
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(500);
+        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 70);
 
         ItemStack fish = ItemManager.getItem("fish").getItem();
         fish.setAmount(5);

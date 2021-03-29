@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.game.player.mission.condition;
+package com.github.tanokun.tanorpg.game.mission.condition;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 

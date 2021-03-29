@@ -1,4 +1,4 @@
-package com.github.tanokun.tanorpg.game.player.mission.condition;
+package com.github.tanokun.tanorpg.game.mission.condition;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -8,6 +8,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 @Retention(value=RUNTIME)
 @Target(value= ElementType.TYPE)
-public @interface ClearMissionCondition {
-    String[] value();
+public @interface LvlMissionCondition {
+    int value() default 1;
 }

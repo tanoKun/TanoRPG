@@ -24,7 +24,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkCircleHeal extends Skill {
     public PlayerSkCircleHeal() {
-        super("天の回復", 6, 60, 50,
+        super("天の回復", 6, 60, 30,
                 new ArrayList<String>(Arrays.asList("DR", "SRC", "RC")),
                 new ArrayList<String>(Arrays.asList("§f範囲5m以内にいる見方を50%回復します")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(PRIEST)), Material.EMERALD_BLOCK);

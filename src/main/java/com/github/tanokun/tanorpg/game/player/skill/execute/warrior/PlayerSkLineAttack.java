@@ -29,7 +29,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.WARRIOR;
 
 public class PlayerSkLineAttack extends Skill implements AttackSkill {
     public PlayerSkLineAttack() {
-        super("猪突猛進", 12, 40, 32,
+        super("猪突猛進", 12, 40, 14,
                 new ArrayList<String>(Arrays.asList("DR", "LC", "LC")),
                 new ArrayList<String>(Arrays.asList("§f前方に突進してダメージを与えます")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.BLAZE_ROD);
@@ -62,7 +62,7 @@ public class PlayerSkLineAttack extends Skill implements AttackSkill {
                         double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.ING).getLevel(),
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());
-                        long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.8);
+                        long damage = Math.round(DamageManager.getCompDamage(atk, custom.getDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer()) * 1.6);
                         DamageManager.createDamage(damage, entity, target);
                     }
                     ParticleEffect.CLOUD.display(loc, 1, 1, 1, 0f, 10, null, Bukkit.getOnlinePlayers());

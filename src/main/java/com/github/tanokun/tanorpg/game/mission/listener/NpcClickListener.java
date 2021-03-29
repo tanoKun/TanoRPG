@@ -1,10 +1,10 @@
-package com.github.tanokun.tanorpg.game.player.mission.listener;
+package com.github.tanokun.tanorpg.game.mission.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.Mission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.menu.mission.AllMissionMenu;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;

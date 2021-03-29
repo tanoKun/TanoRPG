@@ -1,11 +1,14 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.event.tanorpg.CustomCraftEvent;
+import com.github.tanokun.tanorpg.event.tanorpg.CustomEntityKillEvent;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -126,6 +129,14 @@ public class CraftManager implements Listener {
                         TanoRPG.playSound((Player)e.getWhoClicked(), Sound.BLOCK_ANVIL_DESTROY, 10, 1);
                         try {Thread.sleep(750);} catch (InterruptedException e) {e.printStackTrace();}
                         e.getWhoClicked().sendMessage(TanoRPG.PX + "クラフトが完了しました");
+                        new BukkitRunnable(){
+
+                            @Override
+                            public void run() {
+                                Bukkit.getServer().getPluginManager().callEvent(new CustomCraftEvent(((Player) e.getWhoClicked()).getPlayer(),
+                                        craft.getItem(uuid).getAfterItem(), craft));
+                            }
+                        }.runTask(TanoRPG.getPlugin());
                         e.getWhoClicked().getInventory().addItem(craft.getItem(uuid).getAfterItem().getItem());
                         e.getWhoClicked().removeMetadata("craft", TanoRPG.getPlugin());
                     }

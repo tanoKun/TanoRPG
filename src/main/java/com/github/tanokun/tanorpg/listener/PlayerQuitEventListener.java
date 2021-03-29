@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;

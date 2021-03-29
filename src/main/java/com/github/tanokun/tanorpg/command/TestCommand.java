@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.command.register.Command;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 

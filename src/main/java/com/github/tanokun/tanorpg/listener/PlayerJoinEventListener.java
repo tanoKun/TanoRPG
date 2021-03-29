@@ -2,7 +2,7 @@ package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.menu.MenuManager;
@@ -21,23 +21,30 @@ public class PlayerJoinEventListener implements Listener {
     private String join = "§a[§bJoin§a] §f";
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
+        final Player player = e.getPlayer();
+        ComboManager.comboRunnable.put(e.getPlayer().getUniqueId(), new ArrayList<>());
         new BukkitRunnable() {
             @Override
             public void run() {
-                Player player = e.getPlayer();
                 if (!player.getGameMode().equals(GameMode.CREATIVE)) player.setGameMode(GameMode.SURVIVAL);
                 if (GamePlayerManager.loadData(player.getUniqueId()) == null){
                     player.teleport(new Location(Bukkit.getWorld("world"), -814, 47, 97, 0, 0));
+                    Sidebar.setupSidebar(e.getPlayer());
                     player.getInventory().clear();
                     MenuManager.getMenu("§c§l職業選択 §7説明をよく読んで選択しよう！").openInv(player);
-                    e.setJoinMessage(join + "§d" + player.getName() + "§dが初Joinしました！");
+                    for (Player all : Bukkit.getOnlinePlayers()){
+                        all.sendMessage(join + "§d" + player.getName() + "§dが初Joinしました！");
+                    }
+                    player.sendMessage(TanoRPG.PX + "左にいるロバートに話しかけてみよう。");
+                    player.sendMessage(TanoRPG.PX + "必要な情報が得られるぞ！");
                 } else {
-                    e.setJoinMessage(join + "§a" + player.getName() + "§aがJoinしました！");
                     GamePlayerManager.loadData(player.getUniqueId());
                     MissionManager.loadData(player.getUniqueId());
+                    Sidebar.setupSidebar(e.getPlayer());
+                    for (Player all : Bukkit.getOnlinePlayers()){
+                        all.sendMessage(join + "§a" + player.getName() + "§aがJoinしました！");
+                    }
                 }
-                ComboManager.comboRunnable.put(e.getPlayer().getUniqueId(), new ArrayList<>());
-                Sidebar.setupSidebar(e.getPlayer());
             }
         }.runTask(TanoRPG.getPlugin());
     }

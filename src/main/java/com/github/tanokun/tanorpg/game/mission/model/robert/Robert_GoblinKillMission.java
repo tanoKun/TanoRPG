@@ -1,26 +1,30 @@
-package com.github.tanokun.tanorpg.game.player.mission.model;
+package com.github.tanokun.tanorpg.game.mission.model.robert;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.mission.condition.ClearMissionCondition;
+import com.github.tanokun.tanorpg.game.mission.condition.MissionCondition;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.game.player.mission.Mission;
-import com.github.tanokun.tanorpg.game.player.mission.MissionManager;
-import com.github.tanokun.tanorpg.game.player.mission.task.EntityKillTask;
+import com.github.tanokun.tanorpg.game.mission.Mission;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.task.EntityKillTask;
+import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
-public class FirstKillMission extends Mission {
+@ClearMissionCondition({"チュートリアル①", "チュートリアル②"})
+public class Robert_GoblinKillMission extends Mission implements MissionCondition {
     private final String PX = "§a§lロバート>> §f";
 
-    public FirstKillMission() {
+    public Robert_GoblinKillMission() {
         super("ロバートからのお願い", 206);
         addMissionTask(new EntityKillTask(EntityManager.getEntityData("ゴブリン"), 10, "ゴブリンを10体倒す"));
     }
 
     public void showNPCMessages(Player player) throws Exception {
-        sendMessage(player, PX + "やぁやぁ。 新人の冒険者かい？");
+        sendMessage(player, PX + "さっきの冒険者か。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
         sendMessage(player, PX + "ちょっと今ゴブリンが外にうろついていて困ってるんだ。");
@@ -63,10 +67,14 @@ public class FirstKillMission extends Mission {
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "§a+350" + " " + TanoRPG.MONEY);
         sendMessage(player, MissionManager.PX + "§a+2 apples");
+        sendMessage(player, MissionManager.PX + "§a+60" + " EXP");
+        sendMessage(player, MissionManager.PX + "§a+1" + " §f「§bスキル習得書: §6ジャンプ§f」");
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(350);
         player.getInventory().addItem(ItemManager.getItem("apple").getItem(), ItemManager.getItem("apple").getItem());
+        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60);
+        player.getInventory().addItem(SkillManager.getSkillItem("ジャンプ"));
         Sidebar.updateSidebar(player);
 
     }
