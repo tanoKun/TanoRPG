@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -32,7 +33,17 @@ public class TanoRPGCommand extends Command {
         }
         else if (args[0].equals("rem")) {
             sender.sendMessage(TanoRPG.PX + "reloading entity configs....");
-            sender.sendMessage(TanoRPG.PX + EntityManager.loadData());
+            try {
+                for (String error : EntityManager.loadEntities()) sender.sendMessage(TanoRPG.PX + error);
+            } catch (NoSuchMethodException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            }
         }else if (args[0].equals("res")){
             sender.sendMessage(TanoRPG.PX + "reloading shop configs....");
             ShopManager.deleteShops();

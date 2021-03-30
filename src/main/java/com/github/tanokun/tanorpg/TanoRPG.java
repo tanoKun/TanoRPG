@@ -24,6 +24,7 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -66,7 +67,17 @@ public final class TanoRPG extends JavaPlugin {
         for (String error : ItemManager.loadWeaponItem()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX +  "  " + error);
         for (String error : ItemManager.loadMagicWeaponItem()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX +  "  " + error);
         for (String error : ItemManager.loadEquipmentItem()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX +  "  " + error);
-        Bukkit.getConsoleSender().sendMessage(PX + EntityManager.loadData());
+        try {
+            for (String error : EntityManager.loadEntities()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX + error);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        }
         Bukkit.getConsoleSender().sendMessage(PX + ShopManager.loadShops());
         Bukkit.getConsoleSender().sendMessage(PX + CraftManager.loadCrafts());
         for (String error : entitySpawnerManager.loadSpawner()) Bukkit.getConsoleSender().sendMessage(TanoRPG.PX + error);
@@ -78,6 +89,11 @@ public final class TanoRPG extends JavaPlugin {
     }
 
     public void onDisable () {
+        for(Entity entity : Bukkit.getWorld("world").getEntities()) {
+            if (entity.hasMetadata("TanoRPG_entity")) {
+                entity.remove();
+            }
+        }
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
         GamePlayerManager.saveDataAll();
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");

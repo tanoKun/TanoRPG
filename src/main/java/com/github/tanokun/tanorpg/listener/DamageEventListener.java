@@ -2,9 +2,9 @@ package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.entity.EntityCreature;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.ItemMagicWeapon;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.ItemJob;
@@ -64,11 +64,11 @@ public class DamageEventListener implements Listener {
                 e.setCancelled(true);
                 return;
             }
-            if (EntityManager.getEntity((Creature) e.getEntity()) == null) return;
+            if (!e.getEntity().hasMetadata("TanoRPG_entity")) return;
             e.setCancelled(true);
             GamePlayer attacker = GamePlayerManager.getPlayer(e.getDamager().getUniqueId());
-            EntityCreature victim = EntityManager.getEntity((Creature) e.getEntity());
-            EntityData customEntity = victim.getEntityData();
+            ActiveEntity victim = EntityManager.getActiveEntity(e.getEntity());
+            ObjectEntity customEntity = victim.getObjectEntity();
             if (attacker.getPlayer().hasMetadata("cooltime")) {
                 e.setCancelled(true);
                 return;
@@ -119,7 +119,7 @@ public class DamageEventListener implements Listener {
                     attacker.getStatus(StatusType.ING).getLevel(),
                     attacker.getStatus(StatusType.AGI).getLevel());
             long damage = DamageManager.getCompDamage(atk, customEntity.getDEF(), at_lvl, vi_lvl, attacker.getPlayer());
-            DamageManager.createDamage(damage, attacker.getPlayer(), victim.getCreature());
+            DamageManager.createDamage(damage, attacker.getPlayer(), victim.getActiveEntity());
             attacker.getPlayer().setMetadata("cooltime", new FixedMetadataValue(TanoRPG.getPlugin(), true));
             String id = ItemManager.getID(attacker.getPlayer().getEquipment().getItemInMainHand());
             final int[] cool = {Math.round(((ItemJob)ItemManager.getItem(id)).getCoolTime())};
@@ -141,13 +141,13 @@ public class DamageEventListener implements Listener {
     private void entity(EntityDamageByEntityEvent e) {
         try{
             try{
-                if (EntityManager.getEntity((Creature) e.getDamager()) == null) return;
+                if (!e.getDamager().hasMetadata("TanoRPG_entity")) return;
             }catch (Exception ex) {
                 return;
             }
             e.setDamage(0);
-            EntityCreature attacker = EntityManager.getEntity((Creature) e.getDamager());
-            EntityData customEntity = attacker.getEntityData();
+            ActiveEntity attacker = EntityManager.getActiveEntity(e.getDamager());
+            ObjectEntity customEntity = attacker.getObjectEntity();
             GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
             ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
             int at_lvl = customEntity.getLEVEL();

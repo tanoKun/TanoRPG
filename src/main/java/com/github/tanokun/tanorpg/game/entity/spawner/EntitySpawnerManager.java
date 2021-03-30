@@ -58,7 +58,7 @@ public class EntitySpawnerManager extends BukkitRunnable {
                     data = ItemManager.get(key + ".entity", config);
                     if (data.getValue() != null) {
                         entityName = (String) data.getValue();
-                        if (EntityManager.getEntityData(entityName) == null)
+                        if (EntityManager.getBaseEntity(entityName) == null)
                             throw new NullPointerException("エンティティ名「" + entityName + "」は存在しません");
                     } else {
                         throw new NullPointerException("エンティティIDが設定されていません");
@@ -151,7 +151,7 @@ public class EntitySpawnerManager extends BukkitRunnable {
                 }
 
                 if (successFull) {
-                    TanoRPG.getEntitySpawnerManager().registerSpawner(new EntitySpawner(EntityManager.getEntityData(entityName),
+                    TanoRPG.getEntitySpawnerManager().registerSpawner(new EntitySpawner(EntityManager.getBaseEntity(entityName),
                             spawnerLocation, spawnInRadius, playerInRadius, maxSpawnCount, oneTimeSpawnCount, nextSpawnTime,
                             entityTeleportRadius));
                     errors.add("§aEntitySpawners loaded without errors.");

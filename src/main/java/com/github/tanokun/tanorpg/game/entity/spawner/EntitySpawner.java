@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.game.entity.spawner;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -11,7 +11,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class EntitySpawner {
-    private final EntityData entity;
+    private final ObjectEntity entity;
 
     private final Location spawnerLocation;
     private final int spawnInRadius;
@@ -27,7 +27,7 @@ public class EntitySpawner {
 
     private final HashSet<Entity> activeEntities = new HashSet<>();
 
-    public EntitySpawner(EntityData entity, Location spawnerLocation,
+    public EntitySpawner(ObjectEntity entity, Location spawnerLocation,
                          int spawnInRadius, int playerInRadius, int maxSpawnCount, int oneTimeSpawnCount, int nextSpawnTime,
                          int entityTeleportRadius) {
         this.entity = entity;
@@ -41,7 +41,7 @@ public class EntitySpawner {
     }
 
 
-    public EntityData getEntity() {return entity;}
+    public ObjectEntity getEntity() {return entity;}
     public Location getSpawnerLocation() {return spawnerLocation;}
     public int getSpawnInRadius() {return spawnInRadius;}
     public int getPlayerInRadius() {return playerInRadius;}
@@ -64,15 +64,15 @@ public class EntitySpawner {
         nextSpawnTimeTemp = 0;
         if (TanoRPG.getNearbyPlayers(spawnerLocation, playerInRadius).length == 0) return;
         if (activeEntities.size() >= maxSpawnCount) return;
-            new BukkitRunnable() {
-                @Override
-                public void run() {
-                    for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
-                        activeEntities.add(entity.spawnEntity(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
-                    }
-                    cancel();
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
+                    activeEntities.add(entity.spawn(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
                 }
-            }.runTask(TanoRPG.getPlugin());
+                cancel();
+            }
+        }.runTask(TanoRPG.getPlugin());
         return;
 
     }

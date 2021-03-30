@@ -1,112 +1,95 @@
 package com.github.tanokun.tanorpg.game.entity;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
+import com.github.tanokun.tanorpg.game.entity.exception.TanoEntityException;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.util.io.Config;
+import com.github.tanokun.tanorpg.util.io.Folder;
+import com.github.tanokun.tanorpg.util.io.MapNode;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Entity;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
 
 public class EntityManager {
-    private static HashMap<String, EntityData> customEntities = new HashMap<>();
-    private static List<String> customEntityIDs = new ArrayList<>();
+    private static Map<String, ObjectEntity> entityList = new HashMap<>();
 
-    private static HashMap<UUID, EntityCreature> existsEntities = new HashMap<>();
+    private static Map<Entity, ActiveEntity> activeEntityList = new HashMap<>();
 
-    private static Config mobEntity;
-
-    public static String loadData() {
-        String message = ChatColor.GREEN + "All entity config loaded without errors.";
-        try {
-            mobEntity = new Config("mobEntity.yml", "mobs", TanoRPG.getPlugin());
-            EntityData customEntity;
-            for (String value : mobEntity.getConfig().getKeys(false)) {
-                EntityType entityType = EntityType.valueOf((String) mobEntity.getConfig().get(value + ".type"));
-                int lvl = mobEntity.getConfig().getInt(value + ".level");
-                int hp = mobEntity.getConfig().getInt(value + ".hp");
-                long exp = mobEntity.getConfig().getLong(value + ".exp");
-                int ATK = 0;
-                int DEF = 0;
-                int MATK = 0;
-                int MDEF = 0;
-                int AGI = 0;
-                int ING = 0;
-                int INT = 0;
-                for (String key : mobEntity.getConfig().getConfigurationSection(value + ".status").getKeys(false)) {
-                    if (key.equalsIgnoreCase("atk")){ATK = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("def")){DEF = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("matk")){MATK = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("mdef")){MDEF = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("agi")){AGI = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("ing")){ING = mobEntity.getConfig().getInt(value + ".status." + key);}
-                    if (key.equalsIgnoreCase("int")){INT = mobEntity.getConfig().getInt(value + ".status." + key);}
-                }
-                String mainHand = "";
-                String offHand = "";
-                String helmet = "";
-                String chestPlate = "";
-                String leggings = "";
-                String boots = "";
-                for (String key : mobEntity.getConfig().getConfigurationSection(value + ".armor").getKeys(false)) {
-                    if (key.equals("main")) {
-                        mainHand = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                    if (key.equals("sub")) {
-                        offHand = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                    if (key.equals("helmet")) {
-                        helmet = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                    if (key.equals("chestplate")) {
-                        chestPlate = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                    if (key.equals("leggings")) {
-                        leggings = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                    if (key.equals("boots")) {
-                        boots = mobEntity.getConfig().getString(value + ".armor." + key);
-                    }
-                }
-                ArrayList<String> drops = (ArrayList<String>) mobEntity.getConfig().getList(value + ".drop");
-                EntityDropItems customEntityDropItems = new EntityDropItems();
-                for (String drop : drops){
-                    String[] temp = drop.split("@");
-                    int percent = Integer.valueOf(temp[1]);
-                    Item ci = ItemManager.getItem(temp[0]);
-                    customEntityDropItems.addItem(ci, percent);
-                }
-                customEntity = new EntityData(value, entityType, lvl, hp, exp);
-                customEntity.setDropItems(customEntityDropItems);
-                customEntity.setArmors(mainHand, offHand, helmet, chestPlate, leggings, boots);
-                customEntity.setStatuses(ATK, DEF, MATK, MDEF, AGI, ING, INT);
-                customEntities.put(value, customEntity);
-                customEntityIDs.add(value);
-            }
-        } catch (Exception e){
-            message = ChatColor.RED + e.getClass().getName() + ": " + e.getMessage() + ChatColor.GRAY + "(" + "Entity" + ")";
-            return message;
-        }
-        return message;
+    public static void registerEntity(ObjectEntity objectEntity){
+        entityList.put(objectEntity.getName(), objectEntity);
+    }
+    public static ObjectEntity getEntityList(String name) {
+        return entityList.get(entityList);
     }
 
-    public static void addEntity(EntityCreature entityCreature){existsEntities.put(entityCreature.getCreature().getUniqueId(), entityCreature);}
-    public static void removeEntity(Creature creature){existsEntities.remove(creature.getUniqueId());}
-    public static EntityCreature getEntity(Creature creature){return existsEntities.get(creature.getUniqueId());}
-
-    public static EntityData getEntityData(String name) {
-        return customEntities.get(name);
+    public static void registerActiveEntity(ActiveEntity activeEntity){
+        activeEntityList.put(activeEntity.getActiveEntity(), activeEntity);
     }
-    public static EntityData getEntityData(org.bukkit.entity.Entity entity) {
+    public static ActiveEntity removeActiveEntity(Entity entity){
+        return activeEntityList.remove(entity);
+    }
+    public static ActiveEntity getActiveEntity(Entity entity) {return activeEntityList.get(entity);}
+
+    public static ObjectEntity getBaseEntity(String name){
+        return entityList.get(name);
+    }
+    public static ObjectEntity getBaseEntity(Entity entity){
         String[] name = entity.getName().split(" ");
-        return customEntities.get(name[0]);
+        return entityList.get(name[0]);
     }
 
-    public static List<String> getEntityIDs() {return customEntityIDs;}
+    public static List<String> getEntityIDs() {
+        List<String> list = new ArrayList();
+        for (Map.Entry<String, ObjectEntity> entry : entityList.entrySet()) {
+            list.add(entry.getKey());
+        }
+        return list;
+    }
+
+    public static HashSet<String> loadEntities() throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException {
+        HashSet<String> errors = new HashSet<>();
+        MapNode<String, Object> data = null;
+
+        for (Config config : new Folder("mobs", TanoRPG.getPlugin()).getFiles()) {
+            boolean successFull = true;
+
+            EntityTypes entityType = null;
+            try {
+                data = ItemManager.get("EntityType", config);
+                if (data.getValue() != null) {
+                    try {
+                        entityType = EntityTypes.valueOf((String) data.getValue());
+                    } catch (IllegalArgumentException e) {
+                        throw new IllegalArgumentException("EntityType「" + data.getValue() + "」は存在しません");
+                    }
+                } else {
+                    throw new NullPointerException("EntityTypeが設定されていません");
+                }
+            } catch (Exception e){
+                successFull = false;
+                errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
+            }
+
+            if (successFull){
+                ObjectEntity objectEntity;
+                Class<? extends ObjectEntity> e = entityType.getCLASS();
+                Constructor<? extends ObjectEntity> constructor = e.getConstructor(Config.class);
+                try {
+                    objectEntity = constructor.newInstance(config);
+                    registerEntity(objectEntity);
+                    errors.add("§aEntities config loaded without errors.");
+                } catch (InvocationTargetException e2){
+                    TanoEntityException exception = (TanoEntityException) e2.getTargetException();
+                    errors.add(ChatColor.RED + exception.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + exception.getMapNode().getKey() + ")");
+                }
+            }
+        }
+        return errors;
+    }
 
 }

@@ -9,9 +9,9 @@ import org.bukkit.event.entity.EntityDeathEvent;
 public class DeathEventListener implements Listener {
     @EventHandler
     public void onDeath(EntityDeathEvent e){
-        if (e.getEntity() instanceof Creature) {
+        if (e.getEntity().hasMetadata("TanoRPG_entity")) {
             e.getDrops().clear();
-            EntityManager.removeEntity((Creature) e.getEntity());
+            EntityManager.removeActiveEntity(e.getEntity());
         }
     }
 }
