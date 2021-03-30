@@ -42,7 +42,7 @@ public class CraftItem {
         meta.setLore(lore);
         show.setItemMeta(meta);
         inv.setItem(34, show);
-        inv.setItem(32, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: " + price, 1, false));
+        inv.setItem(32, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: " + price + " " + TanoRPG.MONEY, 1, false));
         inv.setItem(53, MenuManager.createItem(Material.ANVIL, "§aクラフトする", 1, true));
         int slot = 19;
         int size = beforeItems.size();

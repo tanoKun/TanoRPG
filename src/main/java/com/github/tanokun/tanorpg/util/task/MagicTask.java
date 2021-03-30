@@ -2,8 +2,8 @@ package com.github.tanokun.tanorpg.util.task;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
@@ -44,10 +44,11 @@ public class MagicTask extends BukkitRunnable {
         ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
         for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
             if (entity instanceof Player) continue;
-            if (entity.hasMetadata("TanoRPG_entity")){
+            if (!(entity instanceof Creature)) continue;
+            if (EntityManager.getEntity((Creature) entity) != null){
                 if (entities.get(entity) == null) {
                     entities.put(entity, true);
-                    ObjectEntity entity2 = EntityManager.getBaseEntity(entity);
+                    EntityData entity2 = EntityManager.getEntityData(entity);
                     int at_lvl = gamePlayer.getLEVEL();
                     int vi_lvl = entity2.getLEVEL();
                     double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),

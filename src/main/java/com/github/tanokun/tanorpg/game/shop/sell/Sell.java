@@ -132,7 +132,7 @@ public class Sell implements Listener {
             long money = check(player.getOpenInventory().getTopInventory().getContents());
             ItemStack item = player.getOpenInventory().getItem(49);
             ItemMeta itemM = item.getItemMeta();
-            itemM.setDisplayName("§d§l合計値段: " + money);
+            itemM.setDisplayName("§d§l合計値段: " + money + " " + TanoRPG.MONEY);
             item.setItemMeta(itemM);
             player.getOpenInventory().setItem(49, item);
         }

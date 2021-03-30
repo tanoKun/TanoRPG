@@ -4,6 +4,15 @@ import com.github.tanokun.tanorpg.command.*;
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
+import com.github.tanokun.tanorpg.game.mission.listener.CraftEventListener;
+import com.github.tanokun.tanorpg.game.mission.listener.EntityKillMissionEventListener;
+import com.github.tanokun.tanorpg.game.mission.listener.NpcClickListener;
+import com.github.tanokun.tanorpg.game.mission.listener.ShoppingEventListener;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_FirstShoppingMission;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_GoblinKillMission;
+import com.github.tanokun.tanorpg.game.mission.model.Merchant_GuardianKillMission;
+import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_firstCraftMission;
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
@@ -19,7 +28,10 @@ import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import com.github.tanokun.tanorpg.listener.*;
 import com.github.tanokun.tanorpg.menu.MenuManager;
-import com.github.tanokun.tanorpg.menu.SetJobMenu;
+import com.github.tanokun.tanorpg.menu.mission.AllMissionMenu;
+import com.github.tanokun.tanorpg.menu.mission.MissionCheck;
+import com.github.tanokun.tanorpg.menu.player.MissionMenu;
+import com.github.tanokun.tanorpg.menu.player.SetJobMenu;
 import com.github.tanokun.tanorpg.menu.player.StatusMainMenu;
 import com.github.tanokun.tanorpg.menu.player.StatusSkillMenu;
 import com.github.tanokun.tanorpg.util.Glowing;
@@ -58,6 +70,7 @@ public class Registration {
         Register.register(new GiveSkItemCommand());
         Register.register(new OpenStatusCommand());
         Register.register(new HatCommand());
+        Register.register(new ReloadCommand());
     }
     public void registerListener(){
         Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
@@ -72,6 +85,10 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new CraftManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
         Bukkit.getPluginManager().registerEvents(new SkillShortCutListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new NpcClickListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new EntityKillMissionEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ShoppingEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new CraftEventListener(), plugin);
     }
     public void registerOthers() {
         {
@@ -105,6 +122,9 @@ public class Registration {
         MenuManager.registerMenu(new SetJobMenu());
         MenuManager.registerMenu(new StatusMainMenu(null));
         MenuManager.registerMenu(new StatusSkillMenu(null));
+        MenuManager.registerMenu(new MissionMenu(null));
+        MenuManager.registerMenu(new MissionCheck());
+        MenuManager.registerMenu(new AllMissionMenu(null));
     }
 
     public void registerSkills() {
@@ -124,5 +144,13 @@ public class Registration {
         SkillManager.addPriestSkill(new PlayerSkHeal());
         SkillManager.addPriestSkill(new PlayerSkCircleHeal());
         SkillManager.addPriestSkill(new PlayerSkCoolTimeUpBuff());
+    }
+
+    public void registerMissions(){
+        MissionManager.registerMission(new Robert_FirstShoppingMission());
+        MissionManager.registerMission(new Robert_firstCraftMission());
+        MissionManager.registerMission(new Robert_GoblinKillMission());
+
+        MissionManager.registerMission(new Merchant_GuardianKillMission());
     }
 }

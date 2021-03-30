@@ -16,7 +16,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.*;
 
 public class PlayerSkJump extends Skill {
     public PlayerSkJump() {
-        super("ジャンプ", 5, 30, 10, new ArrayList<String>(Arrays.asList("DR", "LC", "RC")),
+        super("ジャンプ", 5, 40, 6, new ArrayList<String>(Arrays.asList("DR", "LC", "RC")),
                 new ArrayList<String>(Arrays.asList("§f斜め上にジャンプすることができ、", "§f移動に最適です")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR, MAGE, PRIEST)), Material.FEATHER);
     }

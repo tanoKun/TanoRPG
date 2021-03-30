@@ -2,7 +2,7 @@ name: TanoRPG
 version: ${project.version}
 main: com.github.tanokun.tanorpg.TanoRPG
 api-version: 1.15
-depend: [ProtocolLib, Vault, WorldGuard]
+depend: [ProtocolLib, Vault, WorldGuard, Citizens]
 commands:
   tanorpg:
     permission: tanorpg.command.tanorpg
@@ -16,6 +16,8 @@ commands:
   giveskitem:
     permission: tanorpg.command.giveskitem
     aliases: [gs]
+  re:
+    permission: tanorpg.command.reload
   opencraft:
   openshop:
   opensell:
@@ -35,4 +37,6 @@ permissions:
   tanorpg.command.test:
     default: op
   tanorpg.command.giveskitem:
+    default: op
+  tanorpg.command.reload:
     default: op

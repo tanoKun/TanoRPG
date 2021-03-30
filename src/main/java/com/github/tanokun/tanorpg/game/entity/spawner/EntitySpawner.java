@@ -1,8 +1,9 @@
 package com.github.tanokun.tanorpg.game.entity.spawner;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
+import com.github.tanokun.tanorpg.game.entity.EntityData;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -11,7 +12,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 public class EntitySpawner {
-    private final ObjectEntity entity;
+    private final EntityData entity;
 
     private final Location spawnerLocation;
     private final int spawnInRadius;
@@ -27,7 +28,7 @@ public class EntitySpawner {
 
     private final HashSet<Entity> activeEntities = new HashSet<>();
 
-    public EntitySpawner(ObjectEntity entity, Location spawnerLocation,
+    public EntitySpawner(EntityData entity, Location spawnerLocation,
                          int spawnInRadius, int playerInRadius, int maxSpawnCount, int oneTimeSpawnCount, int nextSpawnTime,
                          int entityTeleportRadius) {
         this.entity = entity;
@@ -41,7 +42,7 @@ public class EntitySpawner {
     }
 
 
-    public ObjectEntity getEntity() {return entity;}
+    public EntityData getEntity() {return entity;}
     public Location getSpawnerLocation() {return spawnerLocation;}
     public int getSpawnInRadius() {return spawnInRadius;}
     public int getPlayerInRadius() {return playerInRadius;}
@@ -64,15 +65,22 @@ public class EntitySpawner {
         nextSpawnTimeTemp = 0;
         if (TanoRPG.getNearbyPlayers(spawnerLocation, playerInRadius).length == 0) return;
         if (activeEntities.size() >= maxSpawnCount) return;
-        new BukkitRunnable() {
-            @Override
-            public void run() {
-                for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
-                    activeEntities.add(entity.spawn(randomizeSpawnLocation(spawnerLocation, spawnInRadius)));
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    for (int loop = 0; loop < oneTimeSpawnCount; loop++) {
+                        Location location;
+                        Material material;
+                            if (activeEntities.size() >= maxSpawnCount) {cancel(); continue;}
+                            location = randomizeSpawnLocation(spawnerLocation, spawnInRadius);
+                            material = location.getBlock().getBlockData().getMaterial();
+                            if (material.equals(Material.WATER) || material.equals(Material.AIR)) {
+                                activeEntities.add(entity.spawnEntity(location));
+                            }
+                    }
+                    cancel();
                 }
-                cancel();
-            }
-        }.runTask(TanoRPG.getPlugin());
+            }.runTask(TanoRPG.getPlugin());
         return;
 
     }

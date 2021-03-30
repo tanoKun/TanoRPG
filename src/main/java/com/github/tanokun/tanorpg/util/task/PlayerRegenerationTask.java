@@ -15,8 +15,8 @@ public class PlayerRegenerationTask extends BukkitRunnable {
             boolean bool = false;
             GamePlayer game = GamePlayerManager.getPlayer(p.getUniqueId());
             if (game == null) continue;
-            double status_vit = new BigDecimal("" + game.getMAX_HP() / 20).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
-            double status_int = new BigDecimal("" + game.getMAX_MP() / 20).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();;
+            int status_vit = new BigDecimal("" + game.getMAX_HP() / 20).setScale(2,BigDecimal.ROUND_DOWN).intValue();
+            int status_int = new BigDecimal("" + game.getMAX_MP() / 20).setScale(2,BigDecimal.ROUND_DOWN).intValue();
 
             if (!(game.getHAS_HP() >= game.getMAX_HP())){
                 game.setHAS_HP(game.getHAS_HP() + status_vit);

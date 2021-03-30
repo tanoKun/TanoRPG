@@ -31,7 +31,7 @@ public class ShopItem {
         for (int i = 1; i < 27; i++) {
             inv.setItem(i - 1, BSG);
         }
-        inv.setItem(11, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: §b" + price, 1, false));
+        inv.setItem(11, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: §b" + price + " " + TanoRPG.MONEY, 1, false));
         ItemStack show = item.getItem();
         ItemMeta meta = show.getItemMeta();
         List<String> lore = meta.getLore();

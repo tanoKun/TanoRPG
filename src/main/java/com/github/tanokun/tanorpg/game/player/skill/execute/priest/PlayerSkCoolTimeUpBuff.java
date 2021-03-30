@@ -26,7 +26,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkCoolTimeUpBuff extends Skill {
     public PlayerSkCoolTimeUpBuff() {
-        super("心身強化", 15, 70, 90,
+        super("心身強化", 15, 70, 50,
                 new ArrayList<String>(Arrays.asList("DR", "DR", "SRC")),
                 new ArrayList<String>(Arrays.asList("§f半径4mの味方に「スキルCT減少15%」を与えます")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(PRIEST)), Material.LAPIS_BLOCK);

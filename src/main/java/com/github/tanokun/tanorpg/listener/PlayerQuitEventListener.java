@@ -1,6 +1,7 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
 import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
@@ -16,6 +17,7 @@ public class PlayerQuitEventListener implements Listener {
         Player player = e.getPlayer();
         e.setQuitMessage(quit + player.getName() + "がQuitしました！");
         GamePlayerManager.saveData(player.getUniqueId());
+        MissionManager.saveData(player.getUniqueId());
         GamePlayerManager.removeData(player.getUniqueId());
         ComboManager.comboRunnable.remove(e.getPlayer().getUniqueId());
 

@@ -37,7 +37,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkLiningAttack extends Skill implements AttackSkill {
     public PlayerSkLiningAttack() {
-        super("落雷", 5, 30, 25,
+        super("落雷", 5, 50, 15,
                 new ArrayList<String>(Arrays.asList("DR", "SRC", "SRC")),
                 new ArrayList<String>(Arrays.asList("§f前方にいる敵に雷を落とします")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(MAGE)), Material.BLAZE_ROD);
@@ -75,7 +75,7 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
                             double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                     gamePlayer.getStatus(StatusType.INT).getLevel(),
                                     gamePlayer.getStatus(StatusType.AGI).getLevel());
-                            long damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.5);
+                            long damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 2);
                             ((LivingEntity) entity2).damage(damage);
                             DamageManager.createDamage(damage, entity, entity2);
                         }

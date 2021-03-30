@@ -23,7 +23,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkHeal extends Skill {
     public PlayerSkHeal() {
-        super("回復", 3, 50, 40,
+        super("回復", 3, 50, 20,
                 new ArrayList<String>(Arrays.asList("DR", "RC", "RC")),
                 new ArrayList<String>(Arrays.asList("§f自分の体力を25%回復します")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(PRIEST)), Material.EMERALD);
@@ -41,7 +41,7 @@ public class PlayerSkHeal extends Skill {
             location.subtract(x, 0, z);
         }
         GamePlayer gamePlayer = GamePlayerManager.getPlayer(entity.getUniqueId());
-        gamePlayer.setHAS_HP(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25);
+        gamePlayer.setHAS_HP((int) Math.floor(gamePlayer.getHAS_HP() + gamePlayer.getMAX_HP() * 0.25));
         if (gamePlayer.getHAS_HP() > gamePlayer.getMAX_HP()) gamePlayer.setHAS_HP(gamePlayer.getMAX_HP());
         gamePlayer.getPlayer().sendMessage(TanoRPG.PX + "回復しました！");
     }

@@ -36,6 +36,7 @@ public class StatusMainMenu extends Menu {
         setItem(2, MenuManager.createItem(Material.IRON_SWORD, "§6§l基本ステータス:", lore, 1, false));
         setItem(3, MenuManager.createItem(Material.DIAMOND_SWORD, "§6§l特殊ステータス:", lore2, 1, true));
         setItem(5, MenuManager.createItem(Material.BLAZE_POWDER, "§c§lスキル", 1, true));
+        setItem(7, MenuManager.createItem(Material.WRITABLE_BOOK, "§d§lミッション", 1, true));
     }
 
     @Override
@@ -44,6 +45,7 @@ public class StatusMainMenu extends Menu {
         if (e.getCurrentItem() == null) return;
         if (e.getCurrentItem().getType().equals(Material.AIR)) return;
         if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§c§lスキル")) new StatusSkillMenu((Player) e.getWhoClicked()).openInv((Player) e.getWhoClicked());
+        if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§d§lミッション")) new MissionMenu((Player) e.getWhoClicked()).openInv((Player) e.getWhoClicked());
     }
     public void onClose(InventoryCloseEvent e) {}
 }

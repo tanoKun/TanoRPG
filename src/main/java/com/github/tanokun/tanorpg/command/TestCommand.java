@@ -1,7 +1,9 @@
 package com.github.tanokun.tanorpg.command;
 
 import com.github.tanokun.tanorpg.command.register.Command;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class TestCommand extends Command {
 
     @Override
     public boolean execute(CommandSender sender, String[] args) {
+        MissionManager.loadData(((Player)sender).getUniqueId());
         return true;
     }
     @Override
