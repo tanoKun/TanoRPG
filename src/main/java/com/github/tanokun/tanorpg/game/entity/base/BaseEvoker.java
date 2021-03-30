@@ -4,10 +4,8 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.util.io.Config;
-import jdk.nashorn.internal.ir.CallNode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Cat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Evoker;
@@ -31,7 +29,11 @@ public class BaseEvoker extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         Evoker target = (Evoker) entity;
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+
+        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        target.setHealth(getHP());
+
+        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] "  + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         target.setCustomNameVisible(true);
         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
         target.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));

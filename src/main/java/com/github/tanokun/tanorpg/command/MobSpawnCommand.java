@@ -27,11 +27,11 @@ public class MobSpawnCommand extends Command {
                 sender.sendMessage(TanoRPG.PX + "§cCONSOLEからは実行できません");
                 return true;
             }
-            if (EntityManager.getEntityData(args[0]) == null) {
+            if (EntityManager.getBaseEntity(args[0]) == null) {
                 sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§cは存在しません");
                 return true;
             }
-            EntityManager.getEntityData(args[0]).spawnEntity(player.getLocation());
+            EntityManager.getBaseEntity(args[0]).spawn(player.getLocation());
             sender.sendMessage(TanoRPG.PX + "§bID「" + args[0] + "§b」" + "§aを召喚しました");
         }
         return true;

@@ -2,8 +2,8 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.warrior;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
@@ -54,9 +54,9 @@ public class PlayerSkLineAttack extends Skill implements AttackSkill {
                     entity.teleport(loc);
                     entity.setVelocity(loc.getDirection());
                     for (Entity target : TanoRPG.getNearbyEntities(loc, 2)){
-                        if (target instanceof Player || EntityManager.getEntity((Creature) target) == null) continue;
+                        if (target instanceof Player || !target.hasMetadata("TanoRPG_entity")) continue;
                         ((Creature) target).setTarget((LivingEntity) entity);
-                        EntityData custom = EntityManager.getEntityData(target);
+                        ObjectEntity custom = EntityManager.getBaseEntity(target);
                         int at_lvl = gamePlayer.getLEVEL();
                         int vi_lvl = custom.getLEVEL();
                         double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),

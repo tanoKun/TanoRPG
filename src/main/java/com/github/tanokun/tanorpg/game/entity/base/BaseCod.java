@@ -3,10 +3,10 @@ package com.github.tanokun.tanorpg.game.entity.base;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Cat;
 import org.bukkit.entity.Cod;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -30,7 +30,11 @@ public class BaseCod extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         Cod target = (Cod) entity;
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+
+        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        target.setHealth(getHP());
+
+        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         target.setCustomNameVisible(true);
         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
         target.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));

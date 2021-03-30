@@ -7,15 +7,12 @@ import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.Donkey;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Horse;
-import org.bukkit.inventory.AbstractHorseInventory;
 import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
-import sun.security.ssl.HandshakeOutStream;
 
 public class BaseHorse extends ObjectEntity {
 
@@ -56,7 +53,11 @@ public class BaseHorse extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         Horse target = (Horse) entity;
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+
+        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        target.setHealth(getHP());
+
+        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] "  + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         target.setCustomNameVisible(true);
         HorseInventory hi = target.getInventory();
         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());

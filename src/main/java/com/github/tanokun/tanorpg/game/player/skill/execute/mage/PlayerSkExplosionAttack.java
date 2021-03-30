@@ -2,8 +2,8 @@ package com.github.tanokun.tanorpg.game.player.skill.execute.mage;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerJobType;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
@@ -47,7 +47,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
             location.add(vector.getX(), vector.getY(), vector.getZ());
             for (Entity temp_target : TanoRPG.getNearbyEntities(location, 6)){
                 if (temp_target instanceof Player) continue;
-                if (EntityManager.getEntity((Creature) temp_target) == null) continue;
+                if (!temp_target.hasMetadata("TanoRPG_entity")) continue;
                 target = temp_target;
             }
         }
@@ -69,7 +69,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                     this.cancel();
                     ((Creature) finalTarget).getEquipment().setHelmet(helmet);
                     ParticleEffect.EXPLOSION_HUGE.display(finalTarget.getLocation(), 0, 0, 0, 0, 4, null, Bukkit.getOnlinePlayers());
-                    EntityData custom = EntityManager.getEntityData(finalTarget);
+                    ObjectEntity custom = EntityManager.getBaseEntity(finalTarget);
                     double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                             gamePlayer.getStatus(StatusType.INT).getLevel(),
                             gamePlayer.getStatus(StatusType.AGI).getLevel());
@@ -78,7 +78,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                     long damage = DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 2;
                     DamageManager.createDamage(damage, entity, finalTarget);
                     for (Entity damager : TanoRPG.getNearbyEntities(finalTarget.getLocation(), 3)){
-                         custom = EntityManager.getEntityData(damager);
+                         custom = EntityManager.getBaseEntity(damager);
                         atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.INT).getLevel(),
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());

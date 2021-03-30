@@ -3,16 +3,15 @@ package com.github.tanokun.tanorpg.game.entity.base;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Horse;
 import org.bukkit.entity.SkeletonHorse;
 import org.bukkit.inventory.AbstractHorseInventory;
-import org.bukkit.inventory.HorseInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 
@@ -40,7 +39,18 @@ public class BaseSkeletonHorse extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         SkeletonHorse target = (SkeletonHorse) entity;
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+
+        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        target.setHealth(getHP());
+
+        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
+        if (!(getMainHand().equals(""))){target.getEquipment().setItemInMainHand(ItemManager.getItem(getMainHand()).getItem());}
+        if (!(getOffHand().equals(""))){target.getEquipment().setItemInOffHand(ItemManager.getItem(getOffHand()).getItem());}
+        if (!(getHelmet().equals(""))){target.getEquipment().setHelmet(ItemManager.getItem(getHelmet()).getItem());}
+        if (!(getChestPlate().equals(""))){target.getEquipment().setChestplate(ItemManager.getItem(getChestPlate()).getItem());}
+        if (!(getLeggings().equals(""))){target.getEquipment().setLeggings(ItemManager.getItem(getLeggings()).getItem());}
+        if (!(getBoots().equals(""))){target.getEquipment().setBoots(ItemManager.getItem(getBoots()).getItem());}
+
         target.setCustomNameVisible(true);
         AbstractHorseInventory hi = target.getInventory();
         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());

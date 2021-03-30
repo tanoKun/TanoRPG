@@ -23,7 +23,6 @@ import com.github.tanokun.tanorpg.menu.SetJobMenu;
 import com.github.tanokun.tanorpg.menu.player.StatusMainMenu;
 import com.github.tanokun.tanorpg.menu.player.StatusSkillMenu;
 import com.github.tanokun.tanorpg.util.Glowing;
-import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import com.github.tanokun.tanorpg.util.task.AutoSaveTask;
 import com.github.tanokun.tanorpg.util.task.EditStatusTask;

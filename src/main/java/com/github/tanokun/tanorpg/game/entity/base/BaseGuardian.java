@@ -9,7 +9,6 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Guardian;
-import org.bukkit.entity.Husk;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseGuardian extends ObjectEntity {
@@ -29,7 +28,11 @@ public class BaseGuardian extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         Guardian guardian = (Guardian) entity;
-        guardian.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+
+        guardian.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        guardian.setHealth(getHP());
+
+        guardian.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] "  + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         guardian.setCustomNameVisible(true);
         guardian.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
         guardian.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));

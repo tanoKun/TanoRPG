@@ -437,7 +437,7 @@ public class ItemManager {
                     data = getList(value + ".lore", config);
                     if (data.getValue() != null) {lore = (List<String>) data.getValue();} else {throw new NullPointerException("説明文が設定されていません");}
 
-                    data = new MapNode<>(value + "/status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
+                    data = new MapNode<>(value + ".status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
                     if (data.getValue() != null) {
                         for (String key : (LinkedHashSet<String>) data.getValue()) {
                             try {
@@ -546,7 +546,7 @@ public class ItemManager {
 
     public static MapNode<String, Object> get(String path, Config config){
         try {
-            if (!config.getConfig().isSet(path)) throw new NullPointerException();
+            if (!config.getConfig().isSet(path)) {return new MapNode<>(path.replace(".", "/"), null);}
             return new MapNode<>(path.replace(".", "/"), String.valueOf(config.getConfig().getString(path)));
         }catch (Exception e) {
             return new MapNode<>(path.replace(".", "/"), null);

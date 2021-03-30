@@ -7,7 +7,6 @@ import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.entity.ElderGuardian;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Mule;
@@ -42,8 +41,12 @@ public class BaseMule extends ObjectEntity {
     @Override
     public Entity setOptions(Entity entity) {
         Mule target = (Mule) entity;
+
+        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
+        target.setHealth(getHP());
+
         AbstractHorseInventory hi = target.getInventory();
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7]");
+        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         target.setCustomNameVisible(true);
         if (this.horseTamed)
             target.setTamed(true);

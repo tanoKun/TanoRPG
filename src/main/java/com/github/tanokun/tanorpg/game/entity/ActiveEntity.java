@@ -1,6 +1,6 @@
 package com.github.tanokun.tanorpg.game.entity;
 
-import com.github.tanokun.tanorpg.game.entity.base.*;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import org.bukkit.entity.Entity;
 
 public class ActiveEntity {
