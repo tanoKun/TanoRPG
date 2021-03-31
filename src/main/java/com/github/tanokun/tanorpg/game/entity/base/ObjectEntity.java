@@ -15,6 +15,7 @@ import org.bukkit.entity.Entity;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public abstract class ObjectEntity {
     private Config entityConfig;
@@ -56,7 +57,7 @@ public abstract class ObjectEntity {
                 if (config.getConfig().isSet("BaseOptions.Speed")) {
                     data = ItemManager.get("BaseOptions.Speed", config);
                     if (data.getValue() != null) {
-                        speed = Integer.valueOf((String) data.getValue());
+                        speed = Double.valueOf((String) data.getValue());
                     }
                 }
             } catch (NumberFormatException e){
@@ -130,8 +131,10 @@ public abstract class ObjectEntity {
                 }
             }
             setArmors(mainHand, offHand, helmet, chestPlate, leggings, boots);
+
             EntityDropItems customEntityDropItems = new EntityDropItems();
-            if (config.getConfig().isSet("Armor")) {
+            data.setKey("Drops.*");
+            if (config.getConfig().isSet("Drops")) {
                 ArrayList<String> drops = (ArrayList<String>) config.getConfig().getList("Drops");
                 for (String drop : drops) {
                     String[] temp = drop.split("@");
@@ -141,6 +144,7 @@ public abstract class ObjectEntity {
                 }
             }
             setDropItems(customEntityDropItems);
+
         }catch (Exception e){
             throw new TanoEntityException(e.getMessage(), data);
         }
@@ -198,7 +202,7 @@ public abstract class ObjectEntity {
     public void setEXP(long EXP) {
         this.EXP = EXP;
     }
-    public void setStatuses(double i, double i2, double i3, double i4, double i5, double i6, double i7){
+    public void setStatuses(int i, int i2, int i3, int i4, int i5, int i6, int i7){
         statuses.put(StatusType.ATK, new Status(StatusType.ATK, i));
         statuses.put(StatusType.DEF, new  Status(StatusType.DEF, i2));
         statuses.put(StatusType.MATK, new Status(StatusType.MATK, i3));
@@ -233,4 +237,17 @@ public abstract class ObjectEntity {
     public String getChestPlate() {return chestPlate;}
     public String getLeggings() {return leggings;}
     public String getBoots() {return boots;}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ObjectEntity that = (ObjectEntity) o;
+        return HP == that.HP && LEVEL == that.LEVEL && EXP == that.EXP && Double.compare(that.speed, speed) == 0 && Objects.equals(entityConfig, that.entityConfig) && entityTypes == that.entityTypes && Objects.equals(name, that.name) && Objects.equals(mainHand, that.mainHand) && Objects.equals(offHand, that.offHand) && Objects.equals(helmet, that.helmet) && Objects.equals(chestPlate, that.chestPlate) && Objects.equals(leggings, that.leggings) && Objects.equals(boots, that.boots) && Objects.equals(dropItems, that.dropItems) && Objects.equals(statuses, that.statuses);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(entityConfig, entityTypes, name, HP, LEVEL, EXP, speed, mainHand, offHand, helmet, chestPlate, leggings, boots, dropItems, statuses);
+    }
 }

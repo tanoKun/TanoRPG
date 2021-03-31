@@ -20,7 +20,7 @@ public class Robert_GoblinKillMission extends Mission implements MissionConditio
 
     public Robert_GoblinKillMission() {
         super("ロバートからのお願い", 206);
-        addMissionTask(new EntityKillTask(EntityManager.getEntityData("ゴブリン"), 10, "ゴブリンを10体倒す"));
+        addMissionTask(new EntityKillTask(EntityManager.getBaseEntity("ゴブリン"), 10, "ゴブリンを10体倒す"));
     }
 
     public void showNPCMessages(Player player) throws Exception {
@@ -30,7 +30,7 @@ public class Robert_GoblinKillMission extends Mission implements MissionConditio
         sendMessage(player, PX + "ちょっと今ゴブリンが外にうろついていて困ってるんだ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(3000);
-        sendMessage(player, PX + "頼み後をしてもいいかな？ 報酬はしっかり払うよ。");
+        sendMessage(player, PX + "頼み事をしてもいいかな？ 報酬はしっかり払うよ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
     }
@@ -64,16 +64,17 @@ public class Robert_GoblinKillMission extends Mission implements MissionConditio
         playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
         MissionManager.addClearMission(player.getUniqueId(), this);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);
+        long exp = GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60;
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "§a+350" + " " + TanoRPG.MONEY);
         sendMessage(player, MissionManager.PX + "§a+2 apples");
-        sendMessage(player, MissionManager.PX + "§a+60" + " EXP");
+        sendMessage(player, MissionManager.PX + "§a+" + exp + " EXP");
         sendMessage(player, MissionManager.PX + "§a+1" + " §f「§bスキル習得書: §6ジャンプ§f」");
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(350);
         player.getInventory().addItem(ItemManager.getItem("apple").getItem(), ItemManager.getItem("apple").getItem());
-        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60);
+        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(exp);
         player.getInventory().addItem(SkillManager.getSkillItem("ジャンプ"));
         Sidebar.updateSidebar(player);
 

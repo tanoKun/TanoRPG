@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.game.mission.listener.CraftEventListener;
 import com.github.tanokun.tanorpg.game.mission.listener.EntityKillMissionEventListener;
 import com.github.tanokun.tanorpg.game.mission.listener.NpcClickListener;
 import com.github.tanokun.tanorpg.game.mission.listener.ShoppingEventListener;
+import com.github.tanokun.tanorpg.game.mission.model.MtMiner_SlimeKillMission;
 import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_FirstShoppingMission;
 import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_GoblinKillMission;
 import com.github.tanokun.tanorpg.game.mission.model.Merchant_GuardianKillMission;
@@ -89,6 +90,7 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new EntityKillMissionEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ShoppingEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new CraftEventListener(), plugin);
+        Bukkit.getPluginManager().registerEvents(new SlimeSplitEventListener(), plugin);
     }
     public void registerOthers() {
         {
@@ -152,5 +154,7 @@ public class Registration {
         MissionManager.registerMission(new Robert_GoblinKillMission());
 
         MissionManager.registerMission(new Merchant_GuardianKillMission());
+
+        MissionManager.registerMission(new MtMiner_SlimeKillMission());
     }
 }

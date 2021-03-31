@@ -2,8 +2,8 @@ package com.github.tanokun.tanorpg.util.task;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.DamageManager;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
@@ -35,33 +35,34 @@ public class MagicTask extends BukkitRunnable {
 
     @Override
     public void run() {
-        time += 0.4;
-        double x = dire.getX() * time;
-        double y = dire.getY() * time + 1.7;
-        double z = dire.getZ() * time;
-        loc.add(x, y, z);
-        if (time > 4) {this.cancel();}
-        ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
-        for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
-            if (entity instanceof Player) continue;
-            if (!(entity instanceof Creature)) continue;
-            if (EntityManager.getEntity((Creature) entity) != null){
-                if (entities.get(entity) == null) {
-                    entities.put(entity, true);
-                    EntityData entity2 = EntityManager.getEntityData(entity);
-                    int at_lvl = gamePlayer.getLEVEL();
-                    int vi_lvl = entity2.getLEVEL();
-                    double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
-                            gamePlayer.getStatus(StatusType.INT).getLevel(),
-                            gamePlayer.getStatus(StatusType.AGI).getLevel());
-                    long damage = DamageManager.getCompDamage(atk, entity2.getMDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer());
-                    DamageManager.createDamage(damage, gamePlayer.getPlayer(), entity);
-                    this.cancel();
+        for (int i = 0; i < 5; i++) {
+            time += 0.3;
+            double x = dire.getX() * time;
+            double y = dire.getY() * time + 1.7;
+            double z = dire.getZ() * time;
+            loc.add(x, y, z);
+            if (time > 5) {this.cancel();}
+            ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
+            for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
+                if (entity instanceof Player) continue;
+                if (entity.hasMetadata("TanoRPG_entity")){
+                    if (entities.get(entity) == null) {
+                        entities.put(entity, true);
+                        ObjectEntity entity2 = EntityManager.getBaseEntity(entity);
+                        int at_lvl = gamePlayer.getLEVEL();
+                        int vi_lvl = entity2.getLEVEL();
+                        double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
+                                gamePlayer.getStatus(StatusType.INT).getLevel(),
+                                gamePlayer.getStatus(StatusType.AGI).getLevel());
+                        long damage = DamageManager.getCompDamage(atk, entity2.getMDEF(), at_lvl, vi_lvl, gamePlayer.getPlayer());
+                        DamageManager.createDamage(damage, gamePlayer.getPlayer(), entity);
+                        this.cancel();
+                    }
                 }
             }
+            loc.subtract(x, y, z);
         }
-        loc.subtract(x, y, z);
-    }
+        }
     public MagicTask(GamePlayer gamePlayer) {
         this.gamePlayer = gamePlayer;
         loc = gamePlayer.getPlayer().getLocation();

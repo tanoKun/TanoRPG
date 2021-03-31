@@ -19,7 +19,7 @@ public class Robert_firstCraftMission extends Mission implements MissionConditio
 
     public Robert_firstCraftMission() {
         super("チュートリアル②", 206);
-        addMissionTask(new CraftTask(1, null, "欲しい物を1つ作る"));
+        addMissionTask(new CraftTask(1, null, "レンガを1つ作る"));
     }
 
     public void showNPCMessages(Player player) throws Exception {
@@ -68,13 +68,14 @@ public class Robert_firstCraftMission extends Mission implements MissionConditio
         playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
         MissionManager.addClearMission(player.getUniqueId(), this);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);
+        long exp = GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60;
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "§a+50" + " " + TanoRPG.MONEY);
-        sendMessage(player, MissionManager.PX + "§a+60" + " EXP");
+        sendMessage(player, MissionManager.PX + "§a+" + exp + " EXP");
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(50);
-        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60);
+        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(exp);
         Sidebar.updateSidebar(player);
     }
 

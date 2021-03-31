@@ -19,7 +19,7 @@ public class Merchant_GuardianKillMission extends Mission {
 
     public Merchant_GuardianKillMission() {
         super("商人の手伝い", 207);
-        addMissionTask(new EntityKillTask(EntityManager.getEntityData("ディファニー"), 12, "ディファニーを12体倒す"));
+        addMissionTask(new EntityKillTask(EntityManager.getBaseEntity("ディファニー"), 12, "ディファニーを12体倒す"));
     }
 
     public void showNPCMessages(Player player) throws Exception {
@@ -85,7 +85,7 @@ public class Merchant_GuardianKillMission extends Mission {
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(500);
-        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 70);
+        GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getHAS_EXP() + 70);
 
         ItemStack fish = ItemManager.getItem("fish").getItem();
         fish.setAmount(5);

@@ -22,6 +22,7 @@ public class PlayerJoinEventListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
         final Player player = e.getPlayer();
+        e.setJoinMessage("");
         ComboManager.comboRunnable.put(e.getPlayer().getUniqueId(), new ArrayList<>());
         new BukkitRunnable() {
             @Override

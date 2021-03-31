@@ -2,6 +2,7 @@ package com.github.tanokun.tanorpg.game.mission.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.event.tanorpg.CustomEntityKillEvent;
+import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.GameActionbar;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.mission.Mission;
@@ -16,7 +17,7 @@ public class EntityKillMissionEventListener implements Listener {
 
     @EventHandler
     public void onKill(CustomEntityKillEvent e){
-        for(Mission mission : com.github.tanokun.tanorpg.game.mission.MissionManager.getActiveMissions(e.getAttacker().getUniqueId())){
+        for(Mission mission : MissionManager.getActiveMissions(e.getAttacker().getUniqueId())){
             if (!(GamePlayerManager.getPlayer(e.getAttacker().getUniqueId()).getActive_mission_NPC_ID() == mission.getNPC_ID())) return;
             for (MissionTask missionTask : mission.getMissionTasks()){
                 if (!(missionTask instanceof EntityKillTask)) continue;

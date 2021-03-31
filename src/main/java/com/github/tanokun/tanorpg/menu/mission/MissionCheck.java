@@ -25,6 +25,7 @@ public class MissionCheck extends Menu {
     public void onClick(InventoryClickEvent e) {
         if (e.getCurrentItem() == null) return;
         if (e.getCurrentItem().getType() == Material.AIR) return;
+        if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory()) && e.getView().getTitle().equals("§aMission>> §7ミッションを遂行しますか？")) return;
         Mission mission = NpcClickListener.meta_Mission.get(e.getWhoClicked().getUniqueId());
         if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§a遂行します")){
             new BukkitRunnable() {

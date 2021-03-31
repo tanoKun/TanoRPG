@@ -2,29 +2,25 @@ package com.github.tanokun.tanorpg.game;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.event.tanorpg.CustomEntityKillEvent;
-import com.github.tanokun.tanorpg.game.entity.EntityData;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Creature;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import static com.github.tanokun.tanorpg.game.entity.EntityManager.getEntity;
 import static com.github.tanokun.tanorpg.game.player.status.buff.Buff.getBuffPercent;
 
 public class DamageManager {
-    public static int getCompDamage(double atk, double def, int attackerLv, int victimLv, Entity entity){
-        int damage = (int) Math.round(atk * (10 + attackerLv) / (9.8 + def + victimLv));
+    public static long getCompDamage(double atk, double def, int attackerLv, int victimLv, Entity entity){
+        long damage = Math.round(atk * (5 + attackerLv) / (5.1 + def + victimLv));
         double percent = getBuffPercent(entity, BuffType.ATK_UP_S) +
                 getBuffPercent(entity, BuffType.ATK_UP_M) +
                 getBuffPercent(entity, BuffType.ATK_UP_L);
         percent = percent / 100;
-        damage = (int) (damage + Math.round(percent * damage));
+        damage = damage + Math.round(percent * damage);
         return damage;
     }
     public static double getDamage(double atk, double ing, double agi){
@@ -36,34 +32,34 @@ public class DamageManager {
         new BukkitRunnable(){
             @Override
             public void run() {
-                if (!(target instanceof Creature)) return;
-                Creature creature = (Creature) target;
-                ((Creature)target).setTarget((LivingEntity) attacker);
-                String[] name = target.getName().split(" ");
-                if (getEntity((Creature) target) == null) return;
-                EntityData customEntity;
+                if (!target.hasMetadata("TanoRPG_entity")) return;
+                Mob mob = (Mob) target;
+                mob.setTarget((LivingEntity) attacker);
+                String[] name = mob.getName().split(" ");
+                ObjectEntity customEntity;
                 try {
-                    customEntity = getEntity((Creature) target).getEntityData();
+                    customEntity = EntityManager.getBaseEntity(target);
                 }catch (NullPointerException e){return;}
                 GamePlayer gamePlayer = GamePlayerManager.getPlayer(attacker.getUniqueId());
-                if (((Creature) target).getHealth() - damage <= 0) {
+                if (mob.getHealth() - damage <= 0) {
                     Bukkit.getServer().getPluginManager().callEvent(new CustomEntityKillEvent(customEntity, (Player) attacker, target));
+                    mob.damage(10000000);
                     customEntity.getDropItems().giveDropItems((Player) attacker);
-                    gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getEntityData(name[0]).getEXP());
+                    gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getBaseEntity(name[0]).getEXP());
                 }
 
-                ((Creature) target).damage(damage);
+                mob.damage(damage);
                 gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
 
-                int hasHP = (int) Math.floor((creature.getHealth() / customEntity.getHP()) * 20);
+                int hasHP = (int) Math.floor((mob.getHealth() / customEntity.getHP()) * 20);
                 for (int i = 0; i < hasHP; i++) {
                     hp[0] = (hp[0] == null) ? "§a❘" :  "§a❘" + hp[0];
                 }
                 for (int i = 0; i < 20 - hasHP; i++) {
                     hp[0] = hp[0] + "§c❘";
                 }
-                hp[0] = hp[0].replace("null", "");
-                creature.setCustomName(customEntity.getName() + " §7[§dLv:§e" + customEntity.getLEVEL() + "§7] " + hp[0]);
+                hp[0] =  hp[0].replace("null", "");
+                mob.setCustomName(customEntity.getName() + " §7[§dLv:§e" + customEntity.getLEVEL() + "§7] " + hp[0]);
             }
         }.runTask(TanoRPG.getPlugin());
     }

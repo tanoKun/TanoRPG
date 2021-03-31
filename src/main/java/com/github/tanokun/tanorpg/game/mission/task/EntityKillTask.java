@@ -1,6 +1,6 @@
 package com.github.tanokun.tanorpg.game.mission.task;
 
-import com.github.tanokun.tanorpg.game.entity.EntityData;
+import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import org.bukkit.entity.Player;
 
 import java.util.Objects;
@@ -8,9 +8,9 @@ import java.util.UUID;
 
 public class EntityKillTask extends MissionTask<Integer>{
     private final int clearCount;
-    private final EntityData target;
+    private final ObjectEntity target;
 
-    public EntityKillTask(EntityData entityData, int clearCount, String message){this.target = entityData; this.clearCount = clearCount; setMessage(message);}
+    public EntityKillTask(ObjectEntity entityData, int clearCount, String message){this.target = entityData; this.clearCount = clearCount; setMessage(message);}
 
     public String getMessage(Player player) {
         if (isClearTask(player.getUniqueId()))
@@ -30,7 +30,7 @@ public class EntityKillTask extends MissionTask<Integer>{
 
     public Integer getValue(UUID uuid) {return (playerData.get(uuid) == null) ? 0 : playerData.get(uuid);}
 
-    public EntityData getTarget() {return target;}
+    public ObjectEntity getTarget() {return target;}
 
     public boolean isClearTask(UUID uuid) {
         if (getValue(uuid) >= clearCount) return true;

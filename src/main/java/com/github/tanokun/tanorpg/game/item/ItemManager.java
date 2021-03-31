@@ -35,7 +35,7 @@ public class ItemManager {
 
     public static HashSet<String> loadMaterialItem(){
         HashSet<String> errors = new HashSet<>();
-
+        boolean allError = false;
         for (Config config : new Folder("items" + File.separator + "material", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
                 boolean successFull = true;
@@ -118,6 +118,7 @@ public class ItemManager {
                     } else {throw new NullPointerException("レアリティが設定されていません");}
                 } catch (Exception e) {
                     successFull = false;
+                    allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
                 if (successFull){
@@ -131,12 +132,12 @@ public class ItemManager {
                 }
             }
         }
-
+        if (allError) errors.remove("§aMaterial item config loaded without errors.");
         return errors;
     }
     public static HashSet<String> loadWeaponItem(){
         HashSet<String> errors = new HashSet<>();
-
+        boolean allError = false;
         for (Config config : new Folder("items" + File.separator + "weapon", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
                 boolean successFull = true;
@@ -247,6 +248,7 @@ public class ItemManager {
 
                 } catch (Exception e) {
                     successFull = false;
+                    allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
                 if (successFull){
@@ -263,11 +265,12 @@ public class ItemManager {
                 }
             }
         }
-
+        if (allError) errors.remove("§aWeapon item config loaded without errors.");
         return errors;
     }
     public static HashSet<String> loadMagicWeaponItem(){
         HashSet<String> errors = new HashSet<>();
+        boolean allError = false;
 
         for (Config config : new Folder("items" + File.separator + "magicWeapon", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
@@ -379,6 +382,7 @@ public class ItemManager {
 
                 } catch (Exception e) {
                     successFull = false;
+                    allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
                 if (successFull){
@@ -395,11 +399,12 @@ public class ItemManager {
                 }
             }
         }
-
+        if (allError) errors.remove("§aMagicWeapon item config loaded without errors.");
         return errors;
     }
     public static HashSet<String> loadEquipmentItem(){
         HashSet<String> errors = new HashSet<>();
+        boolean allError = false;
 
         for (Config config : new Folder("items" + File.separator + "equip", TanoRPG.getPlugin()).getFiles()) {
             for (String value : config.getConfig().getKeys(false)) {
@@ -524,6 +529,7 @@ public class ItemManager {
 
                 } catch (Exception e) {
                     successFull = false;
+                    allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
                 if (successFull){
@@ -541,6 +547,7 @@ public class ItemManager {
             }
         }
 
+        if (allError) errors.remove("§aEquipment item config loaded without errors.");
         return errors;
     }
 

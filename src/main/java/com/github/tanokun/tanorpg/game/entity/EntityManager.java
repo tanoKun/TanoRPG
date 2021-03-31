@@ -55,6 +55,8 @@ public class EntityManager {
         HashSet<String> errors = new HashSet<>();
         MapNode<String, Object> data = null;
 
+        boolean allError = false;
+
         for (Config config : new Folder("mobs", TanoRPG.getPlugin()).getFiles()) {
             boolean successFull = true;
 
@@ -72,6 +74,7 @@ public class EntityManager {
                 }
             } catch (Exception e){
                 successFull = false;
+                allError = true;
                 errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
             }
 
@@ -84,11 +87,13 @@ public class EntityManager {
                     registerEntity(objectEntity);
                     errors.add("§aEntities config loaded without errors.");
                 } catch (InvocationTargetException e2){
+                    allError = true;
                     TanoEntityException exception = (TanoEntityException) e2.getTargetException();
                     errors.add(ChatColor.RED + exception.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + exception.getMapNode().getKey() + ")");
                 }
             }
         }
+        if (allError) errors.remove("§aEntities config loaded without errors.");
         return errors;
     }
 

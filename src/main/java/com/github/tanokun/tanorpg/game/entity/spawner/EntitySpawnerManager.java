@@ -39,6 +39,8 @@ public class EntitySpawnerManager extends BukkitRunnable {
 
         HashSet<String> errors = new HashSet<>();
 
+        boolean allError = false;
+
         for (Config config : new Folder("spawner", TanoRPG.getPlugin()).getFiles()) {
             for (String key : config.getConfig().getKeys(false)) {
                 boolean successFull = true;
@@ -147,6 +149,7 @@ public class EntitySpawnerManager extends BukkitRunnable {
 
                 } catch (Exception e) {
                     successFull = false;
+                    allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
 
@@ -158,6 +161,7 @@ public class EntitySpawnerManager extends BukkitRunnable {
                 }
             }
         }
+        if (allError) errors.remove("§aEntitySpawners loaded without errors.");
         return errors;
     }
 }

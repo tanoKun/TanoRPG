@@ -4,6 +4,7 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AutoSaveTask extends BukkitRunnable {
@@ -12,6 +13,9 @@ public class AutoSaveTask extends BukkitRunnable {
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ中...");
         GamePlayerManager.saveDataAll();
         MissionManager.saveDataAll();
+        for (Player pLayer : Bukkit.getOnlinePlayers()) {
+            MissionManager.loadData(pLayer.getUniqueId());
+        }
         Bukkit.broadcastMessage(TanoRPG.PX + "オートセーブ完了");
         System.gc();
     }

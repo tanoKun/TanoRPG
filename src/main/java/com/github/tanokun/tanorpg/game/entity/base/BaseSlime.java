@@ -10,6 +10,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.MagmaCube;
+import org.bukkit.entity.Slime;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseSlime extends ObjectEntity {
@@ -22,7 +23,7 @@ public class BaseSlime extends ObjectEntity {
 
     @Override
     public Entity spawn(Location location) {
-        MagmaCube entity = (MagmaCube) location.getWorld().spawnEntity(location, EntityType.MAGMA_CUBE);
+        Slime entity = (Slime) location.getWorld().spawnEntity(location, EntityType.SLIME);
         setOptions(entity);
         ActiveEntity activeEntity = new ActiveEntity(this, entity);
         EntityManager.registerActiveEntity(activeEntity);
@@ -31,7 +32,7 @@ public class BaseSlime extends ObjectEntity {
 
     @Override
     public Entity setOptions(Entity entity) {
-        MagmaCube target = (MagmaCube) entity;
+        Slime target = (Slime) entity;
 
         target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
         target.setHealth(getHP());
