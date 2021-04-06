@@ -59,7 +59,6 @@ public class MissionManager {
         } else {
             activeMissions.get(uuid).add(mission);
         }
-        System.out.println(activeMissions.get(uuid).size());
     }
     public static void removeActiveMission(UUID uuid, Mission mission){
         if (activeMissions.get(uuid) == null) return;

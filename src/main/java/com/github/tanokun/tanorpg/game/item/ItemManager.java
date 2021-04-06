@@ -34,7 +34,7 @@ public class ItemManager {
     final public static String firstMagicWeapon = TanoRPG.getPlugin().getConfig().getString("first-job-mage-weapon");
     final public static String firstWeapon = TanoRPG.getPlugin().getConfig().getString("first-job-warrior-weapon");
 
-    public static HashSet<String> loadMaterialItem(){
+    public static HashSet<String> loadMaterialItem() {
         HashSet<String> errors = new HashSet<>();
         boolean allError = false;
         for (Config config : new Folder("items" + File.separator + "material", TanoRPG.getPlugin()).getFiles()) {
@@ -53,19 +53,29 @@ public class ItemManager {
                 Integer customModelData = 0;
                 try {
                     data = get(value + ".name", config);
-                    if (data.getValue() != null) {name = (String) data.getValue();} else {throw new NullPointerException("アイテム名が設定されていません");}
+                    if (data.getValue() != null) {
+                        name = (String) data.getValue();
+                    } else {
+                        throw new NullPointerException("アイテム名が設定されていません");
+                    }
 
                     data = get(value + ".material", config);
                     if (data.getValue() != null) {
                         try {
                             material = Material.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("マテリアル「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("マテリアルが設定されていません");}
+                    } else {
+                        throw new NullPointerException("マテリアルが設定されていません");
+                    }
 
                     data = getList(value + ".lore", config);
-                    if (data.getValue() != null) {lore = (List<String>) data.getValue();} else {throw new NullPointerException("説明文が設定されていません");}
+                    if (data.getValue() != null) {
+                        lore = (List<String>) data.getValue();
+                    } else {
+                        throw new NullPointerException("説明文が設定されていません");
+                    }
 
                     data = new MapNode<>(value + "/status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
                     if (data.getValue() != null) {
@@ -75,9 +85,9 @@ public class ItemManager {
                                 data = get(value + ".status." + key, config);
                                 Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
-                            }catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
-                            }catch (IllegalArgumentException e){
+                            } catch (IllegalArgumentException e) {
                                 throw new IllegalArgumentException("ステータス「" + key + "」は存在しません");
                             }
                         }
@@ -87,7 +97,7 @@ public class ItemManager {
 
                     data = get(value + ".glowing", config);
                     if (data.getValue() != null) {
-                        if (!data.getValue().equals("true") && !data.getValue().equals("false")){
+                        if (!data.getValue().equals("true") && !data.getValue().equals("false")) {
                             throw new IllegalArgumentException("Glowingは「true or false」で入力してください");
                         }
                         glowing = Boolean.valueOf((String) data.getValue());
@@ -105,7 +115,7 @@ public class ItemManager {
                         if (data.getValue() != null) {
                             customModelData = Integer.valueOf((String) data.getValue());
                         }
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         throw new NumberFormatException("「" + data.getValue() + "」は数字で入力して下さい");
                     }
 
@@ -113,16 +123,18 @@ public class ItemManager {
                     if (data.getValue() != null) {
                         try {
                             rarity = ItemRarityType.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("レアリティ「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("レアリティが設定されていません");}
+                    } else {
+                        throw new NullPointerException("レアリティが設定されていません");
+                    }
                 } catch (Exception e) {
                     successFull = false;
                     allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
-                if (successFull){
+                if (successFull) {
                     ItemMaterial item = new ItemMaterial(id, material, name, lore, statuses, glowing);
                     item.setPrice(price);
                     item.setRarity(rarity);
@@ -136,7 +148,8 @@ public class ItemManager {
         if (allError) errors.remove("§aMaterial item config loaded without errors.");
         return errors;
     }
-    public static HashSet<String> loadWeaponItem(){
+
+    public static HashSet<String> loadWeaponItem() {
         HashSet<String> errors = new HashSet<>();
         boolean allError = false;
         for (Config config : new Folder("items" + File.separator + "weapon", TanoRPG.getPlugin()).getFiles()) {
@@ -160,19 +173,29 @@ public class ItemManager {
 
                 try {
                     data = get(value + ".name", config);
-                    if (data.getValue() != null) {name = (String) data.getValue();} else {throw new NullPointerException("アイテム名が設定されていません");}
+                    if (data.getValue() != null) {
+                        name = (String) data.getValue();
+                    } else {
+                        throw new NullPointerException("アイテム名が設定されていません");
+                    }
 
                     data = get(value + ".material", config);
                     if (data.getValue() != null) {
                         try {
                             material = Material.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("マテリアル「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("マテリアルが設定されていません");}
+                    } else {
+                        throw new NullPointerException("マテリアルが設定されていません");
+                    }
 
                     data = getList(value + ".lore", config);
-                    if (data.getValue() != null) {lore = (List<String>) data.getValue();} else {throw new NullPointerException("説明文が設定されていません");}
+                    if (data.getValue() != null) {
+                        lore = (List<String>) data.getValue();
+                    } else {
+                        throw new NullPointerException("説明文が設定されていません");
+                    }
 
                     data = new MapNode<>(value + "/status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
                     if (data.getValue() != null) {
@@ -182,9 +205,9 @@ public class ItemManager {
                                 data = get(value + ".status." + key, config);
                                 Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
-                            }catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
-                            }catch (IllegalArgumentException e){
+                            } catch (IllegalArgumentException e) {
                                 throw new IllegalArgumentException("ステータス「" + key + "」は存在しません");
                             }
                         }
@@ -194,7 +217,7 @@ public class ItemManager {
 
                     data = get(value + ".glowing", config);
                     if (data.getValue() != null) {
-                        if (!data.getValue().equals("true") && !data.getValue().equals("false")){
+                        if (!data.getValue().equals("true") && !data.getValue().equals("false")) {
                             throw new IllegalArgumentException("Glowingは「true or false」で入力してください");
                         }
                         glowing = Boolean.getBoolean((String) data.getValue());
@@ -222,7 +245,7 @@ public class ItemManager {
                         if (data.getValue() != null) {
                             lvl = Integer.valueOf((String) data.getValue());
                         }
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         throw new NumberFormatException("「" + data.getValue() + "」は数字で入力して下さい");
                     }
 
@@ -235,16 +258,20 @@ public class ItemManager {
                                 throw new NumberFormatException("職業「" + proper + "」は存在しません");
                             }
                         }
-                    } else {throw new NullPointerException("対応職業が設定されていません");}
+                    } else {
+                        throw new NullPointerException("対応職業が設定されていません");
+                    }
 
                     data = get(value + ".rarity", config);
                     if (data.getValue() != null) {
                         try {
                             rarity = ItemRarityType.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("レアリティ「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("レアリティが設定されていません");}
+                    } else {
+                        throw new NullPointerException("レアリティが設定されていません");
+                    }
 
 
                 } catch (Exception e) {
@@ -252,7 +279,7 @@ public class ItemManager {
                     allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
-                if (successFull){
+                if (successFull) {
                     ItemWeapon item = new ItemWeapon(id, material, name, lore, statuses, glowing);
                     item.setPrice(price);
                     item.setRarity(rarity);
@@ -269,7 +296,8 @@ public class ItemManager {
         if (allError) errors.remove("§aWeapon item config loaded without errors.");
         return errors;
     }
-    public static HashSet<String> loadMagicWeaponItem(){
+
+    public static HashSet<String> loadMagicWeaponItem() {
         HashSet<String> errors = new HashSet<>();
         boolean allError = false;
 
@@ -294,19 +322,29 @@ public class ItemManager {
 
                 try {
                     data = get(value + ".name", config);
-                    if (data.getValue() != null) {name = (String) data.getValue();} else {throw new NullPointerException("アイテム名が設定されていません");}
+                    if (data.getValue() != null) {
+                        name = (String) data.getValue();
+                    } else {
+                        throw new NullPointerException("アイテム名が設定されていません");
+                    }
 
                     data = get(value + ".material", config);
                     if (data.getValue() != null) {
                         try {
                             material = Material.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("マテリアル「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("マテリアルが設定されていません");}
+                    } else {
+                        throw new NullPointerException("マテリアルが設定されていません");
+                    }
 
                     data = getList(value + ".lore", config);
-                    if (data.getValue() != null) {lore = (List<String>) data.getValue();} else {throw new NullPointerException("説明文が設定されていません");}
+                    if (data.getValue() != null) {
+                        lore = (List<String>) data.getValue();
+                    } else {
+                        throw new NullPointerException("説明文が設定されていません");
+                    }
 
                     data = new MapNode<>(value + "/status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
                     if (data.getValue() != null) {
@@ -316,9 +354,9 @@ public class ItemManager {
                                 data = get(value + ".status." + key, config);
                                 Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
-                            }catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
-                            }catch (IllegalArgumentException e){
+                            } catch (IllegalArgumentException e) {
                                 throw new IllegalArgumentException("ステータス「" + key + "」は存在しません");
                             }
                         }
@@ -328,7 +366,7 @@ public class ItemManager {
 
                     data = get(value + ".glowing", config);
                     if (data.getValue() != null) {
-                        if (!data.getValue().equals("true") && !data.getValue().equals("false")){
+                        if (!data.getValue().equals("true") && !data.getValue().equals("false")) {
                             throw new IllegalArgumentException("Glowingは「true or false」で入力してください");
                         }
                         glowing = Boolean.getBoolean((String) data.getValue());
@@ -356,7 +394,7 @@ public class ItemManager {
                         if (data.getValue() != null) {
                             lvl = Integer.valueOf((String) data.getValue());
                         }
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         throw new NumberFormatException("「" + data.getValue() + "」は数字で入力して下さい");
                     }
 
@@ -369,16 +407,20 @@ public class ItemManager {
                                 throw new NumberFormatException("職業「" + proper + "」は存在しません");
                             }
                         }
-                    } else {throw new NullPointerException("対応職業が設定されていません");}
+                    } else {
+                        throw new NullPointerException("対応職業が設定されていません");
+                    }
 
                     data = get(value + ".rarity", config);
                     if (data.getValue() != null) {
                         try {
                             rarity = ItemRarityType.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("レアリティ「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("レアリティが設定されていません");}
+                    } else {
+                        throw new NullPointerException("レアリティが設定されていません");
+                    }
 
 
                 } catch (Exception e) {
@@ -386,7 +428,7 @@ public class ItemManager {
                     allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
-                if (successFull){
+                if (successFull) {
                     ItemMagicWeapon item = new ItemMagicWeapon(id, material, name, lore, statuses, glowing);
                     item.setPrice(price);
                     item.setRarity(rarity);
@@ -403,7 +445,8 @@ public class ItemManager {
         if (allError) errors.remove("§aMagicWeapon item config loaded without errors.");
         return errors;
     }
-    public static HashSet<String> loadEquipmentItem(){
+
+    public static HashSet<String> loadEquipmentItem() {
         HashSet<String> errors = new HashSet<>();
         boolean allError = false;
 
@@ -429,19 +472,29 @@ public class ItemManager {
 
                 try {
                     data = get(value + ".name", config);
-                    if (data.getValue() != null) {name = (String) data.getValue();} else {throw new NullPointerException("アイテム名が設定されていません");}
+                    if (data.getValue() != null) {
+                        name = (String) data.getValue();
+                    } else {
+                        throw new NullPointerException("アイテム名が設定されていません");
+                    }
 
                     data = get(value + ".material", config);
                     if (data.getValue() != null) {
                         try {
                             material = Material.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("マテリアル「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("マテリアルが設定されていません");}
+                    } else {
+                        throw new NullPointerException("マテリアルが設定されていません");
+                    }
 
                     data = getList(value + ".lore", config);
-                    if (data.getValue() != null) {lore = (List<String>) data.getValue();} else {throw new NullPointerException("説明文が設定されていません");}
+                    if (data.getValue() != null) {
+                        lore = (List<String>) data.getValue();
+                    } else {
+                        throw new NullPointerException("説明文が設定されていません");
+                    }
 
                     data = new MapNode<>(value + ".status", config.getConfig().getConfigurationSection(value + ".status").getKeys(false));
                     if (data.getValue() != null) {
@@ -451,9 +504,9 @@ public class ItemManager {
                                 data = get(value + ".status." + key, config);
                                 Status status2 = new Status(statusType, Integer.valueOf((String) data.getValue()));
                                 statuses.add(status2);
-                            }catch (NumberFormatException e){
+                            } catch (NumberFormatException e) {
                                 throw new NumberFormatException("ステータスレベル「" + data.getValue() + "」は数字で入力して下さい");
-                            }catch (IllegalArgumentException e){
+                            } catch (IllegalArgumentException e) {
                                 throw new IllegalArgumentException("ステータス「" + key + "」は存在しません");
                             }
                         }
@@ -463,7 +516,7 @@ public class ItemManager {
 
                     data = get(value + ".glowing", config);
                     if (data.getValue() != null) {
-                        if (!data.getValue().equals("true") && !data.getValue().equals("false")){
+                        if (!data.getValue().equals("true") && !data.getValue().equals("false")) {
                             throw new IllegalArgumentException("Glowingは「true or false」で入力してください");
                         }
                         glowing = Boolean.getBoolean((String) data.getValue());
@@ -486,7 +539,7 @@ public class ItemManager {
                         if (data.getValue() != null) {
                             lvl = Integer.valueOf((String) data.getValue());
                         }
-                    } catch (NumberFormatException e){
+                    } catch (NumberFormatException e) {
                         throw new NumberFormatException("「" + data.getValue() + "」は数字で入力して下さい");
                     }
 
@@ -499,20 +552,24 @@ public class ItemManager {
                                 throw new NumberFormatException("職業「" + proper + "」は存在しません");
                             }
                         }
-                    } else {throw new NullPointerException("対応職業が設定されていません");}
+                    } else {
+                        throw new NullPointerException("対応職業が設定されていません");
+                    }
 
                     data = get(value + ".rarity", config);
                     if (data.getValue() != null) {
                         try {
                             rarity = ItemRarityType.valueOf((String) data.getValue());
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("レアリティ「" + data.getValue() + "」は存在しません");
                         }
-                    } else {throw new NullPointerException("レアリティが設定されていません");}
+                    } else {
+                        throw new NullPointerException("レアリティが設定されていません");
+                    }
 
                     if (material.toString().contains("LEATHER") && config.getConfig().get(value + ".color.RED") != null &&
                             config.getConfig().get(value + ".color.GREEN") != null &&
-                            config.getConfig().get(value + ".color.BLUE") != null){
+                            config.getConfig().get(value + ".color.BLUE") != null) {
                         try {
                             data = get(value + ".color.RED", config);
                             int r = Integer.valueOf((String) data.getValue());
@@ -521,9 +578,9 @@ public class ItemManager {
                             data = get(value + ".color.BLUE", config);
                             int b = Integer.valueOf((String) data.getValue());
                             color = Color.fromRGB(r, g, b);
-                        }catch (NumberFormatException e) {
+                        } catch (NumberFormatException e) {
                             throw new NullPointerException("RGBは数字で入力してください");
-                        }catch (IllegalArgumentException e){
+                        } catch (IllegalArgumentException e) {
                             throw new IllegalArgumentException("RGBは「0~255」の間です");
                         }
                     }
@@ -533,7 +590,7 @@ public class ItemManager {
                     allError = true;
                     errors.add(ChatColor.RED + e.getMessage() + ChatColor.GRAY + "(Path: " + config.getName() + "/" + data.getKey() + ")");
                 }
-                if (successFull){
+                if (successFull) {
                     ItemEquipment item = new ItemEquipment(id, material, name, lore, statuses, glowing);
                     item.setPrice(price);
                     item.setRarity(rarity);
@@ -552,46 +609,55 @@ public class ItemManager {
         return errors;
     }
 
-    public static MapNode<String, Object> get(String path, Config config){
+    public static MapNode<String, Object> get(String path, Config config) {
         try {
-            if (!config.getConfig().isSet(path)) {return new MapNode<>(path.replace(".", "/"), null);}
+            if (!config.getConfig().isSet(path)) {
+                return new MapNode<>(path.replace(".", "/"), null);
+            }
             return new MapNode<>(path.replace(".", "/"), String.valueOf(config.getConfig().getString(path)));
-        }catch (Exception e) {
-            return new MapNode<>(path.replace(".", "/"), null);
-        }
-    }
-    private static MapNode<String, Object> getList(String path, Config config){
-        try {
-            return new MapNode<>(path.replace(".", "/"), config.getConfig().getStringList(path));
-        }catch (Exception e) {
+        } catch (Exception e) {
             return new MapNode<>(path.replace(".", "/"), null);
         }
     }
 
-    public static Item getItem(String id){ return items.get(id);}
-    public static boolean isExists(String id){
+    private static MapNode<String, Object> getList(String path, Config config) {
+        try {
+            return new MapNode<>(path.replace(".", "/"), config.getConfig().getStringList(path));
+        } catch (Exception e) {
+            return new MapNode<>(path.replace(".", "/"), null);
+        }
+    }
+
+    public static Item getItem(String id) {
+        return items.get(id);
+    }
+
+    public static boolean isExists(String id) {
         return (items.get(id) != null);
     }
-    public static String getID(ItemStack item){
+
+    public static String getID(ItemStack item) {
         try {
-            if (!item.getType().equals(Material.AIR) && item != null && item.getItemMeta().getLore() != null){
+            if (!item.getType().equals(Material.AIR) && item != null && item.getItemMeta().getLore() != null) {
                 String[] id = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).split(" ");
                 if (id[1] == null) return "";
                 return id[1];
             }
             return "";
-        }catch (Exception e){
+        } catch (Exception e) {
             return "";
         }
     }
+
     public static Item getItem(ItemStack item) {
-        if (!item.getType().equals(Material.AIR) && item != null && item.getItemMeta().getLore() != null){
+        if (!item.getType().equals(Material.AIR) && item != null && item.getItemMeta().getLore() != null) {
             String[] id = item.getItemMeta().getLore().get(item.getItemMeta().getLore().size() - 1).split(" ");
             return getItem(id[1]);
         }
         return null;
     }
-    public static int getAmount(Player player, ItemStack item){
+
+    public static int getAmount(Player player, ItemStack item) {
         int i = 0;
         for (ItemStack is : player.getInventory().getContents()) {
             if (is == null || is.getType().equals(Material.AIR)) continue;
@@ -599,13 +665,14 @@ public class ItemManager {
             String item_name = (item.getItemMeta().getDisplayName() == null) ? "" : item.getItemMeta().getDisplayName();
             List<String> is_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
             List<String> item_lore = (item.getItemMeta().getLore() != null) ? item.getItemMeta().getLore() : Arrays.asList("");
-            if (is_name.equals(item_name) && is_lore.equals(item_lore) && is.getType().equals(item.getType())){
+            if (is_name.equals(item_name) && is_lore.equals(item_lore) && is.getType().equals(item.getType())) {
                 i = i + is.getAmount();
             }
         }
         return i;
     }
-    public static List<String> getItemIDs(){
+
+    public static List<String> getItemIDs() {
         return itemIDs;
     }
 
@@ -614,12 +681,12 @@ public class ItemManager {
         itemIDs.clear();
     }
 
-    public static int getDurabilityValue(ItemStack item){
+    public static int getDurabilityValue(ItemStack item) {
         net.minecraft.server.v1_15_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
         return itemStack.getTag().getInt("maxDurabilityValue");
     }
 
-    public static ItemStack setDurabilityValue(ItemStack item, int i){
+    public static ItemStack setDurabilityValue(ItemStack item, int i) {
         net.minecraft.server.v1_15_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
         itemStack.getTag().setInt("maxDurabilityValue", i);
         return CraftItemStack.asBukkitCopy(itemStack);

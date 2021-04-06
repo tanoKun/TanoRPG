@@ -1,7 +1,7 @@
 # TanoRPG
  このプラグインはMCServerTanoRPGのプラグインであるため使用しないでください
    
-# librarys
+# libraries
  ・Spigot_1.12.2  
  ・JDA_4.2.0_225
  
