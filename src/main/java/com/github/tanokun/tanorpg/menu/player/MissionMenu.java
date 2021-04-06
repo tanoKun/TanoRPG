@@ -63,6 +63,8 @@ public class MissionMenu extends Menu {
         if (e.getCurrentItem() == null) return;
         if (e.getCurrentItem().getType().equals(Material.PURPLE_STAINED_GLASS_PANE)) return;
         if (e.getCurrentItem().getType().equals(Material.AIR)) return;
+        if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory())
+                && e.getView().getTitle().equals("§d§lPlayerStatus §7>> §aMissions")) return;
         Player p = (Player)e.getWhoClicked();
         String name = e.getCurrentItem().getItemMeta().getDisplayName().replaceAll("§d", "");
         for(Mission mission : MissionManager.getActiveMissions(p.getUniqueId())){

@@ -113,7 +113,7 @@ public class DamageEventListener implements Listener {
                 new MagicTask(attacker).runTaskTimerAsynchronously(TanoRPG.getPlugin(), 2, 1);
                 return;
             }
-            int at_lvl = attacker.getLEVEL();
+            int at_lvl = attacker.getLEVEL().getLEVEL();
             int vi_lvl = customEntity.getLEVEL();
             double atk = DamageManager.getDamage(attacker.getStatus(StatusType.ATK).getLevel(),
                     attacker.getStatus(StatusType.ING).getLevel(),
@@ -152,7 +152,7 @@ public class DamageEventListener implements Listener {
             GamePlayer victim = GamePlayerManager.getPlayer(e.getEntity().getUniqueId());
             ((LivingEntity) victim.getPlayer()).setNoDamageTicks(0);
             int at_lvl = customEntity.getLEVEL();
-            int vi_lvl = victim.getLEVEL();
+            int vi_lvl = victim.getLEVEL().getLEVEL();
             double atk = DamageManager.getDamage(customEntity.getATK(), customEntity.getINT(), customEntity.getAGI());
             long damage = DamageManager.getCompDamage(atk, victim.getStatus(StatusType.DEF).getLevel(), at_lvl, vi_lvl, e.getDamager());
             victim.setHAS_HP((int) (victim.getHAS_HP() - damage));

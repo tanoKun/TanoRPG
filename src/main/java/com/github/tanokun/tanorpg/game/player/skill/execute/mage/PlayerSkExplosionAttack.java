@@ -32,7 +32,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
     public PlayerSkExplosionAttack() {
-        super("爆散", 8, 40, 19,
+        super("爆散", 8, 30, 19,
                 new ArrayList<String>(Arrays.asList("LC", "DR", "SLC")),
                 new ArrayList<String>(Arrays.asList("§f視点の先にいる敵を爆破します")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(MAGE)), Material.TNT);
@@ -73,7 +73,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                     double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                             gamePlayer.getStatus(StatusType.INT).getLevel(),
                             gamePlayer.getStatus(StatusType.AGI).getLevel());
-                    int at_lvl = gamePlayer.getLEVEL();
+                    int at_lvl = gamePlayer.getLEVEL().getLEVEL();
                     int vi_lvl = custom.getLEVEL();
                     long damage = DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 2;
                     DamageManager.createDamage(damage, entity, finalTarget);
@@ -82,7 +82,7 @@ public class PlayerSkExplosionAttack extends Skill implements AttackSkill {
                         atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.INT).getLevel(),
                                 gamePlayer.getStatus(StatusType.AGI).getLevel());
-                        at_lvl = gamePlayer.getLEVEL();
+                        at_lvl = gamePlayer.getLEVEL().getLEVEL();
                         vi_lvl = custom.getLEVEL();
                         damage = Math.round(DamageManager.getCompDamage(atk, custom.getMDEF(), at_lvl, vi_lvl, entity) * 1.5);
                         if (damager.equals(finalTarget)) continue;

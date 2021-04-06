@@ -72,6 +72,7 @@ public class CraftItem {
     public void openCheck(Player player) {
         TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 10, 1);
         player.openInventory(inv);
+        player.updateInventory();
     }
     public long getPrice() {return price;}
 

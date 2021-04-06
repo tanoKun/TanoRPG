@@ -41,7 +41,7 @@ public class MagicTask extends BukkitRunnable {
             double y = dire.getY() * time + 1.7;
             double z = dire.getZ() * time;
             loc.add(x, y, z);
-            if (time > 5) {this.cancel();}
+            if (time > 7) {this.cancel();}
             ParticleEffect.REDSTONE.display(loc, 0, 0, 0, 0f, 1, regularColor, Bukkit.getOnlinePlayers());
             for (Entity entity : TanoRPG.getNearbyEntities(loc, 2)){
                 if (entity instanceof Player) continue;
@@ -49,7 +49,7 @@ public class MagicTask extends BukkitRunnable {
                     if (entities.get(entity) == null) {
                         entities.put(entity, true);
                         ObjectEntity entity2 = EntityManager.getBaseEntity(entity);
-                        int at_lvl = gamePlayer.getLEVEL();
+                        int at_lvl = gamePlayer.getLEVEL().getLEVEL();
                         int vi_lvl = entity2.getLEVEL();
                         double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.INT).getLevel(),

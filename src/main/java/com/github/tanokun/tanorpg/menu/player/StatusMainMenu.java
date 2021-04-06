@@ -44,6 +44,8 @@ public class StatusMainMenu extends Menu {
         e.setCancelled(true);
         if (e.getCurrentItem() == null) return;
         if (e.getCurrentItem().getType().equals(Material.AIR)) return;
+        if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory())
+                && e.getView().getTitle().equals("§d§lPlayerStatus")) return;
         if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§c§lスキル")) new StatusSkillMenu((Player) e.getWhoClicked()).openInv((Player) e.getWhoClicked());
         if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§d§lミッション")) new MissionMenu((Player) e.getWhoClicked()).openInv((Player) e.getWhoClicked());
     }

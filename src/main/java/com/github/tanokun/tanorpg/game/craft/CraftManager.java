@@ -71,6 +71,7 @@ public class CraftManager implements Listener {
             if (!e.getCurrentItem().getType().equals(Material.AIR) && !(e.getCurrentItem() == null)) {
                 Craft craft = getCraft(id);
                 if (e.getCurrentItem().getItemMeta().getLore() == null) return;
+                e.getWhoClicked().closeInventory();
                 String uuid = e.getCurrentItem().getItemMeta().getLore().get(e.getCurrentItem().getItemMeta().getLore().size() - 1).replace("§7", "");
                 CraftItem item = craft.getItem(uuid);
                 if (item != null) {

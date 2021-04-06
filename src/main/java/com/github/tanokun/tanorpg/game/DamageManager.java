@@ -4,12 +4,19 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.event.tanorpg.CustomEntityKillEvent;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
+import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
+import com.github.tanokun.tanorpg.game.item.itemtype.base.ItemJob;
 import com.github.tanokun.tanorpg.game.player.GamePlayer;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.List;
 
 import static com.github.tanokun.tanorpg.game.player.status.buff.Buff.getBuffPercent;
 
@@ -48,6 +55,15 @@ public class DamageManager {
                     gamePlayer.setHAS_EXP(gamePlayer.getHAS_EXP() + EntityManager.getBaseEntity(name[0]).getEXP());
                 }
 
+                ItemStack item = gamePlayer.getPlayer().getEquipment().getItemInMainHand();
+                ItemJob item2 = (ItemJob) ItemManager.getItem(item);
+                item = ItemManager.setDurabilityValue(item, ItemManager.getDurabilityValue(item) - 1);
+                List<String> lore = item.getItemMeta().getLore();
+                lore.set(lore.size() - 3, "§7DurabilityValue: (" + ItemManager.getDurabilityValue(item) + "/" + item2.getMaxDurabilityValue() + ")");
+                ItemMeta itemMeta = item.getItemMeta(); itemMeta.setLore(lore);
+                item.setItemMeta(itemMeta);
+                gamePlayer.getPlayer().getEquipment().setItemInMainHand(item);
+
                 mob.damage(damage);
                 gamePlayer.getPlayer().sendMessage(TanoRPG.PX + damage + "ダメージ！");
 
@@ -63,4 +79,5 @@ public class DamageManager {
             }
         }.runTask(TanoRPG.getPlugin());
     }
+
 }

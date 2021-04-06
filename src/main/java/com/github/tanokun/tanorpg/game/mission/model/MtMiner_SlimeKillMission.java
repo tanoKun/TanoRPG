@@ -29,14 +29,14 @@ public class MtMiner_SlimeKillMission extends Mission {
         Thread.sleep(2500);
         sendMessage(player, PX + "鉱石が欲しいのか？");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         sendMessage(player, PX + "だが無料で鉱石をやるというのは...");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(3000);
         sendMessage(player, PX + "そうだ！ そこの洞窟の奥にスライムが住み着いてしまってな。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(3400);
-        sendMessage(player, PX + "そいつらを13体ほど倒してくれたら、石炭鉱石を5個やろう。");
+        sendMessage(player, PX + "そいつらを13体ほど倒してくれたら、石炭を5個やろう。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(4000);
         sendMessage(player, PX + "どうだ？ お前にとっても悪い取引じゃないだろう。");
@@ -47,7 +47,7 @@ public class MtMiner_SlimeKillMission extends Mission {
         Thread.sleep(500);
         sendMessage(player, PX + "倒してくれるのか。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
-        Thread.sleep(1000);
+        Thread.sleep(2000);
         sendMessage(player, PX + "俺は大体ここにいるから倒し終わったら、話しかけてくれ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(4000);
@@ -61,16 +61,13 @@ public class MtMiner_SlimeKillMission extends Mission {
 
     public void finishMission(Player player) throws Exception {
         Thread.sleep(500);
-        sendMessage(player, PX + "倒してきてくれたのか　早かったな。");
+        sendMessage(player, PX + "倒してきてくれたのか。早かったな。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(3000);
-        sendMessage(player, PX + "これが報酬の石炭鉱石だ。");
+        sendMessage(player, PX + "これが報酬の石炭だ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
-        sendMessage(player, PX + "これで誰にも邪魔されずに釣りができる...");
-        playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
-        Thread.sleep(4000);
-        sendMessage(player, PX + "それと、その鉱石は鍛冶屋の炉などで精錬して石炭にすることができるぞ。");
+        sendMessage(player, PX + "それと、石炭はクラフトに大きく関わるぞ。無駄にはするなよ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(4000);
         sendMessage(player, PX + "これでやっと洞窟に入ることができる...");
@@ -78,17 +75,18 @@ public class MtMiner_SlimeKillMission extends Mission {
         Thread.sleep(2000);
 
         addClearMission(player.getUniqueId(), this);
+        playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "§a+100" + " " + TanoRPG.MONEY);
-        sendMessage(player, MissionManager.PX + "§a+5 coal_ore");
+        sendMessage(player, MissionManager.PX + "§a+5 coal");
         sendMessage(player, MissionManager.PX + "§a+80 EXP");
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "ミッションをクリアしました。");
         GamePlayerManager.getPlayer(player.getUniqueId()).addMoney(100);
         GamePlayerManager.getPlayer(player.getUniqueId()).setHAS_EXP(GamePlayerManager.getPlayer(player.getUniqueId()).getHAS_EXP() + 80);
 
-        ItemStack coal_ore = ItemManager.getItem("coal_ore").getItem();
+        ItemStack coal_ore = ItemManager.getItem("coal").getItem();
         coal_ore.setAmount(5);
 
         player.getInventory().addItem(coal_ore);

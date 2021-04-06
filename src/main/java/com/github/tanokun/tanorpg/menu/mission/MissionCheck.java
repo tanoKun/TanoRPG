@@ -23,6 +23,7 @@ public class MissionCheck extends Menu {
     }
 
     public void onClick(InventoryClickEvent e) {
+        e.setCancelled(true);
         if (e.getCurrentItem() == null) return;
         if (e.getCurrentItem().getType() == Material.AIR) return;
         if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory()) && e.getView().getTitle().equals("§aMission>> §7ミッションを遂行しますか？")) return;

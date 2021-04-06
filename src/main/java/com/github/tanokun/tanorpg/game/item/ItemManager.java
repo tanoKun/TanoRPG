@@ -15,6 +15,7 @@ import com.github.tanokun.tanorpg.util.io.MapNode;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -611,5 +612,16 @@ public class ItemManager {
     public static void deleteItems() {
         items.clear();
         itemIDs.clear();
+    }
+
+    public static int getDurabilityValue(ItemStack item){
+        net.minecraft.server.v1_15_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
+        return itemStack.getTag().getInt("maxDurabilityValue");
+    }
+
+    public static ItemStack setDurabilityValue(ItemStack item, int i){
+        net.minecraft.server.v1_15_R1.ItemStack itemStack = CraftItemStack.asNMSCopy(item);
+        itemStack.getTag().setInt("maxDurabilityValue", i);
+        return CraftItemStack.asBukkitCopy(itemStack);
     }
 }

@@ -74,6 +74,7 @@ public class Merchant_GuardianKillMission extends Mission {
         sendMessage(player, PX + "これが報酬だ。");
         playSound(player, Sound.ENTITY_CHICKEN_EGG, 3, 0.5);
         Thread.sleep(2000);
+        playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
 
         addClearMission(player.getUniqueId(), this);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);

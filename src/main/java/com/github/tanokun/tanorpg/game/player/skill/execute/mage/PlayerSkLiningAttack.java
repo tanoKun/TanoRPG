@@ -37,7 +37,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkLiningAttack extends Skill implements AttackSkill {
     public PlayerSkLiningAttack() {
-        super("落雷", 5, 50, 15,
+        super("落雷", 5, 30, 15,
                 new ArrayList<String>(Arrays.asList("DR", "SRC", "SRC")),
                 new ArrayList<String>(Arrays.asList("§f前方にいる敵に雷を落とします")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(MAGE)), Material.BLAZE_ROD);
@@ -70,7 +70,7 @@ public class PlayerSkLiningAttack extends Skill implements AttackSkill {
                             if (entity2 instanceof Player || !entity2.hasMetadata("TanoRPG_entity")) continue;
                             ((Creature) entity2).setTarget((LivingEntity) entity);
                             ObjectEntity custom = EntityManager.getBaseEntity(entity2);
-                            int at_lvl = gamePlayer.getLEVEL();
+                            int at_lvl = gamePlayer.getLEVEL().getLEVEL();
                             int vi_lvl = custom.getLEVEL();
                             double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.MATK).getLevel(),
                                     gamePlayer.getStatus(StatusType.INT).getLevel(),

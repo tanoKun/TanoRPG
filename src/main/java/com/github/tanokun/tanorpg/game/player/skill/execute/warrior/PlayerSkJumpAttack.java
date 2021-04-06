@@ -30,7 +30,7 @@ import static java.lang.Math.sin;
 
 public class PlayerSkJumpAttack extends Skill implements AttackSkill {
     public PlayerSkJumpAttack() {
-        super("薙ぎ払い", 7, 40, 13,
+        super("薙ぎ払い", 7, 25, 13,
                 new ArrayList<String>(Arrays.asList("LC", "RC", "LC")),
                 new ArrayList<String>(Arrays.asList("§f剣を振って敵を払います (半径10m)")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.WOODEN_SWORD);
@@ -62,7 +62,7 @@ public class PlayerSkJumpAttack extends Skill implements AttackSkill {
             if (entity2 instanceof Player || !entity.hasMetadata("TanoRPG_entity")) continue;
             ((Creature) entity2).setTarget((LivingEntity) entity);
             ObjectEntity custom = EntityManager.getBaseEntity(entity2);
-            int at_lvl = gamePlayer.getLEVEL();
+            int at_lvl = gamePlayer.getLEVEL().getLEVEL();
             int vi_lvl = custom.getLEVEL();
             double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),
                     gamePlayer.getStatus(StatusType.ING).getLevel(),

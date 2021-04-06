@@ -76,7 +76,7 @@ public class LeftClickEventListener implements Listener {
                     player.getPlayer().sendMessage(PX + "§c職業が違うため習得できません");
                     return;
                 }
-                if (player.getLEVEL() < skill.getLvl()){
+                if (player.getLEVEL().getLEVEL() < skill.getLvl()){
                     player.getPlayer().sendMessage(PX + "§cレベルが足りないため習得できません");
                     return;
                 }

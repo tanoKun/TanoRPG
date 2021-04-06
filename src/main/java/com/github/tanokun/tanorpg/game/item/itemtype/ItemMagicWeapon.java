@@ -9,6 +9,7 @@ import com.github.tanokun.tanorpg.game.player.status.Status;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.Glowing;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -21,6 +22,7 @@ public class ItemMagicWeapon extends Item implements ItemJob {
     private ArrayList<GamePlayerJobType> jobs;
     private long coolTime = 0;
     private int lvl = 0;
+    private int maxDurabilityValue = 100;
 
     public ItemMagicWeapon(String id, Material material, String name, List<String> lores, List<Status> statuses, boolean glowing) {
         super(id, material, name, lores, statuses, glowing);
@@ -29,10 +31,12 @@ public class ItemMagicWeapon extends Item implements ItemJob {
     public ArrayList<GamePlayerJobType> getJobs() {return jobs;}
     public long getCoolTime() {return coolTime;}
     public int getLvl() {return lvl;}
+    public int getMaxDurabilityValue() {return maxDurabilityValue;}
 
     public void setJobs(ArrayList<GamePlayerJobType> jobs) {this.jobs = jobs;}
     public void setCoolTime(long coolTime) {this.coolTime = coolTime;}
     public void setLvl(int lvl) {this.lvl = lvl;}
+    public void setMaxDurabilityValue(int maxDurabilityValue) {this.maxDurabilityValue = maxDurabilityValue;}
 
     @Override
     public ItemStack getItem() {
@@ -64,6 +68,8 @@ public class ItemMagicWeapon extends Item implements ItemJob {
         lore.add("§7Proper: " + proper);
         lore.add("§7Rarity: " + getRarity().getName());
         lore.add("§7Type: " + itemType.getName());
+        lore.add("   ");
+        lore.add("§7DurabilityValue: (" + maxDurabilityValue + "/" + maxDurabilityValue + ")");
         lore.add(ItemManager.FINAL_STATUS);
         lore.add("§7ID: " + getId());
         im.setLore(lore);
@@ -75,6 +81,7 @@ public class ItemMagicWeapon extends Item implements ItemJob {
         }
         im.setUnbreakable(true);
         is.setItemMeta(im);
+        is = ItemManager.setDurabilityValue(is, maxDurabilityValue);
         return is;
     }
 }

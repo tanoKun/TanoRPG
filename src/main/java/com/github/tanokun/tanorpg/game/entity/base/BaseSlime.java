@@ -34,6 +34,9 @@ public class BaseSlime extends ObjectEntity {
     public Entity setOptions(Entity entity) {
         Slime target = (Slime) entity;
 
+        if (this.size > 0)
+            target.setSize(this.size);
+
         target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
         target.setHealth(getHP());
 
@@ -47,8 +50,7 @@ public class BaseSlime extends ObjectEntity {
 
         target.setCustomNameVisible(true);
         target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
-        if (this.size > 0)
-            target.setSize(this.size);
+
         target.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));
         return entity;
     }

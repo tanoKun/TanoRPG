@@ -186,7 +186,7 @@ public class MissionManager {
             }
             if (annotation instanceof LvlMissionCondition){
                 LvlMissionCondition jobMissionCondition = (LvlMissionCondition) annotation;
-                if (jobMissionCondition.value() > player.getLEVEL()) return false;
+                if (jobMissionCondition.value() > player.getLEVEL().getLEVEL()) return false;
             }
             if (annotation instanceof ClearMissionCondition){
                 ClearMissionCondition clearMissionCondition = (ClearMissionCondition) annotation;

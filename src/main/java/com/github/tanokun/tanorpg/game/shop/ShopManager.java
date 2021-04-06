@@ -62,6 +62,7 @@ public class ShopManager implements Listener {
             if (isExists(id) == false) return;
             e.setCancelled(true);
             if (!(e.getCurrentItem() == null) && !e.getCurrentItem().getType().equals(Material.AIR)){
+                e.getWhoClicked().closeInventory();
                 Shop shop = getShop(id);
                 if (e.getCurrentItem().getItemMeta().getLore() == null) return;
                 String uuid = e.getCurrentItem().getItemMeta().getLore().get(e.getCurrentItem().getItemMeta().getLore().size() - 1).replace("§7", "");

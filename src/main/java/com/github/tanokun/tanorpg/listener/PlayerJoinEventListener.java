@@ -29,7 +29,7 @@ public class PlayerJoinEventListener implements Listener {
             public void run() {
                 if (!player.getGameMode().equals(GameMode.CREATIVE)) player.setGameMode(GameMode.SURVIVAL);
                 if (GamePlayerManager.loadData(player.getUniqueId()) == null){
-                    player.teleport(new Location(Bukkit.getWorld("world"), -814, 47, 97, 0, 0));
+                    player.teleport(new Location(Bukkit.getWorld("world"), -814, 49, 97, 0, 0));
                     Sidebar.setupSidebar(e.getPlayer());
                     player.getInventory().clear();
                     MenuManager.getMenu("§c§l職業選択 §7説明をよく読んで選択しよう！").openInv(player);

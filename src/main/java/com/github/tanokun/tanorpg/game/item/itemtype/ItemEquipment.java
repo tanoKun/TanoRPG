@@ -10,6 +10,7 @@ import com.github.tanokun.tanorpg.game.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.Glowing;
 import org.bukkit.Color;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -23,6 +24,7 @@ public class ItemEquipment extends Item implements ItemJob {
     private ArrayList<GamePlayerJobType> jobs;
     private int lvl = 0;
     private Color color;
+    private int maxDurabilityValue = 100;
 
     public ItemEquipment(String id, Material material, String name, List<String> lores, List<Status> statuses, boolean glowing) {
         super(id, material, name, lores, statuses, glowing);
@@ -31,11 +33,12 @@ public class ItemEquipment extends Item implements ItemJob {
     public ArrayList<GamePlayerJobType> getJobs() {return jobs;}
     public long getCoolTime() {return 0;}
     public int getLvl() {return lvl;}
-    public Color getColor() {return color;}
+    public int getMaxDurabilityValue() {return maxDurabilityValue;}
 
     public void setJobs(ArrayList<GamePlayerJobType> jobs) {this.jobs = jobs;}
-    public void setCoolTime(long coolTime) {}
+    public void setCoolTime(long coolTime) {return;}
     public void setLvl(int lvl) {this.lvl = lvl;}
+    public void setMaxDurabilityValue(int maxDurabilityValue) {this.maxDurabilityValue = maxDurabilityValue;}
     public void setColor(Color color) {this.color = color;}
 
     @Override
@@ -74,6 +77,8 @@ public class ItemEquipment extends Item implements ItemJob {
         lore.add("§7Proper: " + proper);
         lore.add("§7Rarity: " + getRarity().getName());
         lore.add("§7Type: " + itemType.getName());
+        lore.add("   ");
+        lore.add("§7DurabilityValue: (" + maxDurabilityValue + "/" + maxDurabilityValue + ")");
         lore.add(ItemManager.FINAL_STATUS);
         lore.add("§7ID: " + getId());
         im.setLore(lore);
@@ -85,6 +90,7 @@ public class ItemEquipment extends Item implements ItemJob {
         }
         im.setUnbreakable(true);
         is.setItemMeta(im);
+        is = ItemManager.setDurabilityValue(is, maxDurabilityValue);
         return is;
     }
 }

@@ -38,8 +38,7 @@ public class GamePlayer {
     private int THIS_MAX_MP = 100;
     private int HAS_MP = 100;
 
-    private int LEVEL = 1;
-    private long MAX_EXP = 100;
+    private GamePlayerLevel LEVEL = GamePlayerLevel.Lv_1;
     private long HAS_EXP = 0;
 
     private HashMap<StatusType, Status> statuses;
@@ -69,8 +68,7 @@ public class GamePlayer {
     public int getHAS_MP() {return HAS_MP;}
     public int getMAX_MP() {return MAX_MP;}
     public int getTHIS_MAX_MP() {return THIS_MAX_MP;}
-    public int getLEVEL() {return LEVEL;}
-    public long getMAX_EXP() {return MAX_EXP;}
+    public GamePlayerLevel getLEVEL() {return LEVEL;}
     public long getHAS_EXP() {return HAS_EXP;}
 
     public void setActive_mission_NPC_ID(int active_mission_NPC_ID) {this.active_mission_NPC_ID = active_mission_NPC_ID;}
@@ -97,20 +95,28 @@ public class GamePlayer {
     public void setMAX_MP(int MAX_MP) {this.MAX_MP = MAX_MP; Sidebar.updateSidebar(getPlayer());}
     public void setTHIS_MAX_MP(int THIS_MAX_MP) {this.THIS_MAX_MP = THIS_MAX_MP; Sidebar.updateSidebar(getPlayer());}
     public void setHAS_MP (int HAS_MP){this.HAS_MP = HAS_MP; Sidebar.updateSidebar(getPlayer());}
-    public void setLEVEL (int LEVEL){this.LEVEL = LEVEL; Sidebar.updateSidebar(getPlayer());}
-    public void setMAX_EXP (long MAX_EXP){this.MAX_EXP = MAX_EXP; Sidebar.updateSidebar(getPlayer());}
+    public void setLEVEL (GamePlayerLevel LEVEL){this.LEVEL = LEVEL; Sidebar.updateSidebar(getPlayer());}
 
     public void setHAS_EXP (long HAS_EXP){
+        if (!LEVEL.hasNext()){
+            this.HAS_EXP = 0;
+            return;
+        }
+
         this.HAS_EXP = HAS_EXP;
-        for (int i = 0; this.HAS_EXP >= MAX_EXP; i++) {
-            this.LEVEL += 1;
+
+        for (int i = 0; this.HAS_EXP >= getLEVEL().getMAX_EXP(); i++){
+            if (!LEVEL.hasNext()){
+                this.HAS_EXP = 0;
+                Sidebar.updateSidebar(getPlayer());
+                return;
+            }
+            this.HAS_EXP = this.HAS_EXP - getLEVEL().getMAX_EXP();
+            setLEVEL(LEVEL.getNext());
             this.THIS_MAX_HP += 5;
             this.THIS_MAX_MP += 5;
             getPlayer().sendMessage(TanoRPG.PX + "§aレベルが §b" + LEVEL + "Lv §aになりました！");
-            this.HAS_EXP = this.HAS_EXP - MAX_EXP;
-            MAX_EXP = Math.round(MAX_EXP * 1.1);
         }
-        Sidebar.updateSidebar(getPlayer());
     }
     public void setStatuses(HashMap<StatusType, Status> statuses) { this.statuses = statuses;}
 
@@ -188,7 +194,7 @@ public class GamePlayer {
     }
     public boolean isLv(ItemStack item){
         try {
-            if (((ItemJob) ItemManager.getItem(ItemManager.getID(item))).getLvl() <= getLEVEL()){
+            if (((ItemJob) ItemManager.getItem(ItemManager.getID(item))).getLvl() <= getLEVEL().getLEVEL()){
                 return true;
             }
         } catch (Exception e2){return false;}
@@ -227,7 +233,6 @@ public class GamePlayer {
                 Double.compare(that.THIS_MAX_MP, THIS_MAX_MP) == 0 &&
                 Double.compare(that.HAS_MP, HAS_MP) == 0 &&
                 LEVEL == that.LEVEL &&
-                MAX_EXP == that.MAX_EXP &&
                 HAS_EXP == that.HAS_EXP &&
                 job == that.job &&
                 Objects.equals(name, that.name) &&
@@ -236,7 +241,7 @@ public class GamePlayer {
                 Objects.equals(skills, that.skills);
     }
     public int hashCode() {
-        return Objects.hash(job, name, uuid, THIS_MAX_HP, MAX_HP, HAS_HP, MAX_MP, THIS_MAX_MP, HAS_MP, LEVEL, MAX_EXP, HAS_EXP, statuses, skills);
+        return Objects.hash(job, name, uuid, THIS_MAX_HP, MAX_HP, HAS_HP, MAX_MP, THIS_MAX_MP, HAS_MP, LEVEL, HAS_EXP, statuses, skills);
     }
 
 }

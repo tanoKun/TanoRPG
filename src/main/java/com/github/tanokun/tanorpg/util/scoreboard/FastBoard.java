@@ -202,7 +202,7 @@ public class FastBoard {
         }
 
         List<String> oldLines = new ArrayList<>(this.lines);
-        this.lines.clear();
+        this.lines = new ArrayList<>();
         this.lines.addAll(lines);
 
         int linesSize = this.lines.size();

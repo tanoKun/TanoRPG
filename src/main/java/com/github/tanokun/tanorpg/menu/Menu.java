@@ -17,7 +17,7 @@ public abstract class Menu {
     public void setItem(int i, ItemStack is){inv.setItem(i, is);}
     public Inventory getInv() {return inv;}
     public String getName() {return name;}
-    public void openInv(Player player){player.openInventory(inv);}
+    public void openInv(Player player){player.openInventory(inv); player.updateInventory();}
     abstract public void onClick(InventoryClickEvent e);
     public abstract void onClose(InventoryCloseEvent e);
 }

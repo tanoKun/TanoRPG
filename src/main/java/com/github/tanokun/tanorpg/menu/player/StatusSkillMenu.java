@@ -115,6 +115,8 @@ public class StatusSkillMenu extends Menu {
     public void onClick(InventoryClickEvent e) {
         e.setCancelled(true);
         if (e.getCurrentItem() == null || e.getCurrentItem().getType().equals(Material.AIR) || e.getCurrentItem().getType().equals(Material.BARRIER)) return;
+        if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory())
+                && e.getView().getTitle().equals("§d§lPlayerStatus §7>> §aSkill")) return;
         ItemMeta item = e.getCurrentItem().getItemMeta();
         String skill_name = item.getDisplayName().replace("§a", "");
         GamePlayer player = GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId());

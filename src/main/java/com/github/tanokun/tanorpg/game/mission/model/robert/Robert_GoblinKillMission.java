@@ -64,7 +64,7 @@ public class Robert_GoblinKillMission extends Mission implements MissionConditio
         playSound(player, Sound.ENTITY_PLAYER_LEVELUP, 3, 0.5);
         MissionManager.addClearMission(player.getUniqueId(), this);
         GamePlayerManager.getPlayer(player.getUniqueId()).setActive_mission_NPC_ID(-1);
-        long exp = GamePlayerManager.getPlayer(player.getUniqueId()).getMAX_EXP() + 60;
+        long exp = GamePlayerManager.getPlayer(player.getUniqueId()).getLEVEL().getMAX_EXP() + 60;
         sendMessage(player, MissionManager.PX + "§e〇=-=-=-=-=-=-=-=〇");
         sendMessage(player, MissionManager.PX + "§a+350" + " " + TanoRPG.MONEY);
         sendMessage(player, MissionManager.PX + "§a+2 apples");

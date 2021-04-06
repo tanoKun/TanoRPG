@@ -60,7 +60,9 @@ public class Shop {
     }
     public void openShop(Player player){
         TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
-        player.openInventory(inventory);}
+        player.openInventory(inventory);
+        player.updateInventory();
+    }
     public ShopItem getItem(String uuid) {
         try {
             for (ShopItem item : items){

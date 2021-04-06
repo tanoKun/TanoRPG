@@ -17,6 +17,7 @@ import com.github.tanokun.tanorpg.game.mission.model.robert.Robert_firstCraftMis
 import com.github.tanokun.tanorpg.game.player.skill.SkillManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.skill.execute.PlayerSkJump;
+import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerMultiLinesAttack;
 import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerSkExplosionAttack;
 import com.github.tanokun.tanorpg.game.player.skill.execute.mage.PlayerSkLiningAttack;
 import com.github.tanokun.tanorpg.game.player.skill.execute.priest.PlayerSkCircleHeal;
@@ -141,6 +142,7 @@ public class Registration {
         //メイジ
         SkillManager.addMageSkill(new PlayerSkLiningAttack());
         SkillManager.addMageSkill(new PlayerSkExplosionAttack());
+        SkillManager.addMageSkill(new PlayerMultiLinesAttack());
 
         //プリースト
         SkillManager.addPriestSkill(new PlayerSkHeal());

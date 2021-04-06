@@ -29,7 +29,7 @@ import static com.github.tanokun.tanorpg.game.player.GamePlayerJobType.WARRIOR;
 
 public class PlayerSkLineAttack extends Skill implements AttackSkill {
     public PlayerSkLineAttack() {
-        super("猪突猛進", 12, 40, 14,
+        super("猪突猛進", 12, 30, 14,
                 new ArrayList<String>(Arrays.asList("DR", "LC", "LC")),
                 new ArrayList<String>(Arrays.asList("§f前方に突進してダメージを与えます")),
                 new ArrayList<GamePlayerJobType>(Arrays.asList(WARRIOR)), Material.BLAZE_ROD);
@@ -57,7 +57,7 @@ public class PlayerSkLineAttack extends Skill implements AttackSkill {
                         if (target instanceof Player || !target.hasMetadata("TanoRPG_entity")) continue;
                         ((Creature) target).setTarget((LivingEntity) entity);
                         ObjectEntity custom = EntityManager.getBaseEntity(target);
-                        int at_lvl = gamePlayer.getLEVEL();
+                        int at_lvl = gamePlayer.getLEVEL().getLEVEL();
                         int vi_lvl = custom.getLEVEL();
                         double atk = DamageManager.getDamage(gamePlayer.getStatus(StatusType.ATK).getLevel(),
                                 gamePlayer.getStatus(StatusType.ING).getLevel(),
