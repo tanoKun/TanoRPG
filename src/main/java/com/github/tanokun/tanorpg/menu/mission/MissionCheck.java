@@ -1,12 +1,16 @@
 package com.github.tanokun.tanorpg.menu.mission;
 
+import com.github.tanokun.api.smart_inv.inv.ClickableItem;
+import com.github.tanokun.api.smart_inv.inv.SmartInventory;
+import com.github.tanokun.api.smart_inv.inv.contents.InventoryContents;
+import com.github.tanokun.api.smart_inv.inv.contents.InventoryProvider;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.mission.Mission;
 import com.github.tanokun.tanorpg.game.mission.listener.NpcClickListener;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
-import com.github.tanokun.tanorpg.menu.Menu;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.menu.player.StatusMainMenu;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,54 +19,57 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 
 
-public class MissionCheck extends Menu {
-    public MissionCheck() {
-        super("§aMission>> §7ミッションを遂行しますか？", 1);
-        setItem(2, MenuManager.createItem(Material.BLUE_WOOL, "§a遂行します", 1, true));
-        setItem(6, MenuManager.createItem(Material.RED_WOOL, "§c遂行しません", 1, true));
+public class MissionCheck implements InventoryProvider {
+
+    private final Mission mission;
+
+    public MissionCheck(Mission mission){
+        this.mission = mission;
     }
 
-    public void onClick(InventoryClickEvent e) {
-        e.setCancelled(true);
-        if (e.getCurrentItem() == null) return;
-        if (e.getCurrentItem().getType() == Material.AIR) return;
-        if (!e.getClickedInventory().equals(e.getWhoClicked().getOpenInventory().getTopInventory()) && e.getView().getTitle().equals("§aMission>> §7ミッションを遂行しますか？")) return;
-        Mission mission = NpcClickListener.meta_Mission.get(e.getWhoClicked().getUniqueId());
-        if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§a遂行します")){
+    public static SmartInventory INVENTORY(Mission mission) {
+        return SmartInventory.builder()
+                .id("mission_check")
+                .provider(new MissionCheck(mission))
+                .size(1, 9)
+                .title("§aMission>> §7ミッションを遂行しますか？")
+                .closeable(false)
+                .build();
+    }
+
+    @Override
+    public void init(Player player, InventoryContents contents) {
+        contents.set(0, 2, ClickableItem.of(ItemUtils.createItem(Material.BLUE_WOOL, "§a遂行します", 1, true), e -> {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    NpcClickListener.flag_nowMissionEvent.add(e.getWhoClicked().getUniqueId());
+                    GamePlayerManager.flag_nowMissionEvent.add(e.getWhoClicked().getUniqueId());
                     try {
                         mission.startMission((Player) e.getWhoClicked());
-                    } catch (Exception exception) {exception.printStackTrace();}
+                    } catch (Exception exception) {
+                        exception.printStackTrace();
+                    }
                     GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).setActive_mission_NPC_ID(mission.getNPC_ID());
                     GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).setActive_mission_NPC_Name(mission.getMissionName());
                     Sidebar.updateSidebar((Player) e.getWhoClicked());
-                    NpcClickListener.flag_nowMissionEvent.remove(e.getWhoClicked().getUniqueId());
+                    GamePlayerManager.flag_nowMissionEvent.remove(e.getWhoClicked().getUniqueId());
                     this.cancel();
                 }
             }.runTaskAsynchronously(TanoRPG.getPlugin());
-        } else if (e.getCurrentItem().getItemMeta().getDisplayName().equals("§c遂行しません")){
+            contents.inventory().close(player);
+        }));
+
+        contents.set(0, 6, ClickableItem.of(ItemUtils.createItem(Material.RED_WOOL, "§c遂行しません", 1, true), e -> {
             new BukkitRunnable() {
                 @Override
                 public void run() {
-                    NpcClickListener.flag_nowMissionEvent.add(e.getWhoClicked().getUniqueId());
+                    GamePlayerManager.flag_nowMissionEvent.add(e.getWhoClicked().getUniqueId());
                     try {mission.cancelMission((Player) e.getWhoClicked());} catch (Exception exception) {exception.printStackTrace();}
-                    NpcClickListener.flag_nowMissionEvent.remove(e.getWhoClicked().getUniqueId());
+                    GamePlayerManager.flag_nowMissionEvent.remove(e.getWhoClicked().getUniqueId());
                     this.cancel();
                 }
             }.runTaskAsynchronously(TanoRPG.getPlugin());
-        }
-        NpcClickListener.meta_Mission.remove(e.getWhoClicked().getUniqueId());
-        e.getWhoClicked().closeInventory();
-    }
-
-    public void onClose(InventoryCloseEvent e) {
-        if (NpcClickListener.meta_Mission.get(e.getPlayer().getUniqueId()) == null) return;
-        else {e.getPlayer().sendMessage(TanoRPG.PX + "§c選択肢を選んでください");}
-        Bukkit.getScheduler().runTask(TanoRPG.getPlugin(), () -> {
-            openInv((Player) e.getPlayer());
-        });
+            contents.inventory().close(player);
+        }));
     }
 }

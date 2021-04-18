@@ -2,7 +2,7 @@ package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -30,8 +30,9 @@ public class CraftItem {
         this.price = price;
         this.owner = owner;
         this.uuid = UUID.randomUUID().toString();
-        inv = Bukkit.createInventory(null, 54, "§6§lクラフト確認 §7(ID: " + owner + ")");
-        ItemStack BSG = MenuManager.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "    ", 1, false);
+        inv = Bukkit.createInventory(null,
+                4, "§6§lクラフト確認 §7(ID: " + owner + ")");
+        ItemStack BSG = ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "    ", 1, false);
         for (int i = 1; i < 54; i++) {
             inv.setItem(i - 1, BSG);
         }
@@ -42,8 +43,8 @@ public class CraftItem {
         meta.setLore(lore);
         show.setItemMeta(meta);
         inv.setItem(34, show);
-        inv.setItem(32, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: " + price + " " + TanoRPG.MONEY, 1, false));
-        inv.setItem(53, MenuManager.createItem(Material.ANVIL, "§aクラフトする", 1, true));
+        inv.setItem(32, ItemUtils.createItem(Material.GOLD_INGOT, "§6§l値段: " + price + " " + TanoRPG.MONEY, 1, false));
+        inv.setItem(53, ItemUtils.createItem(Material.ANVIL, "§aクラフトする", 1, true));
         int slot = 19;
         int size = beforeItems.size();
         for (int i = 1; i < 10; i++) {

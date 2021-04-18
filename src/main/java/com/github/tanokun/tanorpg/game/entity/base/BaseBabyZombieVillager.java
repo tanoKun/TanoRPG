@@ -5,11 +5,18 @@ import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.util.io.Config;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.EntityZombieVillager;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftVillagerZombie;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Zombie;
+import org.bukkit.entity.ZombieVillager;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseBabyZombieVillager extends ObjectEntity {
@@ -20,9 +27,11 @@ public class BaseBabyZombieVillager extends ObjectEntity {
 
     @Override
     public Entity spawn(Location location) {
-        Zombie zombie = (Zombie) location.getWorld().spawnEntity(location, EntityType.ZOMBIE);
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        ZombieVillager zombie = new CraftVillagerZombie((CraftServer) Bukkit.getServer(),
+                new EntityZombieVillager(EntityTypes.ZOMBIE_VILLAGER, craftWorld.getHandle().getMinecraftWorld()));
+        craftWorld.spawn(location, zombie.getClass());
         zombie.setBaby(true);
-        zombie.setVillager(true);
         setOptions(zombie);
         ActiveEntity activeEntity = new ActiveEntity(this, zombie);
         EntityManager.registerActiveEntity(activeEntity);

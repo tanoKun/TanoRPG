@@ -79,6 +79,11 @@ public class Config {
         }
 
         config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, StandardCharsets.UTF_8)));
+        try {
+            defConfigStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public FileConfiguration getConfig() {

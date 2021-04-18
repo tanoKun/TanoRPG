@@ -7,10 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 
 public class GamePlayerManager {
     private static HashMap<UUID, GamePlayer> players = new HashMap<>();
+    public static final HashSet<UUID> flag_nowMissionEvent = new HashSet<>();
     public static GamePlayer loadData(UUID uuid){
         Gson gson = new Gson();
         String json;

@@ -1,12 +1,11 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.event.tanorpg.CustomCraftEvent;
 import com.github.tanokun.tanorpg.event.tanorpg.CustomShopEvent;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
@@ -88,7 +87,7 @@ public class ShopManager implements Listener {
                             shop.getItem(uuid).getItem(), shop.getItem(uuid).getPrice(), shop));
                     e.getWhoClicked().sendMessage(TanoRPG.PX + "購入しました！");
                     e.getWhoClicked().getInventory().addItem(shop.getItem(uuid).getItem().getItem());
-                    e.getWhoClicked().getOpenInventory().setItem(0, MenuManager.createItem(Material.EMERALD,
+                    e.getWhoClicked().getOpenInventory().setItem(0, ItemUtils.createItem(Material.EMERALD,
                             "§6§l所持金: §b" + GamePlayerManager.getPlayer(e.getWhoClicked().getUniqueId()).getMoney(),
                             1, false));
                 } else {

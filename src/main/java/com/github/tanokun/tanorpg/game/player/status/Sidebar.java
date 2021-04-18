@@ -7,7 +7,7 @@ import com.github.tanokun.tanorpg.game.mission.Mission;
 import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.mission.task.MissionTask;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
-import com.github.tanokun.tanorpg.util.scoreboard.FastBoard;
+import com.github.tanokun.api.scoreboard.FastBoard;
 import org.bukkit.entity.Player;
 
 import java.util.*;

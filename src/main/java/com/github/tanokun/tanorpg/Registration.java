@@ -29,13 +29,7 @@ import com.github.tanokun.tanorpg.game.player.skill.execute.warrior.PlayerSkLine
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
 import com.github.tanokun.tanorpg.game.shop.sell.Sell;
 import com.github.tanokun.tanorpg.listener.*;
-import com.github.tanokun.tanorpg.menu.MenuManager;
-import com.github.tanokun.tanorpg.menu.mission.AllMissionMenu;
-import com.github.tanokun.tanorpg.menu.mission.MissionCheck;
-import com.github.tanokun.tanorpg.menu.player.MissionMenu;
-import com.github.tanokun.tanorpg.menu.player.SetJobMenu;
-import com.github.tanokun.tanorpg.menu.player.StatusMainMenu;
-import com.github.tanokun.tanorpg.menu.player.StatusSkillMenu;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.Glowing;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import com.github.tanokun.tanorpg.util.task.AutoSaveTask;
@@ -77,7 +71,7 @@ public class Registration {
     public void registerListener(){
         Bukkit.getPluginManager().registerEvents(new BreakBlockEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new DamageEventListener(), plugin);
-        Bukkit.getPluginManager().registerEvents(new MenuManager(), plugin);
+        Bukkit.getPluginManager().registerEvents(new ItemUtils(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerJoinEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new PlayerQuitEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ComboManager(), plugin);
@@ -85,7 +79,6 @@ public class Registration {
         Bukkit.getPluginManager().registerEvents(new DeathEventListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new ShopManager(), plugin);
         Bukkit.getPluginManager().registerEvents(new CraftManager(), plugin);
-        Bukkit.getPluginManager().registerEvents(new Sell(), plugin);
         Bukkit.getPluginManager().registerEvents(new SkillShortCutListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new NpcClickListener(), plugin);
         Bukkit.getPluginManager().registerEvents(new EntityKillMissionEventListener(), plugin);
@@ -119,15 +112,6 @@ public class Registration {
         new PlayerRegenerationTask().runTaskTimerAsynchronously(plugin, 1, 80);
         new SidebarTask().runTaskTimerAsynchronously(plugin, 1, 100);
         TanoRPG.getEntitySpawnerManager().runTaskTimerAsynchronously(plugin, 1, 20);
-    }
-
-    public void registerMenus() {
-        MenuManager.registerMenu(new SetJobMenu());
-        MenuManager.registerMenu(new StatusMainMenu(null));
-        MenuManager.registerMenu(new StatusSkillMenu(null));
-        MenuManager.registerMenu(new MissionMenu(null));
-        MenuManager.registerMenu(new MissionCheck());
-        MenuManager.registerMenu(new AllMissionMenu(null));
     }
 
     public void registerSkills() {

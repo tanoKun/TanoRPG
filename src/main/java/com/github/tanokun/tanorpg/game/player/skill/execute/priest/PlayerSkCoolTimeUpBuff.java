@@ -7,7 +7,7 @@ import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.buff.Buff;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffSelf;
 import com.github.tanokun.tanorpg.game.player.status.buff.BuffType;
-import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
+import com.github.tanokun.api.particle.ParticleEffect;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;

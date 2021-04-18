@@ -3,7 +3,7 @@ package com.github.tanokun.tanorpg.game.shop;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -27,11 +27,11 @@ public class ShopItem {
         this.uuid = UUID.randomUUID().toString();
         this.owner = owner;
         this.inv = Bukkit.createInventory(null, 27, "§6§l購入確認 " + "§7(ID: " + owner +")");
-        ItemStack BSG = MenuManager.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false);
+        ItemStack BSG = ItemUtils.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false);
         for (int i = 1; i < 27; i++) {
             inv.setItem(i - 1, BSG);
         }
-        inv.setItem(11, MenuManager.createItem(Material.GOLD_INGOT, "§6§l値段: §b" + price + " " + TanoRPG.MONEY, 1, false));
+        inv.setItem(11, ItemUtils.createItem(Material.GOLD_INGOT, "§6§l値段: §b" + price + " " + TanoRPG.MONEY, 1, false));
         ItemStack show = item.getItem();
         ItemMeta meta = show.getItemMeta();
         List<String> lore = meta.getLore();
@@ -39,8 +39,8 @@ public class ShopItem {
         meta.setLore(lore);
         show.setItemMeta(meta);
         inv.setItem(15, show);
-        inv.setItem(18, MenuManager.createItem(Material.RED_WOOL, "§c戻る", 1, true));
-        inv.setItem(26, MenuManager.createItem(Material.GREEN_WOOL, "§a購入する", 1, true));
+        inv.setItem(18, ItemUtils.createItem(Material.RED_WOOL, "§c戻る", 1, true));
+        inv.setItem(26, ItemUtils.createItem(Material.GREEN_WOOL, "§a購入する", 1, true));
     }
 
     public Item getItem() {return item;}
@@ -48,7 +48,7 @@ public class ShopItem {
     public long getPrice() {return price;}
     public void openCheck(Player player){
         TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 10, 1);
-        inv.setItem(0, MenuManager.createItem(Material.EMERALD,
+        inv.setItem(0, ItemUtils.createItem(Material.EMERALD,
                 "§6§l所持金: §b" + GamePlayerManager.getPlayer(player.getUniqueId()).getMoney(),
                 1, false));
         player.openInventory(inv);

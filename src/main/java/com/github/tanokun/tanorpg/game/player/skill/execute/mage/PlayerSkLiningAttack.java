@@ -10,7 +10,7 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.player.skill.AttackSkill;
 import com.github.tanokun.tanorpg.game.player.skill.Skill;
 import com.github.tanokun.tanorpg.game.player.status.StatusType;
-import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
+import com.github.tanokun.api.particle.ParticleEffect;
 import net.minecraft.server.v1_15_R1.EntityLightning;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import net.minecraft.server.v1_15_R1.PacketPlayOutSpawnEntity;

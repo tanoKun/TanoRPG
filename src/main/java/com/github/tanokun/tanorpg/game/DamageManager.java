@@ -36,6 +36,7 @@ public class DamageManager {
 
     public static void createDamage(long damage, Entity attacker, Entity target){
         final String[] hp = {null};
+        if (target.isDead()) return;
         new BukkitRunnable(){
             @Override
             public void run() {

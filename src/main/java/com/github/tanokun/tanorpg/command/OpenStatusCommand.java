@@ -16,7 +16,7 @@ public class OpenStatusCommand extends Command {
     @Override
     public boolean execute(CommandSender sender, String[] args) {
         TanoRPG.playSound((Player)sender, Sound.ENTITY_SHULKER_OPEN, 10, 1);
-        new StatusMainMenu((Player) sender).openInv((Player) sender);
+        StatusMainMenu.INVENTORY().open((Player) sender);
         return true;
     }
    @Override

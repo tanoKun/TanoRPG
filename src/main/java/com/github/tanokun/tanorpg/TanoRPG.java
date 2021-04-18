@@ -1,5 +1,6 @@
 package com.github.tanokun.tanorpg;
 
+import com.github.tanokun.api.smart_inv.inv.InventoryManager;
 import com.github.tanokun.tanorpg.command.register.Register;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
@@ -36,6 +37,7 @@ public final class TanoRPG extends JavaPlugin {
     private static Plugin plugin;
     private static Economy econ = null;
     private static EntitySpawnerManager entitySpawnerManager = null;
+    private static InventoryManager inventoryManager;
     public static final String PX = "§6[§a-｜ §b§lSystem§a ｜-§6] §7=> §b";
     public static final String PX_BUFF_UP = "§7[-｜ バフ付与 ｜-] §7=> ";
     public static final String PX_BUFF_DOWN = "§7[-｜ バフ解除 ｜-] §7=> ";
@@ -46,6 +48,8 @@ public final class TanoRPG extends JavaPlugin {
     public void onEnable() {
         plugin = this;
         entitySpawnerManager = new EntitySpawnerManager();
+        inventoryManager = new InventoryManager(this);
+        inventoryManager.init();
         IP = getPlugin().getConfig().getString("server-ip");
         Bukkit.broadcastMessage(TanoRPG.PX + "プレイヤーデータ読み込み中...");
         for(Player player : Bukkit.getOnlinePlayers()){
@@ -60,7 +64,6 @@ public final class TanoRPG extends JavaPlugin {
         registration.registerConfigs();
         registration.registerCommand();
         registration.registerTask();
-        registration.registerMenus();
         registration.registerOthers();
         registration.registerListener();
         registration.registerSkills();
@@ -88,8 +91,6 @@ public final class TanoRPG extends JavaPlugin {
         removeEntities();
         for(Player player : Bukkit.getOnlinePlayers()) {
             MissionManager.loadData(player.getUniqueId());
-        }
-        for(Player player : Bukkit.getOnlinePlayers()){
             Sidebar.setupSidebar(player);
             player.removeMetadata("COMBO", this);
         }
@@ -115,6 +116,7 @@ public final class TanoRPG extends JavaPlugin {
     public static Economy getEcon() {return econ;}
     public static Plugin getPlugin () {return plugin;}
     public static EntitySpawnerManager getEntitySpawnerManager() {return entitySpawnerManager;}
+    public static InventoryManager getInventoryManager() {return inventoryManager;}
 
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return Register.getCommand(command.getName()).tabComplete(sender, args);
@@ -126,6 +128,12 @@ public final class TanoRPG extends JavaPlugin {
 
     public static void playSound(Player player, Sound sound, int volume, double v2){
         player.playSound(player.getLocation(), sound, volume, (float) v2);
+    }
+
+    public static void playSound(Player[] players, Sound sound, int volume, double v2){
+        for(Player player : players){
+            player.playSound(player.getLocation(), sound, volume, (float) v2);
+        }
     }
 
     private static void removeEntities(){

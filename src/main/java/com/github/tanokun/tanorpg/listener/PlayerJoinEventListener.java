@@ -5,7 +5,8 @@ import com.github.tanokun.tanorpg.game.player.GamePlayerManager;
 import com.github.tanokun.tanorpg.game.mission.MissionManager;
 import com.github.tanokun.tanorpg.game.player.skill.combo.ComboManager;
 import com.github.tanokun.tanorpg.game.player.status.Sidebar;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.menu.player.SetJobMenu;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -32,7 +33,7 @@ public class PlayerJoinEventListener implements Listener {
                     player.teleport(new Location(Bukkit.getWorld("world"), -814, 49, 97, 0, 0));
                     Sidebar.setupSidebar(e.getPlayer());
                     player.getInventory().clear();
-                    MenuManager.getMenu("§c§l職業選択 §7説明をよく読んで選択しよう！").openInv(player);
+                    SetJobMenu.INVENTORY().open(player);
                     for (Player all : Bukkit.getOnlinePlayers()){
                         all.sendMessage(join + "§d" + player.getName() + "§dが初Joinしました！");
                     }

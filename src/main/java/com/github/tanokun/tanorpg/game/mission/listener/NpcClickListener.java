@@ -18,9 +18,7 @@ import java.util.HashSet;
 import java.util.UUID;
 
 public class NpcClickListener implements Listener {
-    public static final HashMap<UUID, Mission> meta_Mission = new HashMap<>();
-    public static final HashSet<UUID> flag_nowMissionEvent = new HashSet<>();
-    public static final HashMap<UUID, Integer> flag_selNPC_ID = new HashMap<>();
+
     @EventHandler
     public void onClick(NPCRightClickEvent e){
         Player player = e.getClicker();
@@ -29,13 +27,13 @@ public class NpcClickListener implements Listener {
         int id = npc.getId();
         if (MissionManager.getMission(id).isEmpty()) return;
 
-        if (flag_nowMissionEvent.contains(e.getClicker().getUniqueId())) return;
+        if (GamePlayerManager.flag_nowMissionEvent.contains(e.getClicker().getUniqueId())) return;
 
         for (Mission activeMission : MissionManager.getActiveMissions(player.getUniqueId())) {
             if (!(activeMission.getNPC_ID() == id)) continue;
             if (activeMission.isActiveClear(player.getUniqueId())) {
                 Mission finalMission = activeMission;
-                flag_nowMissionEvent.add(e.getClicker().getUniqueId());
+                GamePlayerManager.flag_nowMissionEvent.add(e.getClicker().getUniqueId());
                 new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -44,9 +42,7 @@ public class NpcClickListener implements Listener {
                         } catch (Exception exception) {
                             exception.printStackTrace();
                         }
-                        flag_nowMissionEvent.remove(e.getClicker().getUniqueId());
-                        flag_selNPC_ID.remove(e.getClicker().getUniqueId());
-                        meta_Mission.remove(e.getClicker().getUniqueId());
+                        GamePlayerManager.flag_nowMissionEvent.remove(e.getClicker().getUniqueId());
                         this.cancel();
                         return;
                     }
@@ -56,7 +52,6 @@ public class NpcClickListener implements Listener {
 
         if (MissionManager.getMission(id).contains(MissionManager.getMission(
                 gamePlayer.getActive_mission_NPC_ID(), gamePlayer.getActive_mission_NPC_Name()))) return;
-        flag_selNPC_ID.put(e.getClicker().getUniqueId(), id);
-        new AllMissionMenu(e.getClicker().getPlayer()).openInv(e.getClicker().getPlayer());
+        AllMissionMenu.INVENTORY(id).open(player);
     }
 }

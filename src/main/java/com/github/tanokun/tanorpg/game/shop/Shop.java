@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.menu.MenuManager;
+import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -24,7 +24,7 @@ public class Shop {
         this.id = id;
         this.items = items;
         Inventory inventory = Bukkit.createInventory(null, 45, "§6§lShop: " + name + " §7(ID: " + id + ")");
-        ItemStack BSG = MenuManager.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false);
+        ItemStack BSG = ItemUtils.createItem(Material.YELLOW_STAINED_GLASS_PANE, "    ", 1, false);
 
         for (int i = 1; i <= 18; i++){
             if (i <= 9){
