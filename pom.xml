@@ -124,5 +124,10 @@
             <version>2.0.27-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
+        <dependency>
+            <groupId>com.comphenix.protocol</groupId>
+            <artifactId>ProtocolLib</artifactId>
+            <version>4.6.0</version>
+        </dependency>
     </dependencies>
 </project>

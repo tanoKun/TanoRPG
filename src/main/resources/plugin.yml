@@ -2,41 +2,4 @@ name: TanoRPG
 version: ${project.version}
 main: com.github.tanokun.tanorpg.TanoRPG
 api-version: 1.15
-depend: [Vault, WorldGuard, Citizens]
-commands:
-  tanorpg:
-    permission: tanorpg.command.tanorpg
-    aliases: [tr]
-  giveitem:
-    permission: tanorpg.command.giveitem
-    aliases: [gi]
-  mobspawn:
-    permission: tanorpg.command.mobspawn
-    aliases: [ms]
-  giveskitem:
-    permission: tanorpg.command.giveskitem
-    aliases: [gs]
-  re:
-    permission: tanorpg.command.reload
-  opencraft:
-  openshop:
-  opensell:
-  hat:
-    aliases: [h]
-  status:
-    aliases: [st]
-  test:
-    permission: tanokun.tanorpg.command.test
-permissions:
-  tanorpg.command.tanorpg:
-    default: op
-  tanorpg.command.giveitem:
-    default: op
-  tanorpg.command.mobspawn:
-    default: op
-  tanorpg.command.test:
-    default: op
-  tanorpg.command.giveskitem:
-    default: op
-  tanorpg.command.reload:
-    default: op
+depend: [Vault, Citizens, ProtocolLib]

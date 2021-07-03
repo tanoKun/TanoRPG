@@ -1,71 +1,95 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.util.ItemUtils;
-import org.bukkit.Bukkit;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-
 import java.util.ArrayList;
-import java.util.List;
 
-public class Craft {
-    private ArrayList<CraftItem> items;
-    private String name;
-    private String id;
-    private Inventory inventory;
-    public Craft(String name, String id, ArrayList<CraftItem> items) {
-        this.name = name;
-        this.id = id;
-        this.items = items;
-        Inventory inventory = Bukkit.createInventory(null, 45, "§b§lCraft: " + name + " §7(ID: " + id + ")");
-        ItemStack BSG = ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "    ", 1, false);
-        for (int i = 1; i <= 18; i++){
-            if (i <= 9){
-                inventory.setItem(i - 1, BSG);
-            } else {
-                inventory.setItem(i + 26, BSG);
-            }
-        }
-        for (int i = 1; i <= 7; i++){
-            if (i <= 4){
-                inventory.setItem(i * 9, BSG);
-            } else {
-                inventory.setItem(8 + (i - 4) * 9, BSG);
-            }
-        }
-        int table = 0;
-        int slot = 10;
-        int i = 1;
-        for (CraftItem item : items){
-            if (i == 8){slot += 2; i = 1; table += 1;}
-            if (table == 3) break;
-            ItemStack show = item.getItem().getItem();
-            ItemMeta meta = show.getItemMeta();
-            List<String> lore = meta.getLore();
-            lore.add("  "); lore.add("§7" + item.getUuid());
-            meta.setLore(lore);
-            show.setItemMeta(meta);
-            inventory.setItem(slot, show);
-            slot += 1;
-            i += 1;
-        }
-        this.inventory = inventory;
+public class Craft implements InventoryProvider {
+    private final String id;
+
+    private final String name;
+
+    private final ArrayList<CraftItem> items;
+
+    private final int npcId;
+
+    private final String permission;
+
+    public SmartInventory getInv(){
+        return SmartInventory.builder()
+                 .id(id)
+                 .title("§d§lクラフト「" + name + "§d§l」")
+                 .update(false)
+                 .provider(this)
+                 .size(5, 9)
+                 .build();
     }
-    public void openCraft(Player player){
-        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 10, 1);
-        player.openInventory(inventory);}
-    public CraftItem getItem(String uuid) {
-        try {
-            for (CraftItem item : items){
-                if (item.getUuid().equals(uuid)) return item;}
-        }catch (Exception e){
-            return null;
-        }
-        return null;
+
+    public void init(Player player, InventoryContents contents) {
+        Member member = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
+        contents.fillBorders(ClickableItem.empty(ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, " ", 1, false)));
+
+        ArrayList<CraftItem> barrier = new ArrayList<>();
+        items.stream().forEach(item -> {
+            if (!item.isPermission() || player.isOp())
+                contents.add(ClickableItem.of(item.getAfterItem(), e -> {
+                    TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
+                    item.getInv().open(player);
+                }));
+            else
+                if (!member.getOpenPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
+                else
+                    contents.add(ClickableItem.of(item.getAfterItem(), e -> {
+                        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
+                        item.getInv().open(player);
+                    }));
+        });
+        barrier.stream().forEach(item -> {
+            contents.add(ClickableItem.of(item.getAfterItem(), e -> {
+                TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 1);
+                player.sendMessage(TanoRPG.PX + "§cそのクラフトは開放させていません");
+            }));
+        });
+    }
+
+
+    public Craft(String id, String name, ArrayList<CraftItem> items, boolean can, int npcId) {
+        this.id = id;
+        this.name = name;
+        this.items = items;
+        this.npcId = npcId;
+        this.permission = can ? "craft." + id + "." + name : "";
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<CraftItem> getItems() {
+        return items;
+    }
+
+    public int getNpcId() {
+        return npcId;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public boolean isPermission(){
+        return permission.equals("");
     }
 }

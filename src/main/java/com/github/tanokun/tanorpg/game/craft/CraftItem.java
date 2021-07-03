@@ -1,83 +1,86 @@
 package com.github.tanokun.tanorpg.game.craft;
 
-import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.itemtype.base.Item;
 import com.github.tanokun.tanorpg.util.ItemUtils;
-import org.bukkit.Bukkit;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
 
-public class CraftItem {
-    private Item afterItem;
-    private ArrayList<Item> beforeItems;
-    private ArrayList<Integer> beforeItemsCount;
-    private long price;
-    private String owner;
-    private Inventory inv;
-    private String uuid;
-    public CraftItem(ArrayList<Item> beforeItems, ArrayList<Integer> beforeItemsCount, Item afterItem, long price, String owner){
+public class CraftItem implements InventoryProvider {
+    private final ItemStack afterItem;
+
+    private final ArrayList<ItemStack> necItems;
+
+    private final ArrayList<ItemStack> necTools;
+
+    private final long price;
+
+    private final String permission;
+
+    public SmartInventory getInv(){
+        return SmartInventory.builder()
+                .id(afterItem.getItemMeta().getDisplayName())
+                .title("§d§lクラフト確認")
+                .update(false)
+                .provider(this)
+                .size(6, 9)
+                .build();
+    }
+
+    public CraftItem(String id, String name, ItemStack afterItem, ArrayList<ItemStack> beforeItems, ArrayList<ItemStack> necTools, long price, boolean can) {
         this.afterItem = afterItem;
-        this.beforeItems = beforeItems;
-        this.beforeItemsCount = beforeItemsCount;
+        this.necItems = beforeItems;
+        this.necTools = necTools;
         this.price = price;
-        this.owner = owner;
-        this.uuid = UUID.randomUUID().toString();
-        inv = Bukkit.createInventory(null,
-                4, "§6§lクラフト確認 §7(ID: " + owner + ")");
-        ItemStack BSG = ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, "    ", 1, false);
-        for (int i = 1; i < 54; i++) {
-            inv.setItem(i - 1, BSG);
+        this.permission = can ? "craft." + id + "." + name + "." + afterItem.getItemMeta().getDisplayName() : "";
+    }
+
+    @Override
+    public void init(Player player, InventoryContents contents) {
+        contents.fill(ClickableItem.empty(ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, " ", 1, false)));
+        contents.set(3, 7, ClickableItem.empty(afterItem));
+        contents.set(3, 5, ClickableItem.empty(ItemUtils.createItem(Material.ARROW, "§b§l作成後", 1, true, 1)));
+        contents.set(5, 8, ClickableItem.of(ItemUtils.createItem(Material.ANVIL, "§b§lクラフトする", 1, true, 1), e -> {
+
+        }));
+
+        contents.fillRect(2, 1, 4, 3, ClickableItem.empty(new ItemStack(Material.AIR)));
+        for (int i = 0; i < necItems.size(); i++) {
+            contents.add(ClickableItem.empty(necItems.get(i - 1)));
         }
-        ItemStack show = afterItem.getItem();
-        ItemMeta meta = show.getItemMeta();
-        List<String> lore = meta.getLore();
-        lore.add("  "); lore.add("§7" + uuid);
-        meta.setLore(lore);
-        show.setItemMeta(meta);
-        inv.setItem(34, show);
-        inv.setItem(32, ItemUtils.createItem(Material.GOLD_INGOT, "§6§l値段: " + price + " " + TanoRPG.MONEY, 1, false));
-        inv.setItem(53, ItemUtils.createItem(Material.ANVIL, "§aクラフトする", 1, true));
-        int slot = 19;
-        int size = beforeItems.size();
-        for (int i = 1; i < 10; i++) {
-            if (size > i - 1){
-                ItemStack item = beforeItems.get(i - 1).getItem();
-                item.setAmount(beforeItemsCount.get(i - 1));
-                inv.setItem(slot, item);
-            } else {
-                inv.setItem(slot, new ItemStack(Material.AIR));
-            }
-            if (i == 3){
-                slot += 7;
-            } else if (i == 6){
-                slot += 7;
-            } else {
-                slot += 1;
-            }
+
+        contents.fillRect(0, 1, 0, 3, ClickableItem.empty(new ItemStack(Material.AIR)));
+        for (int i = 0; i < necTools.size(); i++) {
+            contents.add(ClickableItem.empty(necTools.get(i - 1)));
         }
     }
 
-    public Item getItem() {return afterItem;}
-    public String getUuid() {return uuid;}
-    public ArrayList<Item> getBeforeItems(){return beforeItems;}
-    public ArrayList<Integer> getBeforeItemsCount() {return beforeItemsCount;}
-
-    public void openCheck(Player player) {
-        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 10, 1);
-        player.openInventory(inv);
-        player.updateInventory();
-    }
-    public long getPrice() {return price;}
-
-    public Item getAfterItem() {
+    public ItemStack getAfterItem() {
         return afterItem;
+    }
+
+    public ArrayList<ItemStack> getNecItems() {
+        return necItems;
+    }
+
+    public ArrayList<ItemStack> getNecTools() {
+        return necTools;
+    }
+
+    public long getPrice() {
+        return price;
+    }
+
+    public String getPermission() {
+        return permission;
+    }
+
+    public boolean isPermission(){
+        return permission.equals("");
     }
 }

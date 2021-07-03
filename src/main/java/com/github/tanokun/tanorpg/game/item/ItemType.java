@@ -1,14 +1,26 @@
 package com.github.tanokun.tanorpg.game.item;
 
 public enum ItemType {
-    MATERIAL("素材"),
-    WEAPON("武器"),
-    MAGIC_WEAPON("魔法武器"),
-    EQUIPMENT("装備"),
-    NULL("その他");
+    MATERIAL("素材", "MATERIAL"),
+    WEAPON("武器", "WEAPON"),
+    MAGIC_WEAPON("魔法武器", "MAGIC_WEAPON"),
+    EQUIPMENT("装備", "EQUIPMENT"),
+    RUNE("ルーン", "RUNE"),
+    ACCESSORY("アクセサリー", "ACCESSORY"),
+    NULL("その他", "NULL");
 
-    private String name;
+    private final String name;
 
-    private ItemType(String name){this.name = name;}
-    public String getName() {return name;}
+    private final String type;
+
+    ItemType(String name, String type){this.name = name;
+        this.type = type;
+    }
+    public String getName() {
+        return name;
+    }
+
+    public String getType() {
+        return type;
+    }
 }

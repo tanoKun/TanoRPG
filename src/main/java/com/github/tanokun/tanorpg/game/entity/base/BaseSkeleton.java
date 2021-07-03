@@ -2,48 +2,55 @@ package com.github.tanokun.tanorpg.game.entity.base;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
-import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.entity.EntityDropItems;
+import com.github.tanokun.tanorpg.player.EquipmentMap;
+import com.github.tanokun.tanorpg.player.status.StatusMap;
+import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.io.Config;
+import net.minecraft.server.v1_15_R1.EntitySkeleton;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import net.minecraft.server.v1_15_R1.EntityZombie;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftSkeleton;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftZombie;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Skeleton;
+import org.bukkit.entity.Zombie;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseSkeleton extends ObjectEntity {
-    public BaseSkeleton(Config config) {
-        super(config);
+
+    public BaseSkeleton(Config entityConfig, String name, StatusMap statusMap, EquipmentMap equipMap, EntityDropItems dropItems, int exp, int level) {
+        super(entityConfig, name, statusMap, equipMap, dropItems, exp, level);
     }
 
     @Override
     public Entity spawn(Location location) {
-        Skeleton skeleton = (Skeleton) location.getWorld().spawnEntity(location, EntityType.SKELETON);
-        setOptions(skeleton);
-        ActiveEntity activeEntity = new ActiveEntity(this, skeleton);
-        EntityManager.registerActiveEntity(activeEntity);
-        return skeleton;
-    }
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        Skeleton entity = new CraftSkeleton((CraftServer) Bukkit.getServer(),
+                new EntitySkeleton(EntityTypes.SKELETON, craftWorld.getHandle().getMinecraftWorld()));
+        entity = craftWorld.spawn(location, entity.getClass());
 
-    @Override
-    public Entity setOptions(Entity entity) {
-        Skeleton skeleton = (Skeleton) entity;
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getStatusMap().getStatus(StatusType.HP));
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(
+                entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue() * (1 + (getStatusMap().getStatus(StatusType.SPEED) / 100)));
 
-        skeleton.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
-        skeleton.setHealth(getHP());
+        entity.setCustomName(getName() + " §7[§dLv:§e" + getHasLevel() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
+        entity.setCustomNameVisible(true);
+        entity.setHealth(getStatusMap().getStatus(StatusType.HP));
+        entity.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), new ActiveEntity(this, entity)));
 
-        skeleton.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
-        if (!(getMainHand().equals(""))){skeleton.getEquipment().setItemInMainHand(ItemManager.getItem(getMainHand()).getItem());}
-        if (!(getOffHand().equals(""))){skeleton.getEquipment().setItemInOffHand(ItemManager.getItem(getOffHand()).getItem());}
-        if (!(getHelmet().equals(""))){skeleton.getEquipment().setHelmet(ItemManager.getItem(getHelmet()).getItem());}
-        if (!(getChestPlate().equals(""))){skeleton.getEquipment().setChestplate(ItemManager.getItem(getChestPlate()).getItem());}
-        if (!(getLeggings().equals(""))){skeleton.getEquipment().setLeggings(ItemManager.getItem(getLeggings()).getItem());}
-        if (!(getBoots().equals(""))){skeleton.getEquipment().setBoots(ItemManager.getItem(getBoots()).getItem());}
+        entity.getEquipment().setItemInMainHand(getEquipMap().getEquip(EquipmentMap.EquipmentType.MAIN));
+        entity.getEquipment().setItemInOffHand(getEquipMap().getEquip(EquipmentMap.EquipmentType.SUB));
+        entity.getEquipment().setHelmet(getEquipMap().getEquip(EquipmentMap.EquipmentType.HELMET));
+        entity.getEquipment().setChestplate(getEquipMap().getEquip(EquipmentMap.EquipmentType.CHESTPLATE));
+        entity.getEquipment().setLeggings(getEquipMap().getEquip(EquipmentMap.EquipmentType.LEGGINGS));
+        entity.getEquipment().setBoots(getEquipMap().getEquip(EquipmentMap.EquipmentType.BOOTS));
 
-        skeleton.setCustomNameVisible(true);
-        skeleton.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
-        skeleton.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));
         return entity;
     }
 }

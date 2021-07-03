@@ -1,0 +1,58 @@
+#初期設定
+options:
+  name: テストチュートリアル
+  npc: 195
+  lore:
+    - テストで作られている
+    - クエストです
+    - 色々ここに打ち込むよ！
+  difficulty: COMMON
+  result:
+    - アップルx2
+    - 職業開放
+
+#受注条件
+conditions:
+  #受注をするために必要なレベル
+  LEVEL: 2
+
+  #受注ができる職業
+  SKILL_CLASS:
+    - ARCHER
+
+  #受注をするために必要なクエストクリア
+  CLEARED:
+    - 始まりのクエスト
+
+tasks:
+  #NPCに話しかける -> SPEAK_TO_NPC [npc_id]
+  - SPEAK_TO_NPC 195 私に話しかけてみる
+
+#クエスト紹介アクション
+showQuestActions:
+  #player はクエストを受けている人 -> send [message]
+  - SEND よ！ [player] 調子はどうだい？
+  # ENTITY_CHICKEN_EGGはbukkitのやつ 3 は音量 0.5はピッチ -> sound [Sound] [volume] [pitch]
+  - SOUND ENTITY_CHICKEN_EGG 3 0.5
+  #待つ -> wait [tick]
+  - WAIT 40
+
+startQuestActions:
+  - SEND テストのめっせだよ!
+  - SOUND ENTITY_CHICKEN_EGG 3 0.5
+  - WAIT 2 seconds
+
+finishQuestAcitons:
+  - SEND よくやった！
+  - SOUND ENTITY_CHICKEN_EGG 3 0.5
+  - WAIT 40
+ # #appleはItemID 1 は個数 -> give [itemID] [amount]
+ # - GIVE apple 1
+ # - EXP 100
+ # # craft はshopでもいい testCraft はCraftID appleはその中でも作るItemID -> open [craft|shop] [ID] [itemID]
+ # - OPEN craft testCraft apple
+
+cancelQuestActions:
+  - SEND それは悲しいなぁ
+  - SOUND ENTITY_CHICKEN_EGG 3 0.5
+  - WAIT 40

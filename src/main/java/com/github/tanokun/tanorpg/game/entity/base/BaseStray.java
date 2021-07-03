@@ -2,49 +2,54 @@ package com.github.tanokun.tanorpg.game.entity.base;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
-import com.github.tanokun.tanorpg.game.entity.EntityManager;
-import com.github.tanokun.tanorpg.game.item.ItemManager;
+import com.github.tanokun.tanorpg.game.entity.EntityDropItems;
+import com.github.tanokun.tanorpg.player.EquipmentMap;
+import com.github.tanokun.tanorpg.player.status.StatusMap;
+import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.io.Config;
+import net.minecraft.server.v1_15_R1.EntitySkeleton;
+import net.minecraft.server.v1_15_R1.EntitySkeletonStray;
+import net.minecraft.server.v1_15_R1.EntityTypes;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftSkeleton;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftStray;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Skeleton;
 import org.bukkit.entity.Stray;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseStray extends ObjectEntity {
 
-    public BaseStray(Config config) {
-        super(config);
+    public BaseStray(Config entityConfig, String name, StatusMap statusMap, EquipmentMap equipMap, EntityDropItems dropItems, int exp, int level) {
+        super(entityConfig, name, statusMap, equipMap, dropItems, exp, level);
     }
 
     @Override
     public Entity spawn(Location location) {
-        Stray entity = (Stray) location.getWorld().spawnEntity(location, EntityType.STRAY);
-        setOptions(entity);
-        ActiveEntity activeEntity = new ActiveEntity(this, entity);
-        EntityManager.registerActiveEntity(activeEntity);
-        return entity;
-    }
+        CraftWorld craftWorld = (CraftWorld) location.getWorld();
+        Stray entity = new CraftStray((CraftServer) Bukkit.getServer(),
+                new EntitySkeletonStray(EntityTypes.STRAY, craftWorld.getHandle().getMinecraftWorld()));
+        entity = craftWorld.spawn(location, entity.getClass());
 
-    @Override
-    public Entity setOptions(Entity entity) {
-        Stray target = (Stray) entity;
+        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getStatusMap().getStatus(StatusType.HP));
+        entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(
+                entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue() * (1 + (getStatusMap().getStatus(StatusType.SPEED) / 100)));
 
-        target.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getHP());
-        target.setHealth(getHP());
+        entity.setCustomName(getName() + " §7[§dLv:§e" + getHasLevel() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
+        entity.setCustomNameVisible(true);
+        entity.setHealth(getStatusMap().getStatus(StatusType.HP));
+        entity.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), new ActiveEntity(this, entity)));
 
-        target.setCustomName(getName() + " §7[§dLv:§e" + getLEVEL() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
-        if (!(getMainHand().equals(""))){target.getEquipment().setItemInMainHand(ItemManager.getItem(getMainHand()).getItem());}
-        if (!(getOffHand().equals(""))){target.getEquipment().setItemInOffHand(ItemManager.getItem(getOffHand()).getItem());}
-        if (!(getHelmet().equals(""))){target.getEquipment().setHelmet(ItemManager.getItem(getHelmet()).getItem());}
-        if (!(getChestPlate().equals(""))){target.getEquipment().setChestplate(ItemManager.getItem(getChestPlate()).getItem());}
-        if (!(getLeggings().equals(""))){target.getEquipment().setLeggings(ItemManager.getItem(getLeggings()).getItem());}
-        if (!(getBoots().equals(""))){target.getEquipment().setBoots(ItemManager.getItem(getBoots()).getItem());}
-
-        target.setCustomNameVisible(true);
-        target.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(getSpeed());
-        target.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), true));
+        entity.getEquipment().setItemInMainHand(getEquipMap().getEquip(EquipmentMap.EquipmentType.MAIN));
+        entity.getEquipment().setItemInOffHand(getEquipMap().getEquip(EquipmentMap.EquipmentType.SUB));
+        entity.getEquipment().setHelmet(getEquipMap().getEquip(EquipmentMap.EquipmentType.HELMET));
+        entity.getEquipment().setChestplate(getEquipMap().getEquip(EquipmentMap.EquipmentType.CHESTPLATE));
+        entity.getEquipment().setLeggings(getEquipMap().getEquip(EquipmentMap.EquipmentType.LEGGINGS));
+        entity.getEquipment().setBoots(getEquipMap().getEquip(EquipmentMap.EquipmentType.BOOTS));
         return entity;
     }
 }

@@ -13,9 +13,7 @@ import java.nio.charset.StandardCharsets;
 public class Config {
     private FileConfiguration config;
     private File file;
-    private File folder;
     private String fileName;
-    private String folderPath;
     private Plugin plugin;
     public Config(Plugin plugin){
         this.file = new File(plugin.getDataFolder(), "config.yml");
@@ -32,13 +30,6 @@ public class Config {
         this.fileName = fileName;
         this.plugin = plugin;
     }
-    public Config(String fileName, String folder, Plugin plugin){
-        this.file = new File(plugin.getDataFolder() + File.separator + folder, fileName);
-        this.folder = new File(plugin.getDataFolder() + File.separator + folder);
-        this.fileName = fileName;
-        this.plugin = plugin;
-        this.folderPath = folder;
-    }
     public boolean exists(){
         return file.exists();
     }
@@ -46,34 +37,23 @@ public class Config {
         if (file.exists()){
             return true;
         }else{
-            if (folder != null) {
-                folder.mkdirs();
-            }
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                return true;
             }
         }
         return false;
     }
     public void saveDefaultConfig() {
         if (!file.exists()) {
-            if (folder != null) {
-                plugin.saveResource(folderPath + File.separator + fileName, false);
-            }else {
-                plugin.saveResource(fileName, false);
-            }
+            plugin.saveResource(fileName, false);
         }
     }
     public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(file);
         InputStream defConfigStream;
-        if (folder != null) {
-            defConfigStream = plugin.getResource(folderPath + File.separator + fileName);
-        }else {
-            defConfigStream = plugin.getResource(fileName);
-        }
+        defConfigStream = plugin.getResource(fileName);
         if (defConfigStream == null) {
             return;
         }

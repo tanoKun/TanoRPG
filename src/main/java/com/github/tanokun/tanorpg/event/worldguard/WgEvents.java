@@ -8,16 +8,18 @@ import com.sk89q.worldguard.protection.regions.RegionContainer;
 import com.sk89q.worldguard.protection.regions.RegionQuery;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 
 import javax.annotation.Nonnull;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class WgEvents implements Listener {
+public class WgEvents {
     static RegionContainer container;
 
-    public static void setup(){container = WorldGuard.getInstance().getPlatform().getRegionContainer();}
+    public static void setup(){
+        container = WorldGuard.getInstance().getPlatform().getRegionContainer();
+        WorldGuard.getInstance().getPlatform().getSessionManager().registerHandler(Entry.factory, null);
+    }
     @Nonnull
     public static Set<ProtectedRegion> getRegions(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
