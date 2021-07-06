@@ -1,15 +1,13 @@
 package com.github.tanokun.tanorpg.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.OpenPermissionMap;
+import com.github.tanokun.tanorpg.game.OpenPermissionMap;
 import com.github.tanokun.tanorpg.player.quest.QuestMap;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.skill.SkillMap;
 import com.github.tanokun.tanorpg.player.status.PlayerStatusMap;
-import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.player.warppoint.WarpPointMap;
 import com.github.tanokun.tanorpg.util.io.Config;
-import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 
 import java.io.File;

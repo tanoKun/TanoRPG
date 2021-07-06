@@ -15,6 +15,7 @@ public enum StatusType {
     HP("最大体力"),
     MP("最大マナ"),
     SPEED("スピードバフ", "%"),
+    LUCKY_ITEM("ドロップ増加", "%")
     ;
 
     private String name;

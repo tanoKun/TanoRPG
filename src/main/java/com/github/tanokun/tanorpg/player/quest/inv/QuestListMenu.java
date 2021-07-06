@@ -3,7 +3,9 @@ package com.github.tanokun.tanorpg.player.quest.inv;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.player.quest.Quest;
+import com.github.tanokun.tanorpg.player.quest.QuestData;
 import com.github.tanokun.tanorpg.player.quest.QuestManager;
+import com.github.tanokun.tanorpg.player.quest.condition.Condition;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.hologram.SelectableHologram;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
@@ -48,6 +50,9 @@ public class QuestListMenu implements InventoryProvider {
         Member m = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
 
         for (Quest quest : TanoRPG.getPlugin().getQuestManager().getQuests(npcId.getId())){
+            if (m.getQuestMap().getClearQuestNames().contains(quest.getName())) continue;
+            for (Condition condition : quest.getConditions()) if (!condition.execute(m)) continue;
+
             List<String> lore = new ArrayList<>();
             lore.add(" ");
             quest.getLore().forEach(lore::add);
@@ -91,6 +96,9 @@ public class QuestListMenu implements InventoryProvider {
                 Bukkit.getScheduler().runTask(TanoRPG.getPlugin(), () -> {
                     player.sendMessage(QuestManager.PX + "§aクエストを受注しました。");
                     TanoRPG.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 3, 2);
+                    QuestData questData = new QuestData(quest);
+                    m.getQuestMap().addQuest(questData);
+                    m.getQuestMap().setActiveQuest(questData);
                 });
             });
         };

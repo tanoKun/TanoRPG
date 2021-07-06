@@ -23,7 +23,10 @@ public class Folder {
     public List<Config> getFiles() {
         List<Config> configs = new ArrayList<>();
         for (File file : folder.listFiles()) {
-            configs.add(new Config(folderName + File.separator + file.getName(), plugin));
+            Config config = new Config(folderName + File.separator + file.getName(), plugin);
+            config.setFileName(file.getName());
+            configs.add(config);
+
         }
         return configs;
     }

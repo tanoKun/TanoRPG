@@ -5,6 +5,8 @@ import com.github.tanokun.tanorpg.player.inv.MainMenu;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
+import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -50,6 +52,9 @@ public class MainMenuListener implements Listener {
 
     @EventHandler
     public void onClose(InventoryCloseEvent e){
+        ItemStack item = e.getPlayer().getInventory().getItem(8);
+        if (item != null) e.getPlayer().getLocation().getWorld().dropItem(e.getPlayer().getLocation(), item);
+
         e.getPlayer().getInventory().setItem(8, ItemUtils.createItem(
                 Material.COMPASS, "§bMenu",
                 Arrays.asList(new String[]{"§f初期アイテム", "§f自分の情報を見ることができる", "§fコンパスはクエストの場所を指し示してくれるぞ"}), 1, true));

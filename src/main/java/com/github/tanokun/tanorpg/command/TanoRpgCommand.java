@@ -6,15 +6,22 @@ import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.entity.spawner.EntitySpawnerManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import com.github.tanokun.tanorpg.player.inv.SelSkillClassMenu;
 import com.github.tanokun.tanorpg.player.quest.QuestManager;
 import com.github.tanokun.tanorpg.util.command.Command;
 import com.github.tanokun.tanorpg.util.command.CommandContext;
 import com.github.tanokun.tanorpg.util.command.CommandPermission;
 import com.github.tanokun.tanorpg.util.command.TabComplete;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
+import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.PermissionDefault;
 
 import java.util.ArrayList;
@@ -190,5 +197,32 @@ public class TanoRpgCommand {
             configNames.stream().filter(t -> t.startsWith(search)).forEach(tc::add);
         }
         return tc;
+    }
+
+    @Command(
+            parentName = "test",
+            name = "init",
+            desc = ""
+    )
+    public void test_init(CommandSender sender, CommandContext commandContext) {
+        SmartInventory.builder()
+                .id("aaa")
+                .title("§9§l購入確認")
+                .update(false)
+                .provider((player, contents) -> {
+                    contents.set(1, 5, ClickableItem.of(new ItemStack(Material.STONE), e -> {
+                        int lastAmount = e.getCurrentItem().getAmount();
+                        if (lastAmount == 64) {
+                            e.getCurrentItem().setAmount(1);
+                            contents.setProperty("count", 1);
+                            return;
+                        }
+                        lastAmount = lastAmount * 2;
+                        e.getCurrentItem().setAmount(lastAmount);
+                        contents.setProperty("count", lastAmount);
+                    }));
+                })
+                .size(3, 9)
+                .build().open((Player) sender);
     }
 }

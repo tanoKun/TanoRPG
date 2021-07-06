@@ -5,10 +5,12 @@ import com.github.tanokun.tanorpg.command.TanoRpgCommand;
 import com.github.tanokun.tanorpg.event.PlayerArmorEquipEvent;
 import com.github.tanokun.tanorpg.event.worldguard.WgEvents;
 import com.github.tanokun.tanorpg.game.craft.CraftManager;
+import com.github.tanokun.tanorpg.game.craft.listener.OpenCraftListener;
 import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.entity.spawner.EntitySpawnerManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
+import com.github.tanokun.tanorpg.game.shop.listener.OpenShopListener;
 import com.github.tanokun.tanorpg.listener.DamageListener;
 import com.github.tanokun.tanorpg.listener.MainMenuListener;
 import com.github.tanokun.tanorpg.listener.PlayerInitListener;
@@ -95,6 +97,11 @@ public final class TanoRPG extends JavaPlugin {
             member.saveData();
         });
 
+        Bukkit.getWorlds().stream().forEach(world -> {
+            world.getEntities().stream().forEach(en -> {
+                if (en.hasMetadata("TanoRPG_Entity")) en.remove();
+            });
+        });
         dataManager.save();
 
     }
@@ -115,15 +122,15 @@ public final class TanoRPG extends JavaPlugin {
 
         craftManager = new CraftManager(null);
 
-        sidebarManager = new SidebarManager();
-
-        memberManager = new MemberManager();
-
-        questManager = new QuestManager(null, this);
-
         entityManager = new EntityManager(null);
 
         entitySpawnerManager = new EntitySpawnerManager(null);
+
+        questManager = new QuestManager(null, this);
+
+        sidebarManager = new SidebarManager();
+
+        memberManager = new MemberManager();
 
     }
 
@@ -135,6 +142,8 @@ public final class TanoRPG extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new ActionQuestListener(), this);
         Bukkit.getPluginManager().registerEvents(new TaskEventListener(), this);
         Bukkit.getPluginManager().registerEvents(new DamageListener(), this);
+        Bukkit.getPluginManager().registerEvents(new OpenCraftListener(), this);
+        Bukkit.getPluginManager().registerEvents(new OpenShopListener(), this);
     }
 
     private void registerCommands() {

@@ -25,8 +25,7 @@ conditions:
     - 始まりのクエスト
 
 tasks:
-  #NPCに話しかける -> SPEAK_TO_NPC [npc_id]
-  - SPEAK_TO_NPC 195 私に話しかけてみる
+  - ENTITY_KILL
 
 #クエスト紹介アクション
 showQuestActions:

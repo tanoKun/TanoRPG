@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.player.inv;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.OpenPermissionMap;
+import com.github.tanokun.tanorpg.game.OpenPermissionMap;
 import com.github.tanokun.tanorpg.player.Attack;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
 import com.github.tanokun.tanorpg.player.Member;

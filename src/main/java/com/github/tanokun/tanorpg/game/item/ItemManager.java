@@ -11,6 +11,8 @@ import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -18,10 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 public class ItemManager {
     private final HashMap<String, ItemBase> items = new HashMap<>();
@@ -36,29 +35,55 @@ public class ItemManager {
     final public static String firstWeapon = TanoRPG.getPlugin().getConfig().getString("first-job-warrior-weapon");
 
     public ItemManager(Player p){
+        if (p != null) p.sendMessage(TanoRPG.PX + "§bLoading item configs...");
+        else Bukkit.getConsoleSender().sendMessage("[TanoRPG] §bLoading item configs...");
         loadMaterialItem(p);
         loadWeaponItem(p);
         loadMagicWeaponItem(p);
         loadEquipmentItem(p);
         loadRuneItem(p);
         loadAccessoryItem(p);
+        if (p != null) p.sendMessage(TanoRPG.PX + " ");
+        else Bukkit.getConsoleSender().sendMessage(" ");
     }
 
     public void loadMaterialItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    Material item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "material", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "material";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
                     List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
                     StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
                         statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
                     });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
 
                     ItemMaterial item = new ItemMaterial(id, material, name, lore, statusMap, glowing, rarity);
                     item.setPrice(price);
@@ -67,41 +92,64 @@ public class ItemManager {
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e){
-            if (p != null){
-                p.sendMessage(TanoRPG.PX + "§c素材系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-              TanoRPG.getPlugin().getLogger().warning("素材系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    Material item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§a素材系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("素材系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public void loadWeaponItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    Weapon item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "weapon", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "weapon";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
                     List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
                     StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
                         statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
                     });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
-                    int lvl = config.getConfig().getInt(id + ".lvl", 0);
-                    int ct = config.getConfig().getInt(id + ".ct", 0);
-                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(id + ".proper").stream().forEach(job ->
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
+
+                    path = id + ".lvl";
+                    int lvl = config.getConfig().getInt(path, 0);
+
+                    path = id + ".ct";
+                    int ct = config.getConfig().getInt(path, 0);
+
+                    path = id + ".proper";
+                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(job ->
                             proper.add(SkillClass.valueOf((String) job)));
-                    List<Integer> combos = new ArrayList<>(); config.getConfig().getList(id + ".combo").stream().forEach(i ->
+
+                    path = id + ".combo";
+                    List<Integer> combos = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(i ->
                             combos.add(Integer.valueOf(String.valueOf(i))));
 
                     ItemWeapon item = new ItemWeapon(id, material, name, lore, statusMap, glowing, rarity);
@@ -115,40 +163,65 @@ public class ItemManager {
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e) {
-            if (p != null) {
-                p.sendMessage(TanoRPG.PX + "§c武器系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-                TanoRPG.getPlugin().getLogger().warning("武器系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    Weapon item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§a武器系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("武器系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public void loadMagicWeaponItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    MagicWeapon item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "magicWeapon", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "magicWeapon";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
                     List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
                     StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
                         statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
                     });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
-                    int lvl = config.getConfig().getInt(id + ".lvl", 0);
-                    int ct = config.getConfig().getInt(id + ".ct", 0);
-                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(id + ".proper").stream().forEach(job ->
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
+
+                    path = id + ".lvl";
+                    int lvl = config.getConfig().getInt(path, 0);
+
+                    path = id + ".ct";
+                    int ct = config.getConfig().getInt(path, 0);
+
+                    path = id + ".proper";
+                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(job ->
                             proper.add(SkillClass.valueOf((String) job)));
+
+                    path = id + ".combo";
+                    List<Integer> combos = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(i ->
+                            combos.add(Integer.valueOf(String.valueOf(i))));
 
                     ItemMagicWeapon item = new ItemMagicWeapon(id, material, name, lore, statusMap, glowing, rarity);
                     item.setPrice(price);
@@ -156,52 +229,76 @@ public class ItemManager {
                     item.setCoolTime(ct);
                     item.setNecLevel(lvl);
                     item.setProper(proper);
+                    item.setCombo(combos);
                     items.put(id, item);
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e) {
-            if (p != null) {
-                p.sendMessage(TanoRPG.PX + "§c武器系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-                TanoRPG.getPlugin().getLogger().warning("武器系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    MagicWeapon item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§a魔法武器系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("魔法武器系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public void loadEquipmentItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    Equipment item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "equip", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "equip";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
-                    List<String> lore = config.getConfig().getStringList(id + ".lore");
-                    EquipmentMap.EquipmentType equipmentType = null;
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
 
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
+                    List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
+                    StatusMap statusMap = new StatusMap();
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
+                        statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
+                    });
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
+
+                    path = id + ".lvl";
+                    int lvl = config.getConfig().getInt(path, 0);
+
+                    path = id + ".ct";
+                    int ct = config.getConfig().getInt(path, 0);
+
+                    path = id + ".proper";
+                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(job ->
+                            proper.add(SkillClass.valueOf((String) job)));
+
+                    EquipmentMap.EquipmentType equipmentType = null;
+                    path = id + ".equipType";
                     if (config.getConfig().isSet(id + ".equipType")){
-                        equipmentType = EquipmentMap.EquipmentType.valueOf(config.getConfig().getString(id + ".equipType"));
+                        equipmentType = EquipmentMap.EquipmentType.valueOf(config.getConfig().getString(path));
                     } else {
                         EquipmentMap.EquipmentType.valueOf(config.getConfig().getString(id + ".material").split("_")[1]);
                     }
 
-                    StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
-                        statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
-                    });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
-                    int lvl = config.getConfig().getInt(id + ".lvl", 0);
-                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(id + ".proper").stream().forEach(job ->
-                            proper.add(SkillClass.valueOf((String) job)));
                     Color color = null;
+                    path = id + ".color.*";
                     if (material.toString().contains("LEATHER") && config.getConfig().get(id + ".color.RED") != null &&
                             config.getConfig().get(id + ".color.GREEN") != null &&
                             config.getConfig().get(id + ".color.BLUE") != null) {
@@ -222,37 +319,51 @@ public class ItemManager {
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e) {
-            e.printStackTrace();
-            if (p != null) {
-                p.sendMessage(TanoRPG.PX + "§c装備系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-                TanoRPG.getPlugin().getLogger().warning("装備系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    Equipment item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§a装備系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("装備系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public void loadRuneItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    Rune item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "rune", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "rune";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
                     List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
                     StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
                         statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
                     });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
 
                     ItemRune item = new ItemRune(id, material, name, lore, statusMap, glowing, rarity);
                     item.setPrice(price);
@@ -261,57 +372,65 @@ public class ItemManager {
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e){
-            if (p != null){
-                p.sendMessage(TanoRPG.PX + "§cルーン系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-                TanoRPG.getPlugin().getLogger().warning("ルーン系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    Rune item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§aルーン系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("ルーン系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public void loadAccessoryItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    Accessory item configs loaded without errors.");
         try {
-            for (Config config : new Folder("items" + File.separator + "accessory", TanoRPG.getPlugin()).getFiles()) {
+            path = "items" + File.separator + "accessory";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
                 for (String id : config.getConfig().getKeys(false)) {
-                    String name = config.getConfig().getString(id + ".name", "unknown");
-                    Material material = Material.valueOf(config.getConfig().getString(id + ".material", "BARRIER"));
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
                     List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
                     StatusMap statusMap = new StatusMap();
-                    config.getConfig().getConfigurationSection(id + ".status").getKeys(false).forEach(text -> {
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
                         statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
                     });
-                    boolean glowing = config.getConfig().getBoolean(id + ".glowing", false);
-                    long price = config.getConfig().getLong(id + ".price", 0);
-                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(id + ".rarity", "COMMON"));
-                    Integer customModelData = config.getConfig().getInt(id + ".customModelData", 0);
 
-                    ItemAccessory item = new ItemAccessory(id, material, name, lore, statusMap, glowing, rarity);
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
+
+                    ItemRune item = new ItemRune(id, material, name, lore, statusMap, glowing, rarity);
                     item.setPrice(price);
                     item.setCustomModelData(customModelData);
                     items.put(id, item);
                     itemIDs.add(id);
                 }
             }
-        }catch (Exception e){
-            if (p != null){
-                p.sendMessage(TanoRPG.PX + "§cアクセサリー系アイテムのコンフィグでエラーが発生しました。");
-            } else {
-                TanoRPG.getPlugin().getLogger().warning("アクセサリー系アイテムのコンフィグでエラーが発生しました。");
-            }
+        } catch (Exception e){
+            errors.remove("§a    Accessory item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
-        if (p != null){
-            p.sendMessage(TanoRPG.PX + "§aアクセサリー系アイテムのコンフィグをロードしました。");
-        } else {
-            TanoRPG.getPlugin().getLogger().warning("アクセサリー系アイテムのコンフィグをロードしました。");
-        }
+        showErrors(errors, p);
     }
 
     public ItemBase getItem(String id) {
@@ -333,21 +452,6 @@ public class ItemManager {
             return getItem(id[1]);
         }
         return null;
-    }
-
-    public int getAmount(Player player, ItemStack item) {
-        int i = 0;
-        for (ItemStack is : player.getInventory().getContents()) {
-            if (is == null || is.getType().equals(Material.AIR)) continue;
-            String is_name = (is.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
-            String item_name = (item.getItemMeta().getDisplayName() == null) ? "" : item.getItemMeta().getDisplayName();
-            List<String> is_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
-            List<String> item_lore = (item.getItemMeta().getLore() != null) ? item.getItemMeta().getLore() : Arrays.asList("");
-            if (is_name.equals(item_name) && is_lore.equals(item_lore) && is.getType().equals(item.getType())) {
-                i = i + is.getAmount();
-            }
-        }
-        return i;
     }
 
     public ArrayList<String> getItemIDs() {
@@ -396,5 +500,10 @@ public class ItemManager {
     public void deleteItems() {
         items.clear();
         itemIDs.clear();
+    }
+
+    private void showErrors(HashSet<String> errors, Player p){
+        if (p != null) errors.stream().forEach(e -> p.sendMessage( e));
+        else errors.stream().forEach(e -> Bukkit.getConsoleSender().sendMessage(e));
     }
 }

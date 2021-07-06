@@ -4,6 +4,7 @@ import com.github.tanokun.tanorpg.player.quest.condition.Condition;
 
 public enum TaskType {
     NONE(null),
+    ENTITY_KILL(QuestEntityKillTask.class);
     ;
 
     private Class<? extends Task> task;

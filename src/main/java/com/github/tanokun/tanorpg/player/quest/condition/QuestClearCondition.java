@@ -16,8 +16,11 @@ public class QuestClearCondition implements Condition {
 
     @Override
     public boolean execute(Member m) {
-        final boolean[] r = {false};
-        quests.stream().forEach(q -> r[0] = m.getQuestMap().isClear(q));
-        return r[0];
+
+        for (String s : quests) {
+            if (!m.getQuestMap().getClearQuestNames().contains(s)) return false;
+        }
+
+        return true;
     }
 }

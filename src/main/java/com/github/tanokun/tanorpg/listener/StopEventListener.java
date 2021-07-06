@@ -23,6 +23,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -37,9 +39,14 @@ public class StopEventListener implements Listener {
     }
 
     @EventHandler
-    public void onChangeBlock(EntityChangeBlockEvent e) {
-        if (!(e.getEntity() instanceof Player)) return;
-        if (e.getEntity().isOp()) return;
+    public void onBlockBreak(BlockBreakEvent e) {
+        if (e.getPlayer().isOp()) return;
+        e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent e) {
+        if (e.getPlayer().isOp()) return;
         e.setCancelled(true);
     }
 

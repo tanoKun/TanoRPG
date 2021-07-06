@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.OpenPermissionMap;
+import com.github.tanokun.tanorpg.game.OpenPermissionMap;
 import com.github.tanokun.tanorpg.player.quest.QuestMap;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.skill.SkillMap;
@@ -92,18 +92,41 @@ public class Member {
 
     public void setHasHP(int hasHP) {
         this.hasHP = hasHP;
+        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
+
     }
 
     public void setHasMP(int hasMP) {
         this.hasMP = hasMP;
+        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
+
     }
 
     public void setHasEXP(long hasEXP) {
         this.hasEXP = hasEXP;
+
+        if (!hasLevel.hasNext()){
+            this.hasEXP = 0;
+            return;
+        }
+
+        for (int i = 0; this.hasEXP >= hasLevel.getMaxEXP(); i++){
+            if (!hasLevel.hasNext()){
+                this.hasEXP = 0;
+                TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
+                return;
+            }
+            this.hasEXP = this.hasEXP - hasLevel.getMaxEXP();
+            hasLevel = (hasLevel.getNext());
+            Bukkit.getPlayer(uuid).sendMessage(TanoRPG.PX + "§aレベルが §b" + hasLevel + "Lv §aになりました！");
+        }
+        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
     }
 
     public void setHasLevel(MemberLevelType hasLevel) {
         this.hasLevel = hasLevel;
+        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
+
     }
 
     public void setAttack(Attack attack) {
@@ -172,7 +195,7 @@ public class Member {
             return;
         }
 
-        this.hasEXP = hasHP + HAS_EXP;
+        this.hasEXP += HAS_EXP;
 
         for (int i = 0; this.hasEXP >= hasLevel.getMaxEXP(); i++){
             if (!hasLevel.hasNext()){
@@ -184,6 +207,8 @@ public class Member {
             hasLevel = (hasLevel.getNext());
             Bukkit.getPlayer(uuid).sendMessage(TanoRPG.PX + "§aレベルが §b" + hasLevel + "Lv §aになりました！");
         }
+        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
+
     }
 
 
@@ -195,6 +220,7 @@ public class Member {
         statusMap.save(data, "");
         equipMap.save(data, "");
         questMap.save(data, "");
+        openPermissionMap.save(data, "");
         c.set("hasHP", hasHP);
         c.set("hasMP", hasMP);
         c.set("hasEXP", hasEXP);

@@ -17,6 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemUtils implements Listener {
@@ -117,5 +118,31 @@ public class ItemUtils implements Listener {
             return false;
         }
         return true;
+    }
+
+
+    public static int getAmount(Player player, ItemStack item) {
+        int i = 0;
+        for (ItemStack is : player.getInventory().getContents()) {
+            if (is == null || is.getType().equals(Material.AIR)) continue;
+            String is_name = (is.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
+            String item_name = (item.getItemMeta().getDisplayName() == null) ? "" : item.getItemMeta().getDisplayName();
+            List<String> is_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
+            if (is_name.equals(item_name) && is.getType().equals(item.getType())) {
+                i = i + is.getAmount();
+            }
+        }
+        return i;
+    }
+
+    public static ItemStack getSameItem(Player player, ItemStack item) {
+        for (ItemStack is : player.getInventory().getContents()) {
+            if (is == null || is.getType().equals(Material.AIR)) continue;
+            String is_name = (is.getItemMeta().getDisplayName() == null) ? "" : is.getItemMeta().getDisplayName();
+            String item_name = (item.getItemMeta().getDisplayName() == null) ? "" : item.getItemMeta().getDisplayName();
+            List<String> is_lore = (is.getItemMeta().getLore() != null) ? is.getItemMeta().getLore() : Arrays.asList("");
+            if (is_name.equals(item_name) && is.getType().equals(item.getType())) return is;
+        }
+        return null;
     }
 }

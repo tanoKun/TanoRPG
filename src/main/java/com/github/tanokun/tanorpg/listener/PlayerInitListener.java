@@ -24,7 +24,6 @@ public class PlayerInitListener implements Listener {
     public void onJoin(PlayerJoinEvent e){
         Member member = TanoRPG.getPlugin().getMemberManager().loadData(e.getPlayer().getUniqueId());
         if (member == null){
-            //SelSkillClassMenu.getInv(e.getPlayer()).open(e.getPlayer());
             e.setJoinMessage(TanoRPG.PX + "§d" + e.getPlayer().getName() + "が初ログインしました！ 082!");
             e.getPlayer().sendMessage(TanoRPG.PX + "§a目の前にいる人に話しかけてみよう");
             TanoRPG.playSound(Bukkit.getOnlinePlayers().toArray(new Player[0]), Sound.ENTITY_PLAYER_LEVELUP, 3, 1);
