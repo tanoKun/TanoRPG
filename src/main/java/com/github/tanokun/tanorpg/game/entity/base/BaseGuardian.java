@@ -35,13 +35,11 @@ public class BaseGuardian extends ObjectEntity {
                 new EntityGuardian(EntityTypes.GUARDIAN, craftWorld.getHandle().getMinecraftWorld()));
         entity = craftWorld.spawn(location, entity.getClass());
 
-        entity.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(getStatusMap().getStatus(StatusType.HP));
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(
                 entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue() * (1 + (getStatusMap().getStatus(StatusType.SPEED) / 100)));
 
         entity.setCustomName(getName() + " §7[§dLv:§e" + getHasLevel() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         entity.setCustomNameVisible(true);
-        entity.setHealth(getStatusMap().getStatus(StatusType.HP));
         entity.setMetadata("TanoRPG_entity", new FixedMetadataValue(TanoRPG.getPlugin(), new ActiveEntity(this, entity)));
 
         entity.getEquipment().setItemInMainHand(getEquipMap().getEquip(EquipmentMap.EquipmentType.MAIN));
