@@ -4,6 +4,8 @@ public enum ActionType {
     SEND(QuestSendMessageAction.class),
     SOUND(QuestSoundAction.class),
     WAIT(QuestWaitAction.class),
+    GIVE_ITEM(QuestGiveItemAction.class),
+    GIVE_EXP(QuestGiveExpAction.class),
     ;
 
     private Class<? extends Action> action;
