@@ -26,7 +26,7 @@ public class Craft implements InventoryProvider {
     public SmartInventory getInv(){
         return SmartInventory.builder()
                  .id(id)
-                 .title("§d§lクラフト「" + name + "§d§l」")
+                 .title("§9§lクラフト「" + name + "§9§l」")
                  .update(false)
                  .provider(this)
                  .size(5, 9)
@@ -55,7 +55,7 @@ public class Craft implements InventoryProvider {
         barrier.stream().forEach(item -> {
             contents.add(ClickableItem.of(item.getAfterItem(), e -> {
                 TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 1);
-                player.sendMessage(TanoRPG.PX + "§cそのクラフトは開放させていません");
+                player.sendMessage(TanoRPG.PX + "§cそのクラフトは開放されていません");
             }));
         });
     }
@@ -90,6 +90,6 @@ public class Craft implements InventoryProvider {
     }
 
     public boolean isPermission(){
-        return permission.equals("");
+        return !permission.equals("");
     }
 }
