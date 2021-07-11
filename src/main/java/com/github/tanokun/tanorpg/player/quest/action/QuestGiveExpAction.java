@@ -14,6 +14,6 @@ public class QuestGiveExpAction implements Action {
 
     @Override
     public void execute(Member m) {
-        m.addHasEXP(exp);
+        Bukkit.getScheduler().runTask(TanoRPG.getPlugin(), () -> m.addHasEXP(exp));
     }
 }
