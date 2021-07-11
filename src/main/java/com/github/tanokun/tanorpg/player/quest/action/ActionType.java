@@ -6,6 +6,7 @@ public enum ActionType {
     WAIT(QuestWaitAction.class),
     GIVE_ITEM(QuestGiveItemAction.class),
     GIVE_EXP(QuestGiveExpAction.class),
+    GIVE_MONEY(QuestGiveMoneyAction.class),
     ;
 
     private Class<? extends Action> action;
