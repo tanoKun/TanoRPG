@@ -8,7 +8,6 @@ import com.github.tanokun.tanorpg.player.status.StatusMap;
 import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.io.Config;
 import net.minecraft.server.v1_15_R1.EntityGuardian;
-import net.minecraft.server.v1_15_R1.EntitySkeleton;
 import net.minecraft.server.v1_15_R1.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -16,10 +15,8 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftGuardian;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftSkeleton;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Guardian;
-import org.bukkit.entity.Skeleton;
 import org.bukkit.metadata.FixedMetadataValue;
 
 public class BaseGuardian extends ObjectEntity {
@@ -36,7 +33,7 @@ public class BaseGuardian extends ObjectEntity {
         entity = craftWorld.spawn(location, entity.getClass());
 
         entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(
-                entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getDefaultValue() * (1 + (getStatusMap().getStatus(StatusType.SPEED) / 100)));
+                entity.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue() * (1 + (getStatusMap().getStatus(StatusType.SPEED) / 100)));
 
         entity.setCustomName(getName() + " §7[§dLv:§e" + getHasLevel() + "§7] " + "§a❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘❘");
         entity.setCustomNameVisible(true);
