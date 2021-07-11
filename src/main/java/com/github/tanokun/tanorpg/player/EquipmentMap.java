@@ -1,17 +1,14 @@
 package com.github.tanokun.tanorpg.player;
 
 import com.github.tanokun.tanorpg.game.item.ItemType;
-import com.github.tanokun.tanorpg.game.item.type.base.ItemData;
 import com.github.tanokun.tanorpg.player.status.StatusMap;
 import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.SaveMarker;
-import com.github.tanokun.tanorpg.util.io.Coding;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonPrimitive;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -82,24 +79,26 @@ public class EquipmentMap implements SaveMarker<EquipmentMap> {
     }
 
     public enum EquipmentType {
-        MAIN(-1, -1, ItemType.NULL, ""),
-        SUB(-1, -1, ItemType.NULL, ""),
-        HELMET(1,1, ItemType.EQUIPMENT, "HELMET"),
-        CHESTPLATE(2,1, ItemType.EQUIPMENT, "CHESTPLATE"),
-        LEGGINGS(3,1, ItemType.EQUIPMENT, "LEGGINGS"),
-        BOOTS(4,1, ItemType.EQUIPMENT, "BOOTS"),
-        ACCESSORY(2, 0, ItemType.ACCESSORY, ""),
-        ACCESSORY2(2, 2, ItemType.ACCESSORY, ""),
+        MAIN(-1, -1, -1, ItemType.NULL, ""),
+        SUB(-1, -1, -1, ItemType.NULL, ""),
+        HELMET(1,1, 10, ItemType.EQUIPMENT, "HELMET"),
+        CHESTPLATE(2,1, 19, ItemType.EQUIPMENT, "CHESTPLATE"),
+        LEGGINGS(3,1, 28, ItemType.EQUIPMENT, "LEGGINGS"),
+        BOOTS(4,1, 37, ItemType.EQUIPMENT, "BOOTS"),
+        ACCESSORY(2, 0, 18, ItemType.ACCESSORY, ""),
+        ACCESSORY2(2, 2, 20, ItemType.ACCESSORY, ""),
         ;
 
         private final ItemType itemType;
         private int row;
         private int column;
+        private int raw;
         private String materialName;
 
-        EquipmentType(int row, int column, ItemType itemType, String materialName){
+        EquipmentType(int row, int column, int raw, ItemType itemType, String materialName){
             this.row = row;
             this.column = column;
+            this.raw = raw;
             this.itemType = itemType;
             this.materialName = materialName;
         }
