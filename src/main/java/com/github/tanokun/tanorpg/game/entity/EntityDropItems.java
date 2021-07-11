@@ -1,27 +1,24 @@
 package com.github.tanokun.tanorpg.game.entity;
 
-import com.github.tanokun.tanorpg.game.item.type.base.ItemBase;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import scala.Int;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EntityDropItems {
-    public HashMap<ItemStack, Integer> drops = new HashMap<>();
+    public HashMap<ItemStack, Double> drops = new HashMap<>();
 
-    public void addDrop(ItemStack item, int chance) {
+    public void addDrop(ItemStack item, double chance) {
         drops.put(item, chance);
     }
 
-    public HashMap<ItemStack, Integer> getDrops() {
+    public HashMap<ItemStack, Double> getDrops() {
         return drops;
     }
 
-    public void chanceGive(Player player, int chanceUp){
+    public void chanceGive(Player player, double chanceUp){
         for (ItemStack item : drops.keySet()){
-            int chance = drops.get(item) * ((chanceUp / 100) + 1);
+            double chance = drops.get(item) * ((chanceUp / 100) + 1);
             if (chance(chance)) {
                 player.getInventory().addItem(item);
             }

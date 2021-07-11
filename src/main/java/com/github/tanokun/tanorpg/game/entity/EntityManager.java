@@ -2,22 +2,17 @@ package com.github.tanokun.tanorpg.game.entity;
 
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
-import com.github.tanokun.tanorpg.game.item.ItemRarityType;
-import com.github.tanokun.tanorpg.game.item.type.ItemMaterial;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
 import com.github.tanokun.tanorpg.player.status.StatusMap;
 import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.command.CommandContext;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class EntityManager {
     private HashMap<String, ObjectEntity> entities = new HashMap<>();
@@ -52,7 +47,7 @@ public class EntityManager {
                     cc.init(null, text2.split(" "));
                     dropItems.addDrop(
                             TanoRPG.getPlugin().getItemManager().getItem(cc.getArg(0, "")).init(Integer.valueOf(cc.getArg(1, "null"))),
-                            Integer.valueOf(cc.getArg(2, "null")));
+                            Double.valueOf(cc.getArg(2, "null")));
                 });
                 ObjectEntity objectEntity;
                 Constructor<? extends ObjectEntity> constructor =
