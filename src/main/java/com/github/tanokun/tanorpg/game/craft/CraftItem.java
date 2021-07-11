@@ -1,6 +1,7 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.event.tanorpg.TanoRpgCraftEvent;
 import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
@@ -37,12 +38,13 @@ public class CraftItem implements InventoryProvider {
                 .build();
     }
 
-    public CraftItem(String id, String name, ItemStack afterItem, ArrayList<ItemStack> beforeItems, ArrayList<ItemStack> necTools, int price, boolean can) {
+    public CraftItem(String id, ItemStack afterItem, ArrayList<ItemStack> beforeItems, ArrayList<ItemStack> necTools, int price, boolean can) {
         this.afterItem = afterItem;
         this.necItems = beforeItems;
         this.necTools = necTools;
         this.price = price;
-        this.permission = can ? "craftItem." + id + "." + name + "." + afterItem.getItemMeta().getDisplayName() : "";
+        this.permission = can ? "craftItem." + id + "." + ItemUtils.getItemData(afterItem).getId() : "";
+        TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
     }
 
     @Override
@@ -83,13 +85,15 @@ public class CraftItem implements InventoryProvider {
 
             member.removeMoney(price);
             for (ItemStack item : necItems) {
-                player.getInventory().removeItem(item);
                 int toDelete = item.getAmount();
-                while (toDelete > 0) {
+                while (true) {
                     ItemStack itemStack = ItemUtils.getSameItem(player, item);
                     int amount = itemStack.getAmount();
                     itemStack.setAmount(amount - toDelete);
                     toDelete -= amount;
+                    System.out.println(amount);
+                    System.out.println(toDelete);
+                    if (toDelete <= 0) break;
                 }
             }
 
@@ -100,6 +104,7 @@ public class CraftItem implements InventoryProvider {
                 player.getInventory().addItem(afterItem);
                 player.removeMetadata("crafting", TanoRPG.getPlugin());
                 TanoRPG.getPlugin().getSidebarManager().updateSidebar(player, member);
+                Bukkit.getPluginManager().callEvent(new TanoRpgCraftEvent(player, member, this));
             }, 15);
         }));
 
@@ -117,7 +122,7 @@ public class CraftItem implements InventoryProvider {
             if (row != 2 && row != 3 && row != 4) continue;
             if (column != 1 && column != 2 && column != 3) continue;
             contents.set(row, column, ClickableItem.empty(necItems.get(i2)));
-            if (necItems.size() >= i2 + 1) return;
+            if (necItems.size() <= i2 + 1) return;
             i2++;
         }
     }

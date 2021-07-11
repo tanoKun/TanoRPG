@@ -10,6 +10,7 @@ import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
 
 public class Craft implements InventoryProvider {
@@ -53,7 +54,7 @@ public class Craft implements InventoryProvider {
                     }));
         });
         barrier.stream().forEach(item -> {
-            contents.add(ClickableItem.of(item.getAfterItem(), e -> {
+            contents.add(ClickableItem.of(ItemUtils.createItem(Material.BARRIER, item.getAfterItem().getItemMeta().getDisplayName(), 1, false), e -> {
                 TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 1);
                 player.sendMessage(TanoRPG.PX + "§cそのクラフトは開放されていません");
             }));
@@ -66,7 +67,8 @@ public class Craft implements InventoryProvider {
         this.name = name;
         this.items = items;
         this.npcId = npcId;
-        this.permission = can ? "craft." + id + "." + name : "";
+        this.permission = can ? "craft." + id: "";
+        TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
     }
 
     public String getId() {

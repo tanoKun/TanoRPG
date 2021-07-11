@@ -14,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 public class CraftManager {
     private final HashMap<String, Craft> crafts = new HashMap<>();
@@ -63,20 +60,24 @@ public class CraftManager {
 
                         path = id + ".items." + item + ".necI";
                         ArrayList<ItemStack> necI = new ArrayList<>();
-                        for (String necI_text : config.getConfig().getConfigurationSection(path).getKeys(false)){
-                            path = id + ".items." + item + ".necI." + necI_text;
-                            int necI_count = config.getConfig().getInt(path, 1);
-                            necI.add(TanoRPG.getPlugin().getItemManager().getItem(necI_text).init(necI_count));
+                        if (config.getConfig().getConfigurationSection(path) != null) {
+                            for (String necI_text : config.getConfig().getConfigurationSection(path).getKeys(false)) {
+                                path = id + ".items." + item + ".necI." + necI_text;
+                                int necI_count = config.getConfig().getInt(path, 1);
+                                necI.add(TanoRPG.getPlugin().getItemManager().getItem(necI_text).init(necI_count));
+                            }
                         }
 
                         path = id + ".items." + item + ".necT";
                         ArrayList<ItemStack> necT = new ArrayList<>();
-                        for (String necT_text : config.getConfig().getConfigurationSection(path).getKeys(false)){
-                            path = id + ".items." + item + ".necT." + necT_text;
-                            int necI_count = config.getConfig().getInt(path, 1);
-                            necT.add(TanoRPG.getPlugin().getItemManager().getItem(necT_text).init(necI_count));
+                        if (config.getConfig().getConfigurationSection(path) != null) {
+                            for (String necT_text : config.getConfig().getConfigurationSection(path).getKeys(false)) {
+                                path = id + ".items." + item + ".necT." + necT_text;
+                                int necI_count = config.getConfig().getInt(path, 1);
+                                necT.add(TanoRPG.getPlugin().getItemManager().getItem(necT_text).init(necI_count));
+                            }
                         }
-                        craftItems.add(new CraftItem(id, item, a, necI, necT, price, item_permission));
+                        craftItems.add(new CraftItem(id, a, necI, necT, price, item_permission));
                     }
                     crafts.put(id, new Craft(id, name, craftItems, main_permission, npcId));
                     npcIds.put(npcId, id);
@@ -97,6 +98,18 @@ public class CraftManager {
 
     public String getCraftId(int npc) {
         return npcIds.get(npc);
+    }
+
+    public HashMap<Integer, String> getNpcIds() {
+        return npcIds;
+    }
+
+    public HashMap<String, Craft> getCrafts() {
+        return crafts;
+    }
+
+    public Set<String> getCraftIds(){
+        return crafts.keySet();
     }
 
     private void showErrors(HashSet<String> errors, Player p) {
