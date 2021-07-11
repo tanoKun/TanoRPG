@@ -6,7 +6,6 @@ import com.github.tanokun.tanorpg.game.item.ItemRarityType;
 import com.github.tanokun.tanorpg.game.item.ItemType;
 import com.github.tanokun.tanorpg.game.item.type.base.ItemBase;
 import com.github.tanokun.tanorpg.game.item.type.base.ItemData;
-import com.github.tanokun.tanorpg.player.EquipmentMap;
 import com.github.tanokun.tanorpg.player.status.StatusMap;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.Material;

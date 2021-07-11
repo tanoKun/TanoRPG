@@ -12,7 +12,6 @@ import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -25,7 +24,6 @@ import java.util.*;
 public class ItemManager {
     private final HashMap<String, ItemBase> items = new HashMap<>();
 
-    private static final ArrayList<String> itemIDs = new ArrayList<>();
     public static final String LORE = "§e〇=-=-=-=-=§b説明§e=-=-=-=-=-〇";
     public static final String FIRST_STATUS = "§e〇=-=-=-§bステータス§e-=-=-=-〇";
     public static final String FINAL_STATUS = "§e〇=-=-=-=-=-=-=-=-=-=-=-〇";
@@ -40,6 +38,7 @@ public class ItemManager {
         loadMaterialItem(p);
         loadWeaponItem(p);
         loadMagicWeaponItem(p);
+        loadProjectileWeaponItem(p);
         loadEquipmentItem(p);
         loadRuneItem(p);
         loadAccessoryItem(p);
@@ -89,7 +88,6 @@ public class ItemManager {
                     item.setPrice(price);
                     item.setCustomModelData(customModelData);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
@@ -160,7 +158,6 @@ public class ItemManager {
                     item.setProper(proper);
                     item.setCombo(combos);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
@@ -231,11 +228,80 @@ public class ItemManager {
                     item.setProper(proper);
                     item.setCombo(combos);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
             errors.remove("§a    MagicWeapon item configs loaded without errors.");
+            errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
+        }
+
+        showErrors(errors, p);
+    }
+
+    public void loadProjectileWeaponItem(Player p) {
+        String path = "";
+        String filePath = "";
+        HashSet<String> errors = new HashSet<>();
+        errors.add("§a    ProjectileWeapon item configs loaded without errors.");
+        try {
+            path = "items" + File.separator + "projectileWeapon";
+            for (Config config : new Folder(path, TanoRPG.getPlugin()).getFiles()) {
+                filePath = path + File.separator + config.getName() + File.separator;
+                for (String id : config.getConfig().getKeys(false)) {
+
+                    path = id + ".name";
+                    String name = config.getConfig().getString(path, "unknown");
+
+                    path = id + ".material";
+                    Material material = Material.valueOf(config.getConfig().getString(path, "BARRIER"));
+
+                    path = id + ".lore";
+                    List<String> lore = config.getConfig().getStringList(id + ".lore");
+
+                    path = id + ".status";
+                    StatusMap statusMap = new StatusMap();
+                    config.getConfig().getConfigurationSection(path).getKeys(false).forEach(text -> {
+                        statusMap.addStatus(StatusType.valueOf(text), config.getConfig().getInt(id + ".status." + text, 0));
+                    });
+
+                    path = id + ".glowing";
+                    boolean glowing = config.getConfig().getBoolean(path, false);
+
+                    path = id + ".price";
+                    long price = config.getConfig().getLong(path, 0);
+
+                    path = id + ".rarity";
+                    ItemRarityType rarity = ItemRarityType.valueOf(config.getConfig().getString(path, "COMMON"));
+
+                    path = id + ".customModelData";
+                    Integer customModelData = config.getConfig().getInt(path, 0);
+
+                    path = id + ".lvl";
+                    int lvl = config.getConfig().getInt(path, 0);
+
+                    path = id + ".ct";
+                    int ct = config.getConfig().getInt(path, 0);
+
+                    path = id + ".proper";
+                    List<SkillClass> proper = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(job ->
+                            proper.add(SkillClass.valueOf((String) job)));
+
+                    path = id + ".combo";
+                    List<Integer> combos = new ArrayList<>(); config.getConfig().getList(path).stream().forEach(i ->
+                            combos.add(Integer.valueOf(String.valueOf(i))));
+
+                    ItemProjectile item = new ItemProjectile(id, material, name, lore, statusMap, glowing, rarity);
+                    item.setPrice(price);
+                    item.setCustomModelData(customModelData);
+                    item.setCoolTime(ct);
+                    item.setNecLevel(lvl);
+                    item.setProper(proper);
+                    item.setCombo(combos);
+                    items.put(id, item);
+                }
+            }
+        } catch (Exception e){
+            errors.remove("§a    ProjectileWeapon item configs loaded without errors.");
             errors.add("§c    " + e.getMessage() + "§7" + "(Path: " + filePath + path + ")");
         }
 
@@ -316,7 +382,6 @@ public class ItemManager {
                     item.setProper(proper);
                     item.setEquipmentType(equipmentType);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
@@ -369,7 +434,6 @@ public class ItemManager {
                     item.setPrice(price);
                     item.setCustomModelData(customModelData);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
@@ -422,7 +486,6 @@ public class ItemManager {
                     item.setPrice(price);
                     item.setCustomModelData(customModelData);
                     items.put(id, item);
-                    itemIDs.add(id);
                 }
             }
         } catch (Exception e){
@@ -454,8 +517,8 @@ public class ItemManager {
         return null;
     }
 
-    public ArrayList<String> getItemIDs() {
-        return itemIDs;
+    public Set<String> getItemIDs() {
+        return items.keySet();
     }
 
     public List<String> fromNormalStatus(StatusMap statusMap){
@@ -465,7 +528,7 @@ public class ItemManager {
             if (statusMap.getHasStatuses().get(status) > 0){
                 statuses.add(KindOfStatusType.NORMAL + "§a" + status.getName() + " +" + statusMap.getHasStatuses().get(status));
             } else {
-                statuses.add(KindOfStatusType.NORMAL + "§c" + status.getName() + " -" + statusMap.getHasStatuses().get(status));
+                statuses.add(KindOfStatusType.NORMAL + "§c" + status.getName() + " " + statusMap.getHasStatuses().get(status));
             }
         }
         return statuses;
@@ -478,7 +541,7 @@ public class ItemManager {
             if (statusMap.getHasStatuses().get(status) > 0){
                 statuses.add(KindOfStatusType.EVOLUTION + "§a" + status.getName() + " +" + statusMap.getHasStatuses().get(status));
             } else {
-                statuses.add(KindOfStatusType.EVOLUTION + "§c" + status.getName() + " -" + statusMap.getHasStatuses().get(status));
+                statuses.add(KindOfStatusType.EVOLUTION + "§c" + status.getName() + " " + statusMap.getHasStatuses().get(status));
             }
         }
         return statuses;
@@ -491,15 +554,10 @@ public class ItemManager {
             if (statusMap.getHasStatuses().get(status) > 0){
                 statuses.add(KindOfStatusType.RUNE + "§a" + status.getName() + " +" + statusMap.getHasStatuses().get(status));
             } else {
-                statuses.add(KindOfStatusType.RUNE + "§c" + status.getName() + " -" + statusMap.getHasStatuses().get(status));
+                statuses.add(KindOfStatusType.RUNE + "§c" + status.getName()  + " " + statusMap.getHasStatuses().get(status));
             }
         }
         return statuses;
-    }
-
-    public void deleteItems() {
-        items.clear();
-        itemIDs.clear();
     }
 
     private void showErrors(HashSet<String> errors, Player p){

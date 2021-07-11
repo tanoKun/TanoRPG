@@ -153,6 +153,11 @@ public class InventoryManager
                 contents.get(p).get(row, column).ifPresent(item -> item.run(e));
 
                 if (inv.isCancelable()) p.updateInventory();
+
+            } else {
+                inv.getListeners().stream()
+                        .filter(listener -> listener.getType() == InventoryClickEvent.class)
+                        .forEach(listener -> ((InventoryListener<InventoryClickEvent>) listener).accept(e));
             }
         }
         @EventHandler

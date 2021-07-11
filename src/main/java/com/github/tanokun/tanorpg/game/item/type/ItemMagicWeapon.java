@@ -7,7 +7,7 @@ import org.bukkit.Material;
 
 import java.util.List;
 
-public class ItemMagicWeapon extends ItemWeapon {
+public class ItemMagicWeapon extends ItemProjectile {
 
     public ItemMagicWeapon(String id, Material material, String name, List<String> lore, StatusMap statuses, boolean glowing, ItemRarityType itemRarityType) {
         super(id, material, name, lore, statuses, glowing, itemRarityType);
