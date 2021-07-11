@@ -62,7 +62,8 @@ public class EntitySpawner {
                 entity.teleport(randomizeSpawnLocation(spawnerLocation, spawnInRadius));
             }
         }
-        if (nextSpawnTimeTemp != nextSpawnTime) return;
+
+        if (nextSpawnTimeTemp <= nextSpawnTime) return;
         nextSpawnTimeTemp = 0;
         if (EntityUtils.getNearPlayers(spawnerLocation, playerInRadius).length == 0) return;
         if (activeEntities.size() >= maxSpawnCount) return;
