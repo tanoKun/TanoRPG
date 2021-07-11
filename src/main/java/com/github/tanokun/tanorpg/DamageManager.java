@@ -1,27 +1,20 @@
 package com.github.tanokun.tanorpg;
 
-import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.event.tanorpg.TanoRpgEntityKillEvent;
 import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
 import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.player.Member;
-import com.github.tanokun.tanorpg.player.status.StatusMap;
 import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.EntityUtils;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
-import net.minecraft.server.v1_15_R1.DamageSource;
-import net.minecraft.server.v1_15_R1.EntityHuman;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftEntity;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.metadata.FixedMetadataValue;
-
-import javax.crypto.Mac;
 
 public class DamageManager {
     public static int getDisplayDamageByPlayer(Member member, ObjectEntity entity){
@@ -49,6 +42,8 @@ public class DamageManager {
 
         String display = "";
         int r = ae.getObjectEntity().getStatusMap().getStatus(StatusType.HP) / 20;
+        if (r <= 0) r = 1;
+        if (hp <= 0) hp = 0;
         int t = hp / r;
 
         for (int i = 0; i < t; i++) {
@@ -67,22 +62,26 @@ public class DamageManager {
         return atk * (5 + entity.getHasLevel()) / (6 + def + member.getHasLevel().getValue());
     }
 
-    public static void createDamageByEntity(int damage, Entity attacker, Player target) {
+    public static void createDamageByEntity(int damage, Player target) {
         if (target.isDead()) return;
         Member member = TanoRPG.getPlugin().getMemberManager().getMember(target.getUniqueId());
         member.setHasHP(member.getHasHP() - damage); int hp = member.getHasHP();
-        target.damage(0);
+        target.damage(1);
         if (hp <= 0) {
             TanoRPG.playSound(target, Sound.ENTITY_WITHER_SPAWN, 1, 1);
             target.getPlayer().setGameMode(GameMode.SPECTATOR);
             target.getPlayer().sendTitle("§c死んでしまった！", "", 0, 0, 100);
             member.setHasHP(0);
             member.setHasEXP(member.getHasEXP() - (member.getHasEXP() * (5/100)));
+            target.setHealth( ((CraftPlayer)target).getHandle().getMaxHealth() );
             Bukkit.getScheduler().runTaskLater(TanoRPG.getPlugin(), () -> {
-                target.teleport(TanoRPG.getPlugin().getDataManager().getStartLoc());
+                target.teleport(TanoRPG.getPlugin().getDataManager().getGuildLoc());
                 member.setHasHP(member.getStatusMap().getStatus(StatusType.HP));
                 target.setGameMode(GameMode.ADVENTURE);
             }, 100);
+        } else {
+            int r = member.getStatusMap().getStatus(StatusType.HP) / 20;
+            target.setHealth(member.getHasHP() / r);
         }
     }
 }
