@@ -4,17 +4,16 @@ import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.player.quest.Quest;
 import com.github.tanokun.tanorpg.player.quest.inv.QuestListMenu;
-import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.io.MapNode;
-import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.block.BlockFace;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.util.Vector;
+import org.bukkit.event.player.PlayerMoveEvent;
 
 public class ActionQuestListener implements Listener {
 
@@ -31,7 +30,7 @@ public class ActionQuestListener implements Listener {
                 Quest quest = m.getQuestMap().getActiveQuest().getQuest();
                 m.getQuestMap().setAction(true);
                 Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
-                    quest.getShowQuestActions()
+                    quest.getFinishQuestActions()
                             .forEach(a -> a.execute(m));
                     Bukkit.getScheduler().runTask(TanoRPG.getPlugin(), () -> {
                         m.getQuestMap().setAction(false);
@@ -39,13 +38,33 @@ public class ActionQuestListener implements Listener {
                         m.getQuestMap().setActiveQuest(new MapNode<>(null, 0));
                         m.getQuestMap().removeQuest(quest.getName());
                         e.getClicker().sendMessage(TanoRPG.PX + "クエスト「" + quest.getName() + "」をクリアしました！");
-                        e.getClicker().setCompassTarget(TanoRPG.getPlugin().getDataManager().getStartLoc());
+                        e.getClicker().setCompassTarget(TanoRPG.getPlugin().getDataManager().getGuildLoc());
+                        TanoRPG.getPlugin().getSidebarManager().updateSidebar(e.getClicker(), m);
                     });
                 });
                 return;
             }
-            QuestListMenu.getInv(e.getNPC(), e.getClicker()).open(e.getClicker());
+            new QuestListMenu(e.getNPC(), e.getClicker()).getInv().open(e.getClicker());
             TanoRPG.playSound(e.getClicker(), Sound.ENTITY_SHULKER_OPEN, 3, 1);
         }
+    }
+
+    @EventHandler
+    public void onPlayerMove(PlayerMoveEvent e) {
+        Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getPlayer().getUniqueId());
+        if (member == null) return;
+
+        if (e.getTo().getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) return;
+
+        Location from = e.getFrom().clone();
+        from.setYaw(0);
+        from.setPitch(0);
+
+        Location to = e.getTo().clone();
+        to.setYaw(0);
+        to.setPitch(0);
+
+        if (!from.equals(to) && member.getQuestMap().isAction())
+            e.setCancelled(true);
     }
 }
