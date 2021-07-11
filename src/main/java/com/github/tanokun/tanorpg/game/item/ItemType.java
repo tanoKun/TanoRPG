@@ -4,6 +4,7 @@ public enum ItemType {
     MATERIAL("素材", "MATERIAL"),
     WEAPON("武器", "WEAPON"),
     MAGIC_WEAPON("魔法武器", "MAGIC_WEAPON"),
+    PROJECTILE_WEAPON("飛び道具", "PROJECTILE_WEAPON"),
     EQUIPMENT("装備", "EQUIPMENT"),
     RUNE("ルーン", "RUNE"),
     ACCESSORY("アクセサリー", "ACCESSORY"),
