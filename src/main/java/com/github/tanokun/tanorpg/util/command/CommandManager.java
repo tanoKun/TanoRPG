@@ -29,6 +29,17 @@ public class CommandManager {
 
             if (method.getAnnotation(TabComplete.class) != null){
                 TabComplete tabComplete = method.getAnnotation(TabComplete.class);
+                if (commands.get(tabComplete.parentName()) == null) {
+                    try {
+                        commandEntity = new CommandEntity(tabComplete.parentName(), clazz.newInstance());
+                    } catch (InstantiationException e) {
+                        e.printStackTrace();
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    commands.put(tabComplete.parentName(), commandEntity);
+                    server.getCommandMap().register("tanorpg", commandEntity);
+                }
                 commands.get(tabComplete.parentName()).registerTabComplete(tabComplete.name(), method);
                 continue;
             }
