@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 import java.util.HashSet;
 
-    public class OpenPermissionMap implements SaveMarker<com.github.tanokun.tanorpg.game.OpenPermissionMap> {
+    public class PermissionMap implements SaveMarker<PermissionMap> {
         private HashSet<String> openPermission = new HashSet<>();
 
         public void addPermission(String permission){
@@ -28,7 +28,7 @@ import java.util.HashSet;
         }
 
         @Override
-        public com.github.tanokun.tanorpg.game.OpenPermissionMap load(Config config, String key) {
+        public PermissionMap load(Config config, String key) {
             openPermission = new Gson().fromJson(config.getConfig().getString(key + "openPermission"), HashSet.class);
             return this;
         }

@@ -16,14 +16,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 
 public class QuestManager {
-    public static final String PX = "§6[§a-｜ §b§lMission§a ｜-§6] §7=> §a";
+    public static final String PX = "§6[§a-｜ §b§lQuest§a ｜-§6] §7=> §c";
 
     HashMap<Integer, ArrayList<Quest>> quests = new HashMap<>();
 
@@ -66,6 +65,10 @@ public class QuestManager {
                 List<String> result = new ArrayList<>();
                 config.getConfig().getStringList(path).stream().forEach(t -> result.add("§f - " + t));
 
+                boolean cantToDoQuestShow = config.getConfig().getBoolean("options.cantToDoQuestShow", false);
+
+                long minutes = config.getConfig().getLong("options.minutes", 0);
+
                 path = "conditions";
                 List<Condition> conditions = new ArrayList<>();
                 for (String condition : config.getConfig().getConfigurationSection(path).getKeys(false)){
@@ -76,7 +79,7 @@ public class QuestManager {
                 List<Task> tasks = new ArrayList<>();
                 for (String task : config.getConfig().getStringList(path)){
                     cc.init(null, task.split(" "));
-                    tasks.add(TaskType.valueOf(cc.args.remove(0)).getTask().getConstructor(CommandContext.class).newInstance(cc));
+                    tasks.add(TaskType.valueOf(cc.args.remove(0)).getTask().getConstructor(CommandContext.class, Config.class).newInstance(cc, config));
                 }
 
                 path = "showQuestActions";
@@ -108,7 +111,8 @@ public class QuestManager {
                 }
 
                 ArrayList<Quest> quests = this.quests.get(npcId) == null ? new ArrayList<>() : this.quests.get(npcId);
-                quests.add(new Quest(name, npcId, lore, result, difficulty, conditions, tasks, showQuestActions, startQuestActions, finishQuestActions, cancelQuestActions));
+                quests.add(new Quest(name, npcId, lore, result, difficulty, conditions, tasks,
+                        showQuestActions, startQuestActions, finishQuestActions, cancelQuestActions, cantToDoQuestShow, minutes));
                 this.quests.put(npcId, quests);
 
             }

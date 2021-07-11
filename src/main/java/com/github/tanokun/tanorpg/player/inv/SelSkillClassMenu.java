@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.player.inv;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.OpenPermissionMap;
+import com.github.tanokun.tanorpg.game.PermissionMap;
 import com.github.tanokun.tanorpg.player.Attack;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
 import com.github.tanokun.tanorpg.player.Member;
@@ -23,13 +23,13 @@ import org.bukkit.entity.Player;
 import java.util.Arrays;
 
 public class SelSkillClassMenu implements InventoryProvider {
-    public static SmartInventory getInv(Player player){
+    public SmartInventory getInv(){
         return SmartInventory.builder()
                 .closeable(false)
-                .provider(new SelSkillClassMenu())
+                .provider(this)
                 .size(5, 9)
                 .title("§d職業選択")
-                .id("selSkillCLass")
+                .id("SelSkillClassMenu")
                 .update(false)
                 .build();
     }
@@ -76,7 +76,7 @@ public class SelSkillClassMenu implements InventoryProvider {
         statusMap.addStatus(StatusType.HP, skillClass.MAX_HP);
         statusMap.addStatus(StatusType.MP, skillClass.MAX_MP);
         Member member = new Member(player.getUniqueId(), skillClass, statusMap, new EquipmentMap(), new SkillMap()
-        , new WarpPointMap(), new QuestMap(), new OpenPermissionMap(), new Attack());
+        , new WarpPointMap(), new QuestMap(), new PermissionMap(), new Attack());
         TanoRPG.getPlugin().getMemberManager().registerMember(member);
         TanoRPG.getPlugin().getSidebarManager().setupSidebar(player, member);
     }

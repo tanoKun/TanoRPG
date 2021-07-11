@@ -1,10 +1,12 @@
 package com.github.tanokun.tanorpg.player.quest.task;
 
-import com.github.tanokun.tanorpg.player.quest.condition.Condition;
-
 public enum TaskType {
     NONE(null),
-    ENTITY_KILL(QuestEntityKillTask.class);
+    ENTITY_KILL(QuestEntityKillTask.class),
+    LEVEL_UP(QuestLevelUpTask.class),
+    CRAFT(QuestCraftTask.class),
+    SHOP(QuestShopBuyTask.class),
+    TALK_TO_NPC(QuestTalkToNpcTask.class),
     ;
 
     private Class<? extends Task> task;

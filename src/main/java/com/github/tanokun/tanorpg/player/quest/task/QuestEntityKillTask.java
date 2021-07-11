@@ -3,13 +3,13 @@ package com.github.tanokun.tanorpg.player.quest.task;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.entity.base.ObjectEntity;
 import com.github.tanokun.tanorpg.util.command.CommandContext;
-import scala.Int;
+import com.github.tanokun.tanorpg.util.io.Config;
 
 public class QuestEntityKillTask extends Task<Integer> {
     private int necCount;
     private ObjectEntity target;
 
-    public QuestEntityKillTask(CommandContext commandContext) {
+    public QuestEntityKillTask(CommandContext commandContext, Config config) {
         super(TaskType.ENTITY_KILL);
         necCount = Integer.valueOf(commandContext.getArg(1, "1"));
         target = TanoRPG.getPlugin().getEntityManager().getEntity(commandContext.getArg(0, ""));

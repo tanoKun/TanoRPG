@@ -90,6 +90,10 @@ public class SmartInventory
     public boolean isCloseable() { return closeable; }
     public void setCloseable(boolean closeable) { this.closeable = closeable; }
 
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
     public boolean isCancelable() {return cancelable;}
     public void setCancelable(boolean cancelable) {this.cancelable = cancelable;}
 

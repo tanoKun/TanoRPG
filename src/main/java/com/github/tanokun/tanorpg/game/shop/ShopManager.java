@@ -1,8 +1,6 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.Craft;
-import com.github.tanokun.tanorpg.game.craft.CraftItem;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
@@ -13,6 +11,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 
 public class ShopManager {
     private final HashMap<String, Shop> shops = new HashMap<>();
@@ -53,7 +52,7 @@ public class ShopManager {
                         path = id + ".items." + item + ".permission";
                         boolean item_permission = config.getConfig().getBoolean(path, false);
 
-                        shopItems.add(new ShopItem(id, item, a, price, item_permission));
+                        shopItems.add(new ShopItem(id, a, price, item_permission));
                     }
                     shops.put(id, new Shop(id, name, shopItems, main_permission, npcId));
                     npcIds.put(npcId, id);
@@ -74,6 +73,18 @@ public class ShopManager {
 
     public String getShopId(int npc) {
         return npcIds.get(npc);
+    }
+
+    public HashMap<Integer, String> getNpcIds() {
+        return npcIds;
+    }
+
+    public HashMap<String, Shop> getShops() {
+        return shops;
+    }
+
+    public Set<String> getShopIds(){
+        return shops.keySet();
     }
 
     private void showErrors(HashSet<String> errors, Player p) {

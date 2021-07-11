@@ -1,5 +1,7 @@
 package com.github.tanokun.tanorpg;
 
+import com.github.tanokun.tanorpg.command.OpenInvCommand;
+import com.github.tanokun.tanorpg.command.PermissionCommand;
 import com.github.tanokun.tanorpg.command.RpgDataCommand;
 import com.github.tanokun.tanorpg.command.TanoRpgCommand;
 import com.github.tanokun.tanorpg.event.PlayerArmorEquipEvent;
@@ -28,19 +30,15 @@ import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.InventoryManager;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.HashSet;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 public final class TanoRPG extends JavaPlugin {
     private static TanoRPG plugin;
@@ -99,7 +97,7 @@ public final class TanoRPG extends JavaPlugin {
 
         Bukkit.getWorlds().stream().forEach(world -> {
             world.getEntities().stream().forEach(en -> {
-                if (en.hasMetadata("TanoRPG_Entity")) en.remove();
+                if (en.hasMetadata("TanoRPG_entity")) en.remove();
             });
         });
         dataManager.save();
@@ -149,6 +147,8 @@ public final class TanoRPG extends JavaPlugin {
     private void registerCommands() {
         getCommandManager().registerCommand(new RpgDataCommand().getClass());
         getCommandManager().registerCommand(new TanoRpgCommand().getClass());
+        getCommandManager().registerCommand(new OpenInvCommand().getClass());
+        getCommandManager().registerCommand(new PermissionCommand().getClass());
     }
 
     private void registerTasks(){

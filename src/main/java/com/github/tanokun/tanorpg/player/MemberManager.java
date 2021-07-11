@@ -1,7 +1,7 @@
 package com.github.tanokun.tanorpg.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.OpenPermissionMap;
+import com.github.tanokun.tanorpg.game.PermissionMap;
 import com.github.tanokun.tanorpg.player.quest.QuestMap;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.skill.SkillMap;
@@ -48,13 +48,13 @@ public class MemberManager {
         SkillMap skillMap = new SkillMap();
         WarpPointMap warpPointMap = new WarpPointMap();
         QuestMap questMap = new QuestMap().load(data, "");
-        OpenPermissionMap openPermissionMap = new OpenPermissionMap().load(data, "");
+        PermissionMap permissionMap = new PermissionMap().load(data, "");
         int hasHP = data.getConfig().getInt("hasHP");
         int hasMP = data.getConfig().getInt("hasMP");
         long hasEXP = data.getConfig().getInt("hasEXP");
         MemberLevelType hasLevel = MemberLevelType.valueOf(data.getConfig().getString("hasLevel"));
 
-        member = new Member(uuid, skillClass, statusMap, equipMap, skillMap, warpPointMap, questMap, openPermissionMap, new Attack(), hasHP, hasMP, hasEXP, hasLevel);
+        member = new Member(uuid, skillClass, statusMap, equipMap, skillMap, warpPointMap, questMap, permissionMap, new Attack(), hasHP, hasMP, hasEXP, hasLevel);
         return member;
     }
 }

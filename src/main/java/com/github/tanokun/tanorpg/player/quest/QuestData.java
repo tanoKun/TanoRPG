@@ -1,12 +1,11 @@
 package com.github.tanokun.tanorpg.player.quest;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.player.quest.task.Task;
 import com.github.tanokun.tanorpg.player.quest.task.TaskData;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Objects;
-import java.util.UUID;
 
 public class QuestData {
     private final int npcId;
@@ -16,6 +15,8 @@ public class QuestData {
     private final ArrayList<TaskData> tasks;
 
     private boolean isClearTasks = false;
+
+    private LocalDateTime clearTime;
 
     public QuestData(int npcId, String name, ArrayList<TaskData> tasks) {
         this.npcId = npcId;
@@ -53,6 +54,10 @@ public class QuestData {
         return TanoRPG.getPlugin().getQuestManager().getQuest(npcId, name);
     }
 
+    public LocalDateTime getClearTime() {
+        return clearTime;
+    }
+
     public boolean isClear(){
         for (TaskData taskData : tasks){
             if (!taskData.getTask().isClearTask(taskData.getValue())) return false;
@@ -66,6 +71,10 @@ public class QuestData {
 
     public boolean isClearTasks() {
         return isClearTasks;
+    }
+
+    public void setClearTime(LocalDateTime clearTime) {
+        this.clearTime = clearTime;
     }
 
     @Override

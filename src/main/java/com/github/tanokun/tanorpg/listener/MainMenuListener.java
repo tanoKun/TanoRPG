@@ -1,12 +1,10 @@
 package com.github.tanokun.tanorpg.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.player.inv.MainMenu;
+import com.github.tanokun.tanorpg.player.inv.main.MainMenu;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_15_R1.inventory.CraftItemStack;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -35,7 +33,7 @@ public class MainMenuListener implements Listener {
         if (e.getItem().getItemMeta().getDisplayName().equals("§bMenu") &&
                 e.getItem().getType().equals(Material.COMPASS)){
             e.setCancelled(true);
-            MainMenu.getInv(e.getPlayer()).open(e.getPlayer());
+            new MainMenu().getInv(e.getPlayer()).open(e.getPlayer());
         }
     }
 

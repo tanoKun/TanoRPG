@@ -46,7 +46,6 @@ public enum SkillClass {
         this.CriticalRate = CriticalRate;
         this.SUS = SUS;
         this.walkSpeedPer = walkSpeedPer;
-
         count = 1;
     }
 

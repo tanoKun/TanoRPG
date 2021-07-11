@@ -1,19 +1,18 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.event.tanorpg.TanoRpgShopEvent;
 import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
+import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class ShopItem implements InventoryProvider {
     private final ItemStack itemStack;
@@ -22,20 +21,21 @@ public class ShopItem implements InventoryProvider {
 
     private final String permission;
 
-    public SmartInventory getInv(String id, String name){
+    public SmartInventory getInv(){
         return SmartInventory.builder()
                 .id(itemStack.getItemMeta().getDisplayName())
                 .title("§9§l購入確認")
                 .update(false)
-                .provider(new ShopItem(id, name, itemStack, price, isPermission()))
+                .provider(this)
                 .size(3, 9)
                 .build();
     }
 
-    public ShopItem(String id, String name, ItemStack item, int price, boolean can) {
+    public ShopItem(String id, ItemStack item, int price, boolean can) {
         this.price = price;
         this.itemStack = item;
-        this.permission = can ? "shopItem." + id + "." + name : "";
+        this.permission = can ? "shopItem." + id + "." + ItemUtils.getItemData(item).getId() : "";
+        TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
     }
 
     @Override
@@ -84,6 +84,7 @@ public class ShopItem implements InventoryProvider {
             itemStack.setAmount(1);
             player.getInventory().addItem(itemStack);
             player.sendMessage(TanoRPG.PX + "購入しました");
+            Bukkit.getPluginManager().callEvent(new TanoRpgShopEvent(player, member, this));
             TanoRPG.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);
         }));
     }

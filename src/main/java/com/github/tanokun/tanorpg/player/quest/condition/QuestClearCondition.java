@@ -16,7 +16,6 @@ public class QuestClearCondition implements Condition {
 
     @Override
     public boolean execute(Member m) {
-
         for (String s : quests) {
             if (!m.getQuestMap().getClearQuestNames().contains(s)) return false;
         }

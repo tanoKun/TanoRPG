@@ -1,7 +1,5 @@
 package com.github.tanokun.tanorpg.player.status;
 
-import scala.Int;
-
 import java.util.HashMap;
 
 public class StatusMap {
@@ -49,6 +47,10 @@ public class StatusMap {
                 hasStatuses.put(status, -value);
             }
         }
+    }
+
+    public void clear() {
+        hasStatuses.clear();
     }
 
     public int getStatus(StatusType status){

@@ -18,7 +18,6 @@ public class OpenCraftListener implements Listener {
         if (craft == null || member == null) return;
 
         if (!craft.isPermission() || e.getClicker().isOp()) craft.getInv().open(e.getClicker());
-
         if (member.getOpenPermissionMap().hasPermission(craft.getPermission())) craft.getInv().open(e.getClicker());
     }
 }

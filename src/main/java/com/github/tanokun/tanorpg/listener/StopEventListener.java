@@ -1,36 +1,23 @@
 package com.github.tanokun.tanorpg.listener;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
-import com.comphenix.protocol.events.PacketContainer;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.event.PlayerArmorEquipEvent;
-import com.github.tanokun.tanorpg.game.entity.ActiveEntity;
-import com.github.tanokun.tanorpg.game.entity.spawner.EntitySpawnerManager;
 import com.github.tanokun.tanorpg.player.Member;
-import com.github.tanokun.tanorpg.player.status.StatusType;
-import com.github.tanokun.tanorpg.util.EntityUtils;
-import net.minecraft.server.v1_15_R1.*;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.craftbukkit.v1_15_R1.CraftWorld;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftArmorStand;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftArrow;
-import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-
-import java.util.List;
-import java.util.stream.Stream;
+import org.bukkit.event.entity.EntityRegainHealthEvent;
+import org.bukkit.event.entity.SlimeSplitEvent;
+import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class StopEventListener implements Listener {
     @EventHandler
@@ -51,19 +38,36 @@ public class StopEventListener implements Listener {
     }
 
     @EventHandler
-    public void onDamage(EntityDamageByEntityEvent e) {
-        if (!EntityUtils.isActiveEntity(e.getEntity())) return;
-        Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getDamager().getUniqueId());
+    public void onBlock(EntityChangeBlockEvent e) {
+        if (e.getEntity().isOp()) return;
+        e.setCancelled(true);
+    }
 
-        int speed = 20;
+    @EventHandler
+    public void onSplit(SlimeSplitEvent event) {
+        event.setCount(0);
+    }
 
-        //ActiveEntity activeEntity = EntityUtils.getActiveEntity(e.getEntity());
-//
-        //int atk = (member.getStatusMap().getStatus(StatusType.ATK) *
-        //        (5 + member.getHasLevel().getValue()) /
-        //                (5 + (activeEntity.getObjectEntity().getHasLevel() - member.getHasLevel().getValue())*5 + activeEntity.getObjectEntity().getStatusMap().getStatus(StatusType.DEF)));
-//
-        //e.getDamager().sendMessage("§a" + atk);
+    @EventHandler
+    public void onRegainHealth(EntityRegainHealthEvent event) {
+        event.setCancelled(true);
+    }
 
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerOpenInv(InventoryOpenEvent e) {
+        if (e.getPlayer().isOp()) return;
+        if (TanoRPG.getPlugin().getInventoryManager().getInventory((Player) e.getPlayer()) == null) e.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPlayerDoorOpen(PlayerInteractEvent e) {
+        if ((e.getAction() == Action.RIGHT_CLICK_BLOCK)) {
+            if (("" + e.getClickedBlock().getType()).contains("DOOR"))
+                Bukkit.getScheduler().runTaskLater(TanoRPG.getPlugin(), () -> {
+                    Door data = (Door) e.getClickedBlock().getBlockData();
+                    data.setOpen(false);
+                    e.getClickedBlock().setBlockData(data);
+                }, 40);
+        }
     }
 }

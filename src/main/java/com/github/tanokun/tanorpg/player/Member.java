@@ -1,7 +1,8 @@
 package com.github.tanokun.tanorpg.player;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.OpenPermissionMap;
+import com.github.tanokun.tanorpg.event.tanorpg.TanoRpgLevelUpEvent;
+import com.github.tanokun.tanorpg.game.PermissionMap;
 import com.github.tanokun.tanorpg.player.quest.QuestMap;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.skill.SkillMap;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.util.UUID;
 
 import static org.bukkit.Bukkit.getOfflinePlayer;
+import static org.bukkit.Bukkit.getPlayer;
 
 public class Member {
     private final UUID uuid;
@@ -32,7 +34,7 @@ public class Member {
 
     private final QuestMap questMap;
 
-    private final OpenPermissionMap openPermissionMap;
+    private final PermissionMap permissionMap;
 
     private int hasHP;
 
@@ -44,7 +46,7 @@ public class Member {
 
     private Attack attack;
 
-    public Member(UUID uuid, SkillClass skillClass, PlayerStatusMap pb, EquipmentMap equip, SkillMap skillMap, WarpPointMap warpPointMap, QuestMap questMap, OpenPermissionMap openPermissionMap, Attack attack){
+    public Member(UUID uuid, SkillClass skillClass, PlayerStatusMap pb, EquipmentMap equip, SkillMap skillMap, WarpPointMap warpPointMap, QuestMap questMap, PermissionMap permissionMap, Attack attack){
         this.uuid = uuid;
         this.skillClass = skillClass;
         this.statusMap = pb;
@@ -52,14 +54,14 @@ public class Member {
         this.skillMap = skillMap;
         this.warpPointMap = warpPointMap;
         this.questMap = questMap;
-        this.openPermissionMap = openPermissionMap;
+        this.permissionMap = permissionMap;
         this.attack = attack;
         this.hasLevel = MemberLevelType.Lv_1;
         this.hasHP = pb.getPointAndStatus(StatusType.HP);
         this.hasMP = pb.getPointAndStatus(StatusType.MP);
     }
 
-    public Member(UUID uuid, SkillClass skillClass, PlayerStatusMap pb, EquipmentMap equip, SkillMap skillMap, WarpPointMap warpPointMap, QuestMap questMap, OpenPermissionMap openPermissionMap, Attack attack, int hasHP, int hasMP, long hasEXP, MemberLevelType level) {
+    public Member(UUID uuid, SkillClass skillClass, PlayerStatusMap pb, EquipmentMap equip, SkillMap skillMap, WarpPointMap warpPointMap, QuestMap questMap, PermissionMap permissionMap, Attack attack, int hasHP, int hasMP, long hasEXP, MemberLevelType level) {
         this.uuid = uuid;
         this.skillClass = skillClass;
         this.statusMap = pb;
@@ -67,7 +69,7 @@ public class Member {
         this.skillMap = skillMap;
         this.warpPointMap = warpPointMap;
         this.questMap = questMap;
-        this.openPermissionMap = openPermissionMap;
+        this.permissionMap = permissionMap;
         this.attack = attack;
         this.hasLevel = level;
         this.hasHP = hasHP;
@@ -119,6 +121,8 @@ public class Member {
             this.hasEXP = this.hasEXP - hasLevel.getMaxEXP();
             hasLevel = (hasLevel.getNext());
             Bukkit.getPlayer(uuid).sendMessage(TanoRPG.PX + "§aレベルが §b" + hasLevel + "Lv §aになりました！");
+            getStatusMap().setStatusPoint(getStatusMap().getStatusPoint() + 2);
+            Bukkit.getPluginManager().callEvent(new TanoRpgLevelUpEvent(getPlayer(uuid), this));
         }
         TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
     }
@@ -161,8 +165,8 @@ public class Member {
         return questMap;
     }
 
-    public OpenPermissionMap getOpenPermissionMap() {
-        return openPermissionMap;
+    public PermissionMap getOpenPermissionMap() {
+        return permissionMap;
     }
 
     public long getMoney() {
@@ -190,27 +194,8 @@ public class Member {
     }
 
     public void addHasEXP(long HAS_EXP){
-        if (!hasLevel.hasNext()){
-            this.hasEXP = 0;
-            return;
-        }
-
-        this.hasEXP += HAS_EXP;
-
-        for (int i = 0; this.hasEXP >= hasLevel.getMaxEXP(); i++){
-            if (!hasLevel.hasNext()){
-                this.hasEXP = 0;
-                TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
-                return;
-            }
-            this.hasEXP = this.hasEXP - hasLevel.getMaxEXP();
-            hasLevel = (hasLevel.getNext());
-            Bukkit.getPlayer(uuid).sendMessage(TanoRPG.PX + "§aレベルが §b" + hasLevel + "Lv §aになりました！");
-        }
-        TanoRPG.getPlugin().getSidebarManager().updateSidebar(Bukkit.getPlayer(uuid), this);
-
+        setHasEXP(getHasEXP() + HAS_EXP);
     }
-
 
     public void saveData(){
         Config data = new Config("player_database" + File.separator + uuid.toString() + ".yml", TanoRPG.getPlugin());
@@ -220,7 +205,7 @@ public class Member {
         statusMap.save(data, "");
         equipMap.save(data, "");
         questMap.save(data, "");
-        openPermissionMap.save(data, "");
+        permissionMap.save(data, "");
         c.set("hasHP", hasHP);
         c.set("hasMP", hasMP);
         c.set("hasEXP", hasEXP);

@@ -6,7 +6,6 @@ import com.github.tanokun.tanorpg.game.entity.EntityManager;
 import com.github.tanokun.tanorpg.game.entity.spawner.EntitySpawnerManager;
 import com.github.tanokun.tanorpg.game.item.ItemManager;
 import com.github.tanokun.tanorpg.game.shop.ShopManager;
-import com.github.tanokun.tanorpg.player.inv.SelSkillClassMenu;
 import com.github.tanokun.tanorpg.player.quest.QuestManager;
 import com.github.tanokun.tanorpg.util.command.Command;
 import com.github.tanokun.tanorpg.util.command.CommandContext;
@@ -14,8 +13,6 @@ import com.github.tanokun.tanorpg.util.command.CommandPermission;
 import com.github.tanokun.tanorpg.util.command.TabComplete;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
-import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
-import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.apache.commons.lang.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -57,8 +54,6 @@ public class TanoRpgCommand {
             }
 
             p.getInventory().addItem(TanoRPG.getPlugin().getItemManager().getItem(commandContext.getArg(0, "")).init(1));
-            p.sendMessage(TanoRPG.PX + "§a" + p.getName() + "§aに" + "§bID「" + commandContext.getArg(0, "")
-                    + "§b」" + "§aを" + commandContext.getArg(1, "1") + "個渡しました");
         } else {
             if (!StringUtils.isNumeric(commandContext.getArg(1, "0"))) {
                 p.sendMessage(TanoRPG.PX + "§c個数は数字で指定してください");
@@ -75,9 +70,10 @@ public class TanoRpgCommand {
 
             p.getInventory().addItem(TanoRPG.getPlugin().getItemManager().getItem(
                     commandContext.getArg(0, "")).init(Integer.parseInt(commandContext.getArg(1, "0"))));
-            p.sendMessage(TanoRPG.PX + "§a" + p.getName() + "§aに" + "§bID「" + commandContext.getArg(0, "")
-                    + "§b」" + "§aを" + commandContext.getArg(1, "1") + "個渡しました");
         }
+
+        p.sendMessage(TanoRPG.PX + "§a" + p.getName() + "§aに" + "§bID「" + commandContext.getArg(0, "")
+                + "§b」" + "§aを" + commandContext.getArg(1, "1") + "個渡しました");
     }
 
     @TabComplete(

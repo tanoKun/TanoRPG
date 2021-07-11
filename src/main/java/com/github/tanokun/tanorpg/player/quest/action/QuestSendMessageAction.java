@@ -15,9 +15,9 @@ public class QuestSendMessageAction implements Action {
 
     @Override
     public void execute(Member m) {
-        Player p = Bukkit.getPlayer(m.getUuid());
-        String r = message;
+    Player p = Bukkit.getPlayer(m.getUuid());
+    String r = message;
         r = r.replace("[player]", p.getName());
-        p.sendMessage(r);
-    }
+                p.sendMessage(r);
+                }
 }

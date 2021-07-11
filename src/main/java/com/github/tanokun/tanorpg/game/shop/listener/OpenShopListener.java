@@ -1,7 +1,6 @@
 package com.github.tanokun.tanorpg.game.shop.listener;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.Craft;
 import com.github.tanokun.tanorpg.game.shop.Shop;
 import com.github.tanokun.tanorpg.player.Member;
 import net.citizensnpcs.api.event.NPCRightClickEvent;

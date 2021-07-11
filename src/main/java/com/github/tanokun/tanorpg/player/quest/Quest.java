@@ -30,8 +30,12 @@ public class Quest {
 
     private final List<Action> cancelQuestActions;
 
+    private final boolean IfCantToDoQuestShow;
+
+    private final long minutes;
+
     public Quest(String name, int npcID, List<String> lore, List<String> result, ItemRarityType difficulty, List<Condition> conditions, List<Task> tasks,
-                 List<Action> showQuestActions, List<Action> startQuestActions, List<Action> finishQuestActions, List<Action> cancelQuestActions){
+                 List<Action> showQuestActions, List<Action> startQuestActions, List<Action> finishQuestActions, List<Action> cancelQuestActions, boolean ifCantToDoQuestShow, long minutes){
         this.name = name;
         this.npcID = npcID;
         this.lore = lore;
@@ -43,6 +47,8 @@ public class Quest {
         this.startQuestActions = startQuestActions;
         this.finishQuestActions = finishQuestActions;
         this.cancelQuestActions = cancelQuestActions;
+        IfCantToDoQuestShow = ifCantToDoQuestShow;
+        this.minutes = minutes;
     }
 
     public String getName() {
@@ -94,5 +100,13 @@ public class Quest {
 
     public List<String> getResult() {
         return result;
+    }
+
+    public boolean isCantToDoQuestShow() {
+        return IfCantToDoQuestShow;
+    }
+
+    public long getMinutes() {
+        return minutes;
     }
 }

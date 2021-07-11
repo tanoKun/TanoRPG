@@ -1,10 +1,6 @@
 package com.github.tanokun.tanorpg.player.quest.task;
 
-import com.github.tanokun.tanorpg.util.command.CommandContext;
-import org.bukkit.entity.Player;
-
 import java.util.Objects;
-import java.util.UUID;
 
 public abstract class Task<V> {
     protected V max;
@@ -17,7 +13,7 @@ public abstract class Task<V> {
 
     public String getMessage() {return message;}
 
-    abstract public String getMessage(boolean b, TaskData<Integer> taskData);
+    abstract public String getMessage(boolean b, TaskData<V> taskData);
 
     public V getMax() {
         return max;

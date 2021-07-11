@@ -1,7 +1,6 @@
 package com.github.tanokun.tanorpg.game.shop;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.craft.CraftItem;
 import com.github.tanokun.tanorpg.player.Member;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
@@ -30,7 +29,8 @@ public class Shop implements InventoryProvider {
         this.name = name;
         this.items = items;
         this.npcId = npcId;
-        this.permission = can ? "shop." + id + "." + name : "";
+        this.permission = can ? "shop." + id : "";
+        TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
     }
 
     public SmartInventory getInv(){
@@ -38,7 +38,7 @@ public class Shop implements InventoryProvider {
                 .id(id)
                 .title("§6§lショップ「" + name + "§6§l」")
                 .update(false)
-                .provider(new Shop(id, name, items, isPermission(), npcId))
+                .provider(this)
                 .size(5, 9)
                 .build();
     }
@@ -50,21 +50,26 @@ public class Shop implements InventoryProvider {
 
         ArrayList<ShopItem> barrier = new ArrayList<>();
         items.stream().forEach(item -> {
-            if (!item.isPermission() || player.isOp())
+            if (!item.isPermission() || player.isOp()) {
+
                 contents.add(ClickableItem.of(item.getItemStack(), e -> {
                     TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
-                    item.getInv(id, name).open(player);
+                    item.getInv().open(player);
                 }));
-            else
-            if (!member.getOpenPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
-            else
-                contents.add(ClickableItem.of(item.getItemStack(), e -> {
-                    TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
-                    item.getInv(id, name).open(player);
-                }));
+
+            } else {
+                if (!member.getOpenPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
+
+                else
+                    contents.add(ClickableItem.of(item.getItemStack(), e -> {
+                        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
+                        item.getInv().open(player);
+                    }));
+            }
         });
+
         barrier.stream().forEach(item -> {
-            contents.add(ClickableItem.of(item.getItemStack(), e -> {
+            contents.add(ClickableItem.of(ItemUtils.createItem(Material.BARRIER, item.getItemStack().getItemMeta().getDisplayName(), 1, false), e -> {
                 TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 1);
                 player.sendMessage(TanoRPG.PX + "§cそのショップは開放されていません");
             }));

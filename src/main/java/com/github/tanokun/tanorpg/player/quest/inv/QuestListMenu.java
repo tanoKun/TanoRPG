@@ -12,7 +12,6 @@ import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryContents;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
-import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,7 +20,10 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class QuestListMenu implements InventoryProvider {
@@ -34,12 +36,12 @@ public class QuestListMenu implements InventoryProvider {
         m = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
     }
 
-    public static SmartInventory getInv(NPC npcId, Player player){
+    public SmartInventory getInv() {
         return SmartInventory.builder()
                 .closeable(true)
-                .provider(new QuestListMenu(npcId, player))
+                .provider(this)
                 .size(1, 9)
-                .title("§dクエスト受注リスト")
+                .title("§d§lクエスト受注リスト")
                 .id("questListMenu")
                 .update(false)
                 .build();
@@ -49,9 +51,55 @@ public class QuestListMenu implements InventoryProvider {
     public void init(Player player, InventoryContents contents) {
         Member m = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
 
-        for (Quest quest : TanoRPG.getPlugin().getQuestManager().getQuests(npcId.getId())){
-            if (m.getQuestMap().getClearQuestNames().contains(quest.getName())) continue;
-            for (Condition condition : quest.getConditions()) if (!condition.execute(m)) continue;
+        for (Quest quest : TanoRPG.getPlugin().getQuestManager().getQuests(npcId.getId())) {
+
+            if (m.getQuestMap().getClearQuestNames().contains(quest.getName())) {
+                if (quest.getMinutes() == 0) continue;
+                QuestData questData = m.getQuestMap().getClearQuest(quest.getName());
+
+                LocalDateTime old = questData.getClearTime();
+                LocalDateTime now = LocalDateTime.now();
+                long diffInMinutes = java.time.Duration.between(old, now).toMinutes();
+                if (diffInMinutes >= quest.getMinutes()) {
+                    m.getQuestMap().removeClearQuest(quest.getName());
+                }
+            }
+        }
+
+        questLoop: for (Quest quest : TanoRPG.getPlugin().getQuestManager().getQuests(npcId.getId())) {
+
+            if (m.getQuestMap().getClearQuestNames().contains(quest.getName())) {
+                if (quest.getMinutes() == 0) continue;
+                QuestData questData = m.getQuestMap().getClearQuest(quest.getName());
+
+                LocalDateTime old = questData.getClearTime();
+                LocalDateTime now = LocalDateTime.now();
+                long diffInMinutes = java.time.Duration.between(old, now).toMinutes();
+                long diffInSeconds = diffInMinutes * 60;
+
+                if (!quest.isCantToDoQuestShow()) continue;
+
+                long min, hour;
+                hour = diffInSeconds / 3600;
+                min = (diffInSeconds % 3600 / 60);
+                contents.add(ClickableItem.of(ItemUtils.createItem(Material.BARRIER, "§c" + quest.getName(), Arrays.asList("§cクールタイム中 " + hour + "時間" + min + "分後にお試しください"), 1, false), e -> {
+                    TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1 ,1);
+                    player.sendMessage("§cクールタイム中 " + hour + "時間" + min + "分後にお試しください");
+                    contents.inventory().close(player);
+                }));
+                continue;
+            }
+
+            for (Condition condition : quest.getConditions())
+                if (!condition.execute(m)) {
+                    if (!quest.isCantToDoQuestShow()) continue questLoop;
+                    contents.add(ClickableItem.of(ItemUtils.createItem(Material.BARRIER, "§c" + quest.getName(), Arrays.asList("§c条件を達していません"), 1, false), e -> {
+                        TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1 ,1);
+                        player.sendMessage("§c条件を達していません");
+                        contents.inventory().close(player);
+                    }));
+                    continue questLoop;
+                }
 
             List<String> lore = new ArrayList<>();
             lore.add(" ");
@@ -61,7 +109,8 @@ public class QuestListMenu implements InventoryProvider {
             lore.add(" ");
             lore.add("§b━━報酬━━━━━━━━━");
             quest.getResult().forEach(lore::add);
-            contents.add(ClickableItem.of(ItemUtils.createItem(Material.WRITTEN_BOOK, "§d" + quest.getName(), lore, 1, false), e->{
+
+            contents.add(ClickableItem.of(ItemUtils.createItem(Material.WRITTEN_BOOK, "§d" + quest.getName(), lore, 1, false), e -> {
                 m.getQuestMap().setAction(true);
                 contents.inventory().close(player);
                 Bukkit.getScheduler().runTaskAsynchronously(TanoRPG.getPlugin(), () -> {
@@ -85,7 +134,7 @@ public class QuestListMenu implements InventoryProvider {
         }
     }
 
-    private Runnable getYes(Player player, InventoryContents contents, Quest quest){
+    private Runnable getYes(Player player, InventoryContents contents, Quest quest) {
         return () -> {
             m.getQuestMap().setAction(true);
             contents.inventory().close(player);
@@ -99,12 +148,13 @@ public class QuestListMenu implements InventoryProvider {
                     QuestData questData = new QuestData(quest);
                     m.getQuestMap().addQuest(questData);
                     m.getQuestMap().setActiveQuest(questData);
+                    TanoRPG.getPlugin().getSidebarManager().updateSidebar(player, m);
                 });
             });
         };
     }
 
-    private Runnable getNo(Player player, InventoryContents contents, Quest quest){
+    private Runnable getNo(Player player, InventoryContents contents, Quest quest) {
         return () -> {
             m.getQuestMap().setAction(true);
             contents.inventory().close(player);
