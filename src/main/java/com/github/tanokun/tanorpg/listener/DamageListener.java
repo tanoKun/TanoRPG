@@ -1,11 +1,11 @@
 package com.github.tanokun.tanorpg.listener;
 
-import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.DamageManager;
+import com.github.tanokun.tanorpg.TanoRPG;
+import com.github.tanokun.tanorpg.game.item.ItemType;
 import com.github.tanokun.tanorpg.game.item.type.base.ItemData;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
 import com.github.tanokun.tanorpg.player.Member;
-import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.util.EntityUtils;
 import com.github.tanokun.tanorpg.util.ItemUtils;
 import com.github.tanokun.tanorpg.util.particle.ParticleEffect;
@@ -18,6 +18,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.inventory.EquipmentSlot;
@@ -39,42 +40,57 @@ public class DamageListener implements Listener {
 
         if (member == null) return;
 
-        if (ItemUtils.getItemData(e.getPlayer().getEquipment().getItemInMainHand()) == null) {
-            member.getStatusMap().removeAllStatus(member.getEquipMap().getStatus());
-            member.getEquipMap().setEquip(EquipmentMap.EquipmentType.MAIN, null);
-            member.getStatusMap().addAllStatus(member.getEquipMap().getStatus());
-        } else {
-            member.getStatusMap().removeAllStatus(member.getEquipMap().getStatus());
-            member.getEquipMap().setEquip(EquipmentMap.EquipmentType.MAIN, e.getPlayer().getEquipment().getItemInMainHand());
-            member.getStatusMap().addAllStatus(member.getEquipMap().getStatus());
+        Bukkit.getScheduler().runTaskLater(TanoRPG.getPlugin(), () -> {
+            if (ItemUtils.getItemData(e.getPlayer().getEquipment().getItemInMainHand()) == null) {
+                member.getStatusMap().removeAllStatus(member.getEquipMap().getStatus());
+                member.getEquipMap().setEquip(EquipmentMap.EquipmentType.MAIN, null);
+                member.getStatusMap().addAllStatus(member.getEquipMap().getStatus());
+            } else {
+                member.getStatusMap().removeAllStatus(member.getEquipMap().getStatus());
+                member.getEquipMap().setEquip(EquipmentMap.EquipmentType.MAIN, e.getPlayer().getEquipment().getItemInMainHand());
+                member.getStatusMap().addAllStatus(member.getEquipMap().getStatus());
+            }
+        }, 2);
+
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageEvent e) {
+        if (e.getCause().equals(EntityDamageEvent.DamageCause.FALL)
+                || e.getCause().equals(EntityDamageEvent.DamageCause.FIRE)
+                || e.getCause().equals(EntityDamageEvent.DamageCause.FIRE_TICK)
+                || e.getCause().equals(EntityDamageEvent.DamageCause.SUFFOCATION)
+                || e.getEntity() instanceof Player)
+            e.setDamage(0);
+
+        if (e.getEntity() instanceof Player && e.getEntity().getHeight() - e.getDamage() <= 0) {
+            e.setCancelled(true);
         }
     }
 
     @EventHandler
-    public void onClick(EntityDamageByEntityEvent e) {
-        e.setCancelled(true);
+    public void onDamage(EntityDamageByEntityEvent e) {
+        if (e.getEntity() instanceof Player) e.setCancelled(true);
+        else e.setDamage(0);
 
-        if (!(e.getDamager() instanceof Player)) {
-            if (!(e.getEntity() instanceof Player)) return;
-            if (!e.getDamager().hasMetadata("TanoRPG_entity")) return;
-                Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getEntity().getUniqueId());
-                if (member == null) return;
-                int damage = DamageManager.getDisplayDamageByEntity(EntityUtils.getActiveEntity(e.getDamager()).getObjectEntity(), member);
-                DamageManager.createDamageByEntity(damage, e.getDamager(), (Player) e.getEntity());
-                return;
+        if (TanoRPG.getPlugin().getMemberManager().getMember(e.getEntity().getUniqueId()) != null && e.getDamager().hasMetadata("TanoRPG_entity")) {
+            Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getEntity().getUniqueId());
+            if (member == null) return;
+            int damage = DamageManager.getDisplayDamageByEntity(EntityUtils.getActiveEntity(e.getDamager()).getObjectEntity(), member);
+            DamageManager.createDamageByEntity(damage, (Player) e.getEntity());
+            return;
         }
 
-        if (!e.getEntity().hasMetadata("TanoRPG_entity")) return;
-
-        Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getDamager().getUniqueId());
-
-        if (member == null) return;
+        if (e.getEntity().hasMetadata("TanoRPG_entity") && e.getDamager() instanceof Player) {
+            Member member = TanoRPG.getPlugin().getMemberManager().getMember(e.getDamager().getUniqueId());
+            if (member == null) return;
 
             onClick(
-                new PlayerInteractEvent(((Player) e.getDamager()).getPlayer(), Action.LEFT_CLICK_AIR,
-                        ((Player) e.getDamager()).getEquipment().getItemInMainHand() == null
-                                ? null : ((Player) e.getDamager()).getEquipment().getItemInMainHand(),
-                        null, null));
+                    new PlayerInteractEvent(((Player) e.getDamager()).getPlayer(), Action.LEFT_CLICK_AIR,
+                            ((Player) e.getDamager()).getEquipment().getItemInMainHand() == null
+                                    ? null : ((Player) e.getDamager()).getEquipment().getItemInMainHand(),
+                            null, null));
+        }
     }
 
     @EventHandler
@@ -103,11 +119,11 @@ public class DamageListener implements Listener {
                 if (member.getAttack().isAttackWait()) return;
                 member.getAttack().setAttackWait(true);
                 member.getAttack().setNextAttackCombo(member.getAttack().getAttackCombo() + 1);
+
                 Bukkit.getScheduler().runTaskLater(TanoRPG.getPlugin(), () -> {
                     int combo = member.getAttack().nextAttackCombo();
                     getWaitAttack(itemData.getCoolTime(), member, itemData).runTaskTimer(TanoRPG.getPlugin(), 1, 1);
-                    attack(e.getPlayer(), member, itemData, combo);
-                }, (itemData.getCoolTime() + itemData.getCombo().get(member.getAttack().getAttackCombo() - 1) - member.getAttack().getLastAttackTicks() <= 0 ?
+                    attack(e.getPlayer(), member, itemData, combo); }, (itemData.getCoolTime() + itemData.getCombo().get(member.getAttack().getAttackCombo() - 1) - member.getAttack().getLastAttackTicks() <= 0 ?
                         0 : itemData.getCoolTime() + itemData.getCombo().get(member.getAttack().getAttackCombo() - 1)) - member.getAttack().getLastAttackTicks());
             }
         }
@@ -116,13 +132,50 @@ public class DamageListener implements Listener {
     private BukkitRunnable getWaitAttack(int ct, Member member, ItemData itemData) {
         return new BukkitRunnable() {
 
+            Player player = Bukkit.getPlayer(member.getUuid());
+
             int time = 0;
+
+            int time2 = 4;
+
             int combo = member.getAttack().getAttackCombo();
 
             int d = ct + itemData.getCombo().get(combo - 1);
 
+            int da = (ct + itemData.getCombo().get(combo - 1)) / 3;
+
+            int da2 = 0;
+
+            boolean isAttack = false;
+
             public void run() {
+                time2++;
+                if (time == 0 && itemData.getItemType().equals(ItemType.PROJECTILE_WEAPON)) d = (ct + itemData.getCombo().get(combo - 1)) * 2;
+
                 member.getAttack().nextLastAttackTicks();
+
+                if (itemData.getItemType().equals(ItemType.PROJECTILE_WEAPON)) {
+                    if (time2 == 5) {
+                        if (d / 2 >= time){
+                            player = Bukkit.getPlayer(member.getUuid());
+                            Location m = player.getLocation();
+                            m.setYaw(m.getYaw() + 120);
+                            m.add(m.getDirection().getX() * 0.8, 1.7, m.getDirection().getZ() * 0.8);
+
+                            Location m2 = m.clone();
+                            m2.setYaw(player.getPlayer().getLocation().getYaw());
+
+                            for (int i = 0; i < 11; i++) {
+                                ParticleEffect.CRIT.display(m, 0, 0, 0, 0f, 1, null, Bukkit.getOnlinePlayers());
+                                m.add(m2.getDirection().getX() * 0.25, 0, m2.getDirection().getZ() * 0.25);
+                            }
+                            time2 = 0;
+                        } else if (!isAttack) {
+                            isAttack = true;
+                            System.out.println("aaa");
+                        }
+                    }
+                }
 
                 if (time == d + 5) {
                     if (!member.getAttack().isAttackWait() && combo == member.getAttack().getAttackCombo()) {
@@ -141,9 +194,7 @@ public class DamageListener implements Listener {
 
     private void attack(Player player, Member member, ItemData itemData, int combo) {
         HashSet<Integer> entityCounts = new HashSet<>();
-        if (member.getSkillClass().equals(SkillClass.SOLDIER) ||
-                member.getSkillClass().equals(SkillClass.GLADIATOR) ||
-                member.getSkillClass().equals(SkillClass.KNIGHT)) {
+        if (itemData.getItemType().equals(ItemType.WEAPON)) {
             Location m = player.getLocation();
             if (combo != itemData.getCombo().size()) {
                 TanoRPG.playSound(player, Sound.ENTITY_PLAYER_ATTACK_SWEEP, 1, 1);
@@ -215,13 +266,6 @@ public class DamageListener implements Listener {
                     }
                 }
             }
-        }
-
-        if (member.getSkillClass().equals(SkillClass.MAGE) ||
-                member.getSkillClass().equals(SkillClass.WIZARD) ||
-                member.getSkillClass().equals(SkillClass.ARC_MAGE) ||
-                member.getSkillClass().equals(SkillClass.PRIEST)) {
-
         }
     }
 
