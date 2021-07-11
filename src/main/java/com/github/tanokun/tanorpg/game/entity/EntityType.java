@@ -48,7 +48,7 @@ public enum EntityType {
     //SHEEP(BaseSheep.class),
     SKELETON(BaseSkeleton.class),
     //SKELETON_HORSE(BaseSkeletonHorse.class),
-    //SLIME(BaseSlime.class),
+    SLIME(BaseSlime.class),
     SPIDER(BaseSpider.class),
     STRAY(BaseStray.class),
     //VEX(BaseVex.class),
