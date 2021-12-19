@@ -39,20 +39,23 @@ public class Craft implements InventoryProvider {
         contents.fillBorders(ClickableItem.empty(ItemUtils.createItem(Material.LIGHT_BLUE_STAINED_GLASS_PANE, " ", 1, false)));
 
         ArrayList<CraftItem> barrier = new ArrayList<>();
+
         items.stream().forEach(item -> {
-            if (!item.isPermission() || player.isOp())
+
+
+            if (!item.getRecipe().get(0).isPermission() || player.isOp())
                 contents.add(ClickableItem.of(item.getAfterItem(), e -> {
                     TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
                     item.getInv().open(player);
                 }));
+            else if (!member.getPermissionMap().hasPermission(item.getRecipe().get(0).getPermission())) barrier.add(item);
             else
-                if (!member.getOpenPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
-                else
-                    contents.add(ClickableItem.of(item.getAfterItem(), e -> {
-                        TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
-                        item.getInv().open(player);
-                    }));
-        });
+                contents.add(ClickableItem.of(item.getAfterItem(), e -> {
+                    TanoRPG.playSound(player, Sound.ENTITY_SHULKER_OPEN, 3, 1);
+                    item.getInv().open(player);
+                }));
+            });
+
         barrier.stream().forEach(item -> {
             contents.add(ClickableItem.of(ItemUtils.createItem(Material.BARRIER, item.getAfterItem().getItemMeta().getDisplayName(), 1, false), e -> {
                 TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 3, 1);

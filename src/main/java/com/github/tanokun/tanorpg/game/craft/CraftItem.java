@@ -11,6 +11,7 @@ import com.github.tanokun.tanorpg.util.smart_inv.inv.contents.InventoryProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -18,15 +19,9 @@ import org.bukkit.metadata.FixedMetadataValue;
 import java.util.ArrayList;
 
 public class CraftItem implements InventoryProvider {
+    private final ArrayList<CraftRecipe> recipe;
+
     private final ItemStack afterItem;
-
-    private final ArrayList<ItemStack> necItems;
-
-    private final ArrayList<ItemStack> necTools;
-
-    private final long price;
-
-    private final String permission;
 
     public SmartInventory getInv(){
         return SmartInventory.builder()
@@ -38,13 +33,9 @@ public class CraftItem implements InventoryProvider {
                 .build();
     }
 
-    public CraftItem(String id, ItemStack afterItem, ArrayList<ItemStack> beforeItems, ArrayList<ItemStack> necTools, int price, boolean can) {
+    public CraftItem(ItemStack afterItem, final ArrayList<CraftRecipe> recipe) {
         this.afterItem = afterItem;
-        this.necItems = beforeItems;
-        this.necTools = necTools;
-        this.price = price;
-        this.permission = can ? "craftItem." + id + "." + ItemUtils.getItemData(afterItem).getId() : "";
-        TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
+        this.recipe = recipe;
     }
 
     @Override
@@ -53,8 +44,9 @@ public class CraftItem implements InventoryProvider {
         contents.set(3, 7, ClickableItem.empty(afterItem));
         contents.set(3, 5, ClickableItem.empty(ItemUtils.createItem(Material.ARROW, "§b§l作成後", 1, true, 1)));
         contents.set(5, 8, ClickableItem.of(ItemUtils.createItem(Material.ANVIL, "§b§lクラフトする", 1, true, 1), e -> {
-            Member member = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
-
+                    Member member = TanoRPG.getPlugin().getMemberManager().getMember(player.getUniqueId());
+                }));
+            /*
             if (player.hasMetadata("crafting")){
                 player.sendMessage(TanoRPG.PX + "§cクラフト中...");
                 TanoRPG.playSound(player, Sound.BLOCK_NOTE_BLOCK_BASS, 1, 1);
@@ -91,8 +83,6 @@ public class CraftItem implements InventoryProvider {
                     int amount = itemStack.getAmount();
                     itemStack.setAmount(amount - toDelete);
                     toDelete -= amount;
-                    System.out.println(amount);
-                    System.out.println(toDelete);
                     if (toDelete <= 0) break;
                 }
             }
@@ -101,7 +91,7 @@ public class CraftItem implements InventoryProvider {
             TanoRPG.playSound(player, Sound.BLOCK_ANVIL_DESTROY, 10, 1);
             Bukkit.getScheduler().runTaskLater(TanoRPG.getPlugin(), () -> {
                 player.sendMessage(TanoRPG.PX + "クラフトが完了しました");
-                player.getInventory().addItem(afterItem);
+                ItemUtils.addItem(player, afterItem);
                 player.removeMetadata("crafting", TanoRPG.getPlugin());
                 TanoRPG.getPlugin().getSidebarManager().updateSidebar(player, member);
                 Bukkit.getPluginManager().callEvent(new TanoRpgCraftEvent(player, member, this));
@@ -125,29 +115,64 @@ public class CraftItem implements InventoryProvider {
             if (necItems.size() <= i2 + 1) return;
             i2++;
         }
+             */
     }
 
     public ItemStack getAfterItem() {
         return afterItem;
     }
 
-    public ArrayList<ItemStack> getNecItems() {
-        return necItems;
+    public ArrayList<CraftRecipe> getRecipe() {
+        return recipe;
     }
 
-    public ArrayList<ItemStack> getNecTools() {
-        return necTools;
+    public boolean isAnyOpen(Member member) {
+        for (CraftRecipe craftRecipe : getRecipe()) {
+            if (!craftRecipe.isPermission()) return true;
+            if (member.getPermissionMap().hasPermission(craftRecipe.getPermission())) return true;
+        }
+
+        return false;
     }
 
-    public long getPrice() {
-        return price;
-    }
+    public static class CraftRecipe {
+        private final ArrayList<ItemStack> necItems;
 
-    public String getPermission() {
-        return permission;
-    }
+        private final ArrayList<ItemStack> necTools;
 
-    public boolean isPermission(){
-        return !permission.equals("");
+        private final long price;
+
+        private final String permission;
+
+        private final int count;
+
+        public CraftRecipe(ArrayList<ItemStack> necItems, ArrayList<ItemStack> necTools, long price, int count, boolean can, ItemStack afterItem, String id, String id2) {
+            this.necItems = necItems;
+            this.necTools = necTools;
+            this.price = price;
+            this.count = count;
+            this.permission = can ? "craftItem." + id + "." + id2 + "." + ItemUtils.getItemData(afterItem).getId() : "";
+            TanoRPG.getPlugin().getDataManager().getPermissions().add(permission);
+        }
+
+        public ArrayList<ItemStack> getNecItems() {
+            return necItems;
+        }
+
+        public ArrayList<ItemStack> getNecTools() {
+            return necTools;
+        }
+
+        public long getPrice() {
+            return price;
+        }
+
+        public String getPermission() {
+            return permission;
+        }
+
+        public boolean isPermission() {
+            return !permission.equals("");
+        }
     }
 }

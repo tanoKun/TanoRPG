@@ -1,20 +1,17 @@
 package com.github.tanokun.tanorpg.game.craft;
 
 import com.github.tanokun.tanorpg.TanoRPG;
-import com.github.tanokun.tanorpg.game.item.ItemRarityType;
-import com.github.tanokun.tanorpg.game.item.type.ItemMaterial;
-import com.github.tanokun.tanorpg.game.item.type.base.ItemBase;
-import com.github.tanokun.tanorpg.player.status.StatusMap;
-import com.github.tanokun.tanorpg.player.status.StatusType;
 import com.github.tanokun.tanorpg.util.io.Config;
 import com.github.tanokun.tanorpg.util.io.Folder;
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.io.File;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 public class CraftManager {
     private final HashMap<String, Craft> crafts = new HashMap<>();
@@ -77,7 +74,7 @@ public class CraftManager {
                                 necT.add(TanoRPG.getPlugin().getItemManager().getItem(necT_text).init(necI_count));
                             }
                         }
-                        craftItems.add(new CraftItem(id, a, necI, necT, price, item_permission));
+                        //craftItems.add(new CraftItem(id, a, necI, necT, price, item_permission));
                     }
                     crafts.put(id, new Craft(id, name, craftItems, main_permission, npcId));
                     npcIds.put(npcId, id);
