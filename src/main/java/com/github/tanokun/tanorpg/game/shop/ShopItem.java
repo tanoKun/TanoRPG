@@ -13,6 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.Permission;
+import org.bukkit.util.permissions.DefaultPermissions;
 
 public class ShopItem implements InventoryProvider {
     private final ItemStack itemStack;
@@ -82,7 +84,7 @@ public class ShopItem implements InventoryProvider {
             }
             member.removeMoney(price);
             itemStack.setAmount(1);
-            player.getInventory().addItem(itemStack);
+            ItemUtils.addItem(player, itemStack);
             player.sendMessage(TanoRPG.PX + "購入しました");
             Bukkit.getPluginManager().callEvent(new TanoRpgShopEvent(player, member, this));
             TanoRPG.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1, 1);

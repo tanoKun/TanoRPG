@@ -19,7 +19,7 @@ public class OpenShopListener implements Listener {
 
         if (!shop.isPermission() || e.getClicker().isOp()) shop.getInv().open(e.getClicker());
 
-        if (member.getOpenPermissionMap().hasPermission(shop.getPermission())) shop.getInv().open(e.getClicker());
+        if (member.getPermissionMap().hasPermission(shop.getPermission())) shop.getInv().open(e.getClicker());
 
         TanoRPG.getPlugin().getSidebarManager().updateSidebar(e.getClicker(), member);
     }

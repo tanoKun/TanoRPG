@@ -58,7 +58,7 @@ public class Shop implements InventoryProvider {
                 }));
 
             } else {
-                if (!member.getOpenPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
+                if (!member.getPermissionMap().hasPermission(item.getPermission())) barrier.add(item);
 
                 else
                     contents.add(ClickableItem.of(item.getItemStack(), e -> {
