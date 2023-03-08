@@ -5,7 +5,7 @@ public enum KindOfStatusType {
     RUNE("§b§l◆ §r"),
     EVOLUTION("§d§l◆ §r");
 
-    private String star;
+    private final String star;
 
     KindOfStatusType(String s) {
         star = s;

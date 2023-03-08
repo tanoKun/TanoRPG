@@ -11,8 +11,7 @@ import org.bukkit.inventory.Inventory;
 
 import java.util.List;
 
-public class SpecialInventoryOpener implements InventoryOpener
-{
+public class SpecialInventoryOpener implements InventoryOpener {
     private static final List<InventoryType> SUPPORTED = ImmutableList.of(
             InventoryType.FURNACE,
             InventoryType.WORKBENCH,
@@ -26,8 +25,7 @@ public class SpecialInventoryOpener implements InventoryOpener
     );
 
     @Override
-    public Inventory open(SmartInventory inv, Player player)
-    {
+    public Inventory open(SmartInventory inv, Player player) {
         InventoryManager manager = inv.getManager();
         Inventory handle = Bukkit.createInventory(player, inv.getType(), inv.getTitle());
 
@@ -38,8 +36,7 @@ public class SpecialInventoryOpener implements InventoryOpener
     }
 
     @Override
-    public boolean supports(InventoryType type)
-    {
+    public boolean supports(InventoryType type) {
         return SUPPORTED.contains(type);
     }
 }

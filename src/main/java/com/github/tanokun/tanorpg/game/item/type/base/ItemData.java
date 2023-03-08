@@ -4,8 +4,10 @@ import com.github.tanokun.tanorpg.game.item.ItemRarityType;
 import com.github.tanokun.tanorpg.game.item.ItemRuneInventory;
 import com.github.tanokun.tanorpg.game.item.ItemType;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
+import com.github.tanokun.tanorpg.player.quests.actions.QuestGiveBuffAction;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.status.StatusMap;
+import org.bukkit.Color;
 import org.bukkit.Material;
 
 import java.util.List;
@@ -51,7 +53,13 @@ public class ItemData {
 
     private int reach;
 
-    public ItemData(ItemBase itemBase)  {
+    private Color color;
+
+    private List<QuestGiveBuffAction> buffs;
+
+    private String displayType;
+
+    public ItemData(ItemBase itemBase, StatusMap itemStatus) {
         this.itemType = itemBase.getItemType();
         this.id = itemBase.getId();
         this.displayName = itemBase.getDisplayName();
@@ -60,7 +68,7 @@ public class ItemData {
         this.glowing = itemBase.isGlowing();
         this.price = itemBase.getPrice();
         this.customModelData = itemBase.getCustomModelData();
-        this.statuses = itemBase.getBasicStatuses();
+        this.statuses = itemStatus;
         this.rarity = itemBase.getRarity();
         this.proper = itemBase.getProper();
         this.coolTime = itemBase.getCoolTime();
@@ -72,6 +80,9 @@ public class ItemData {
         this.equipmentType = itemBase.getEquipmentType();
         this.combo = itemBase.getCombo();
         this.reach = itemBase.getReach();
+        this.color = itemBase.getColor();
+        this.buffs = itemBase.getBuffs();
+        this.displayType = itemBase.getDisplayType();
     }
 
     public String getId() {
@@ -154,6 +165,18 @@ public class ItemData {
         return reach;
     }
 
+    public Color getColor() {
+        return color;
+    }
+
+    public List<QuestGiveBuffAction> getBuffs() {
+        return buffs;
+    }
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -232,5 +255,17 @@ public class ItemData {
 
     public void setReach(int reach) {
         this.reach = reach;
+    }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+    public void setBuffs(List<QuestGiveBuffAction> buffs) {
+        this.buffs = buffs;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
     }
 }

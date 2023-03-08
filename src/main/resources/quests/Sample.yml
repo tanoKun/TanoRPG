@@ -45,11 +45,11 @@ finishQuestAcitons:
   - SEND よくやった！
   - SOUND ENTITY_CHICKEN_EGG 3 0.5
   - WAIT 40
- # #appleはItemID 1 は個数 -> give [itemID] [amount]
- # - GIVE apple 1
- # - EXP 100
- # # craft はshopでもいい testCraft はCraftID appleはその中でも作るItemID -> open [craft|shop] [ID] [itemID]
- # - OPEN craft testCraft apple
+  # #appleはItemID 1 は個数 -> give [itemID] [amount]
+  # - GIVE apple 1
+  # - EXP 100
+  # # craft はshopでもいい testCraft はCraftID appleはその中でも作るItemID -> open [craft|shop] [ID] [itemID]
+  # - OPEN craft testCraft apple
 
 cancelQuestActions:
   - SEND それは悲しいなぁ

@@ -31,17 +31,17 @@ public class WgRegionLeftEvent extends Event implements Cancellable {
      * This even is fired whenever a region is left.
      * It may be fired multiple times per tick, if several
      * regions are left at the same time.
+     *
      * @param playerUUID The UUID of the player leaving the region.
-     * @param region WorldGuard's ProtectedRegion region.
+     * @param region     WorldGuard's ProtectedRegion region.
      */
-    public WgRegionLeftEvent(UUID playerUUID, @NotNull ProtectedRegion region)
-    {
+    public WgRegionLeftEvent(UUID playerUUID, @NotNull ProtectedRegion region) {
         this.uuid = playerUUID;
         this.region = region;
         this.regionName = region.getId();
     }
 
-    @Contract (pure = true)
+    @Contract(pure = true)
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -78,6 +78,6 @@ public class WgRegionLeftEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancelled) {
-        this.cancelled=cancelled;
+        this.cancelled = cancelled;
     }
 }

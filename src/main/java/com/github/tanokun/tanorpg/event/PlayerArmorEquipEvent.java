@@ -1,5 +1,7 @@
 package com.github.tanokun.tanorpg.event;
 
+import com.github.tanokun.tanorpg.game.item.type.base.ItemData;
+import com.github.tanokun.tanorpg.util.ItemUtilsKt;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -24,7 +26,7 @@ import org.bukkit.event.player.PlayerItemBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Contract;
 
-public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
+public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
     private boolean cancel = false;
@@ -32,7 +34,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
     private final ArmorType type;
     private ItemStack oldArmorPiece, newArmorPiece;
 
-    public PlayerArmorEquipEvent(final Player player, final EquipMethod equipType, final ArmorType type, final ItemStack oldArmorPiece, final ItemStack newArmorPiece){
+    public PlayerArmorEquipEvent(final Player player, final EquipMethod equipType, final ArmorType type, final ItemStack oldArmorPiece, final ItemStack newArmorPiece) {
         super(player);
         this.equipType = equipType;
         this.type = type;
@@ -41,50 +43,50 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
     }
 
     @Contract(pure = true)
-    public final static HandlerList getHandlerList(){
+    public final static HandlerList getHandlerList() {
         return handlers;
     }
 
     @Contract(pure = true)
     @Override
-    public final HandlerList getHandlers(){
+    public final HandlerList getHandlers() {
         return handlers;
     }
 
-    public final void setCancelled(final boolean cancel){
+    public final void setCancelled(final boolean cancel) {
         this.cancel = cancel;
     }
 
     @Contract(pure = true)
-    public final boolean isCancelled(){
+    public final boolean isCancelled() {
         return cancel;
     }
 
     @Contract(pure = true)
-    public final ArmorType getType(){
+    public final ArmorType getType() {
         return type;
     }
 
     @Contract(pure = true)
-    public final ItemStack getOldArmorPiece(){
+    public final ItemStack getOldArmorPiece() {
         return oldArmorPiece;
     }
 
-    public final void setOldArmorPiece(final ItemStack oldArmorPiece){
+    public final void setOldArmorPiece(final ItemStack oldArmorPiece) {
         this.oldArmorPiece = oldArmorPiece;
     }
 
     @Contract(pure = true)
-    public final ItemStack getNewArmorPiece(){
+    public final ItemStack getNewArmorPiece() {
         return newArmorPiece;
     }
 
-    public final void setNewArmorPiece(final ItemStack newArmorPiece){
+    public final void setNewArmorPiece(final ItemStack newArmorPiece) {
         this.newArmorPiece = newArmorPiece;
     }
 
     @Contract(pure = true)
-    public EquipMethod getMethod(){
+    public EquipMethod getMethod() {
         return equipType;
     }
 
@@ -127,20 +129,30 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
         return item;
     }
 
-    public enum ArmorType{
+    public enum ArmorType {
         HELMET(5), CHESTPLATE(6), LEGGINGS(7), BOOTS(8), SHIELD(45), OFF_HAND(45);
 
         private final int slot;
 
-        ArmorType(int slot){
+        ArmorType(int slot) {
             this.slot = slot;
         }
 
-        public final static ArmorType matchType(final ItemStack itemStack){
-            if(itemStack == null)
+        public final static ArmorType matchType(final ItemStack itemStack) {
+            if (itemStack == null)
                 return null;
 
-            switch (itemStack.getType()){
+            if (ItemUtilsKt.getItemData(itemStack) != null) {
+                ItemData itemData = ItemUtilsKt.getItemData(itemStack);
+
+                switch (itemData.getEquipmentType()) {
+                    case HELMET: return HELMET;
+                    case CHESTPLATE: return CHESTPLATE;
+                    case LEGGINGS: return LEGGINGS;
+                    case BOOTS: return BOOTS;
+                }
+            }
+            switch (itemStack.getType()) {
                 case DIAMOND_HELMET:
                 case GOLDEN_HELMET:
                 case IRON_HELMET:
@@ -174,7 +186,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
             }
         }
 
-        public int getSlot(){
+        public int getSlot() {
             return slot;
         }
     }
@@ -182,29 +194,29 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
     public static class ArmorListener implements Listener {
 
         @EventHandler
-        public final void onInventoryClick(final InventoryClickEvent e){
+        public final void onInventoryClick(final InventoryClickEvent e) {
             boolean shift = false, numberkey = false;
 
-            if(e.isCancelled())
+            if (e.isCancelled())
                 return;
 
-            if(e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT))
+            if (e.getClick().equals(ClickType.SHIFT_LEFT) || e.getClick().equals(ClickType.SHIFT_RIGHT))
                 shift = true;
 
-            if(e.getClick().equals(ClickType.NUMBER_KEY))
+            if (e.getClick().equals(ClickType.NUMBER_KEY))
                 numberkey = true;
 
-            if((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) && !e.getInventory().getType().equals(InventoryType.CRAFTING))
+            if ((e.getSlotType() != SlotType.ARMOR || e.getSlotType() != SlotType.QUICKBAR) && !e.getInventory().getType().equals(InventoryType.CRAFTING))
                 return;
 
-            if(!(e.getWhoClicked() instanceof Player))
+            if (!(e.getWhoClicked() instanceof Player))
                 return;
 
-            if(e.getCurrentItem() == null)
+            if (e.getCurrentItem() == null)
                 return;
 
             ArmorType newArmorType = ArmorType.matchType(shift ? e.getCurrentItem() : e.getCursor());
-            if(!shift && newArmorType != null && e.getRawSlot() != newArmorType.getSlot())
+            if (!shift && newArmorType != null && e.getRawSlot() != newArmorType.getSlot())
                 return;
 
             if (shift) {
@@ -212,7 +224,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
                 if (newArmorType != null && !newArmorType.equals(ArmorType.OFF_HAND)) {
 
                     boolean equipping = true;
-                    if(e.getRawSlot() == newArmorType.getSlot())
+                    if (e.getRawSlot() == newArmorType.getSlot())
                         equipping = false;
 
                     if (!equipping) {
@@ -225,7 +237,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
 
                         Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                        if(armorEquipEvent.isCancelled())
+                        if (armorEquipEvent.isCancelled())
                             e.setCancelled(true);
 
                     } else {
@@ -239,7 +251,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
 
                         Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                        if(armorEquipEvent.isCancelled())
+                        if (armorEquipEvent.isCancelled())
                             e.setCancelled(true);
                     }
                 }
@@ -264,9 +276,10 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
                     newArmorType = ArmorType.matchType(e.getCurrentItem() != null && e.getCurrentItem().getType() != Material.AIR ? e.getCurrentItem() : e.getCursor());
                 }
 
-                if(newArmorType != null && e.getRawSlot() == newArmorType.getSlot()){
+                if (newArmorType != null && e.getRawSlot() == newArmorType.getSlot()) {
                     PlayerArmorEquipEvent.EquipMethod method = PlayerArmorEquipEvent.EquipMethod.DRAG;
-                    if(e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey) method = PlayerArmorEquipEvent.EquipMethod.HOTBAR_SWAP;
+                    if (e.getAction().equals(InventoryAction.HOTBAR_SWAP) || numberkey)
+                        method = PlayerArmorEquipEvent.EquipMethod.HOTBAR_SWAP;
                     PlayerArmorEquipEvent armorEquipEvent = new PlayerArmorEquipEvent((Player) e.getWhoClicked(), method, newArmorType, oldArmorPiece, newArmorPiece);
                     Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
                     if (armorEquipEvent.isCancelled())
@@ -285,26 +298,26 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
 
                 final Player player = e.getPlayer();
 
-                    ArmorType newArmorType = ArmorType.matchType(e.getItem());
-                    if (newArmorType != null) {
+                ArmorType newArmorType = ArmorType.matchType(e.getItem());
+                if (newArmorType != null) {
 
-                        if (newArmorType.equals(ArmorType.HELMET) && e.getPlayer().getInventory().getHelmet() == null
-                                || newArmorType.equals(ArmorType.CHESTPLATE) && e.getPlayer().getInventory().getChestplate() == null
-                                || newArmorType.equals(ArmorType.LEGGINGS) && e.getPlayer().getInventory().getLeggings() == null
-                                || newArmorType.equals(ArmorType.BOOTS) && e.getPlayer().getInventory().getBoots() == null
-                                || newArmorType.equals(ArmorType.SHIELD) && e.getPlayer().getInventory().getItemInOffHand() == null
-                                || newArmorType.equals(ArmorType.OFF_HAND) && e.getPlayer().getInventory().getItemInOffHand() == null) {
+                    if (newArmorType.equals(ArmorType.HELMET) && e.getPlayer().getInventory().getHelmet() == null
+                            || newArmorType.equals(ArmorType.CHESTPLATE) && e.getPlayer().getInventory().getChestplate() == null
+                            || newArmorType.equals(ArmorType.LEGGINGS) && e.getPlayer().getInventory().getLeggings() == null
+                            || newArmorType.equals(ArmorType.BOOTS) && e.getPlayer().getInventory().getBoots() == null
+                            || newArmorType.equals(ArmorType.SHIELD) && e.getPlayer().getInventory().getItemInOffHand() == null
+                            || newArmorType.equals(ArmorType.OFF_HAND) && e.getPlayer().getInventory().getItemInOffHand() == null) {
 
-                            PlayerArmorEquipEvent armorEquipEvent = new PlayerArmorEquipEvent(
-                                    e.getPlayer(),
-                                    PlayerArmorEquipEvent.EquipMethod.HOTBAR,
-                                    ArmorType.matchType(e.getItem()),
-                                    null, e.getItem());
+                        PlayerArmorEquipEvent armorEquipEvent = new PlayerArmorEquipEvent(
+                                e.getPlayer(),
+                                PlayerArmorEquipEvent.EquipMethod.HOTBAR,
+                                ArmorType.matchType(e.getItem()),
+                                null, e.getItem());
 
-                            Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
-                            if (armorEquipEvent.isCancelled()) {
-                                e.setCancelled(true);
-                                player.updateInventory();
+                        Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
+                        if (armorEquipEvent.isCancelled()) {
+                            e.setCancelled(true);
+                            player.updateInventory();
                         }
                     }
                 }
@@ -312,7 +325,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
         }
 
         @EventHandler
-        public void dispenserFireEvent(BlockDispenseEvent e){
+        public void dispenserFireEvent(BlockDispenseEvent e) {
             ArmorType type = ArmorType.matchType(e.getItem());
 
             if (ArmorType.matchType(e.getItem()) == null)
@@ -334,7 +347,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
                         org.bukkit.material.Dispenser dis = (org.bukkit.material.Dispenser) dispenser.getData();
 
                         BlockFace directionFacing = dis.getFacing();
-                        if(directionFacing == BlockFace.EAST
+                        if (directionFacing == BlockFace.EAST
                                 && p.getLocation().getBlockX() != loc.getBlockX()
                                 && p.getLocation().getX() <= loc.getX() + 2.3
                                 && p.getLocation().getX() >= loc.getX() || directionFacing == BlockFace.WEST
@@ -343,7 +356,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
                                 && p.getLocation().getZ() <= loc.getZ() + 2.3
                                 && p.getLocation().getZ() >= loc.getZ() || directionFacing == BlockFace.NORTH
                                 && p.getLocation().getZ() >= loc.getZ() - 1.3
-                                && p.getLocation().getZ() <= loc.getZ()){
+                                && p.getLocation().getZ() <= loc.getZ()) {
 
                             PlayerArmorEquipEvent armorEquipEvent = new PlayerArmorEquipEvent(
                                     p,
@@ -353,7 +366,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
 
                             Bukkit.getServer().getPluginManager().callEvent(armorEquipEvent);
 
-                            if(armorEquipEvent.isCancelled())
+                            if (armorEquipEvent.isCancelled())
                                 e.setCancelled(true);
 
                             return;
@@ -364,7 +377,7 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
         }
 
         @EventHandler
-        public void itemBreakEvent(PlayerItemBreakEvent e){
+        public void itemBreakEvent(PlayerItemBreakEvent e) {
             ArmorType type = ArmorType.matchType(e.getBrokenItem());
 
             if (type == null || type.equals(ArmorType.OFF_HAND))
@@ -393,10 +406,10 @@ public class PlayerArmorEquipEvent extends PlayerEvent implements Cancellable{
         }
 
         @EventHandler
-        public void playerDeathEvent(PlayerDeathEvent e){
+        public void playerDeathEvent(PlayerDeathEvent e) {
             Player p = e.getEntity();
-            for(ItemStack i : p.getInventory().getArmorContents()){
-                if(i != null && !i.getType().equals(Material.AIR)){
+            for (ItemStack i : p.getInventory().getArmorContents()) {
+                if (i != null && !i.getType().equals(Material.AIR)) {
                     Bukkit.getServer().getPluginManager().callEvent(new PlayerArmorEquipEvent(p, PlayerArmorEquipEvent.EquipMethod.DEATH, ArmorType.matchType(i), i, null));
                 }
             }

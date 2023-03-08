@@ -3,129 +3,85 @@ package com.github.tanokun.tanorpg;
 import com.github.tanokun.tanorpg.util.io.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.plugin.Plugin;
-
-import java.util.HashSet;
+import org.bukkit.World;
 
 public class DataManager {
-    private Config dataFile;
+    public static void setLocation(Location location, Config config, String key) {
+        String locT = location.getWorld().getName() + " " + location.getX() + " " + location.getY() + " " + location.getZ() + " " + location.getPitch() + " " + location.getYaw();
+        config.getConfig().set(key, locT);
+    }
 
-    private Location guildLoc;
+    public static Location getLocation(Config config, String key) {
+        try {
+            String[] locT = config.getConfig().getString(key).split(" ");
 
-    private String guildRegionName;
+            World world = Bukkit.getWorld(locT[0]);
+            double x = Double.parseDouble(locT[1]);
+            double y = Double.parseDouble(locT[2]);
+            double z = Double.parseDouble(locT[3]);
 
-    private Location homeLoc;
+            float p = Float.valueOf(locT[4]);
+            float y2 = Float.valueOf(locT[5]);
 
-    private String homeRegionName;
-
-    private Location respawnLoc;
-
-    private boolean initFile;
-
-    private HashSet<String> permissions = new HashSet<>();
-
-    public DataManager(Plugin plugin) {
-        dataFile = new Config("data.yml", plugin);
-        dataFile.saveDefaultConfig();
-        String[] guildLoc = dataFile.getConfig().getString("guild-loc", "none").split(" ");
-        this.guildLoc = guildLoc[0].equals("none") ? Bukkit.getWorld("world").getSpawnLocation() :
-        new Location(Bukkit.getWorld(guildLoc[3]), Double.valueOf(guildLoc[0]), Double.valueOf(guildLoc[1]), Double.valueOf(guildLoc[2]));
-        if (!this.guildLoc.equals(Bukkit.getWorld("world").getSpawnLocation())) {
-            this.guildLoc.setPitch(Float.parseFloat(guildLoc[4]));
-            this.guildLoc.setYaw(Float.parseFloat(guildLoc[5]));
+            return new Location(world, x, y, z, y2, p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Location(Bukkit.getWorld("world"), 0, 0, 0);
         }
+    }
 
-        String guildRegionName = dataFile.getConfig().getString("guild-region-name", "none");
-        this.guildRegionName = guildRegionName.equals("none") ? "" : guildRegionName;
+    public static Location getLocation(String stringLoc) {
+        try {
+            String[] locT = stringLoc.split(" ");
 
-        String[] homeLoc = dataFile.getConfig().getString("home-loc", "none").split(" ");
-        this.homeLoc = homeLoc[0].equals("none") ? Bukkit.getWorld("world").getSpawnLocation() :
-                new Location(Bukkit.getWorld(homeLoc[3]), Double.valueOf(homeLoc[0]), Double.valueOf(homeLoc[1]), Double.valueOf(homeLoc[2]));
-        if (!this.homeLoc.equals(Bukkit.getWorld("world").getSpawnLocation())) {
-            this.homeLoc.setPitch(Float.parseFloat(homeLoc[4]));
-            this.homeLoc.setYaw(Float.parseFloat(homeLoc[5]));
+            World world = Bukkit.getWorld(locT[0]);
+            double x = Double.valueOf(locT[1]);
+            double y = Double.valueOf(locT[2]);
+            double z = Double.valueOf(locT[3]);
+
+            float p = Float.valueOf(locT[4]);
+            float y2 = Float.valueOf(locT[5]);
+
+            return new Location(world, x, y, z, y2, p);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Location(Bukkit.getWorld("world"), 0, 0, 0);
         }
+    }
 
-        String homeRegionName = dataFile.getConfig().getString("home-region-name", "none");
-        this.homeRegionName = homeRegionName.equals("none") ? "" : homeRegionName;
+    public static Location getLocationNoYawAndPitch(Config config, String key) {
+        try {
+            String[] locT = config.getConfig().getString(key).split(" ");
 
-        String[] respawnLoc = dataFile.getConfig().getString("respawn-loc", "none").split(" ");
-        this.respawnLoc = respawnLoc[0].equals("none") ? Bukkit.getWorld("world").getSpawnLocation() :
-                new Location(Bukkit.getWorld(respawnLoc[3]), Double.valueOf(respawnLoc[0]), Double.valueOf(respawnLoc[1]), Double.valueOf(respawnLoc[2]));
-        if (!this.respawnLoc.equals(Bukkit.getWorld("world").getSpawnLocation())) {
-            this.respawnLoc.setPitch(Float.parseFloat(respawnLoc[4]));
-            this.respawnLoc.setYaw(Float.parseFloat(respawnLoc[5]));
+            World world = Bukkit.getWorld(locT[0]);
+            double x = Double.valueOf(locT[1]);
+            double y = Double.valueOf(locT[2]);
+            double z = Double.valueOf(locT[3]);
+
+            return new Location(world, x, y, z);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Location(Bukkit.getWorld("world"), 0, 0, 0);
         }
-
-        this.initFile = dataFile.getConfig().getBoolean("init-file", false);
     }
 
-    public void save(){
-        dataFile.getConfig().set("guild-loc", guildLoc.equals(Bukkit.getWorld("world").getSpawnLocation()) ? "none" :
-                guildLoc.getBlockX() + " " + guildLoc.getBlockY() + " " + guildLoc.getBlockZ() + " " + guildLoc.getWorld().getName() + " " + guildLoc.getPitch() + " " + guildLoc.getYaw());
-        dataFile.getConfig().set("guild-region-name", guildRegionName);
+    public static Location getLocationNoYawAndPitch(String stringLoc) {
+        try {
+            String[] locT = stringLoc.split(" ");
 
-        dataFile.getConfig().set("home-loc", homeLoc.equals(Bukkit.getWorld("world").getSpawnLocation()) ? "none" :
-                homeLoc.getBlockX() + " " + homeLoc.getBlockY() + " " + homeLoc.getBlockZ() + " " + homeLoc.getWorld().getName() + " " + homeLoc.getPitch() + " " + homeLoc.getYaw());
-        dataFile.getConfig().set("home-region-name", homeRegionName);
+            World world = Bukkit.getWorld(locT[0]);
+            double x = Double.valueOf(locT[1]);
+            double y = Double.valueOf(locT[2]);
+            double z = Double.valueOf(locT[3]);
 
-        dataFile.getConfig().set("respawn-loc", respawnLoc.equals(Bukkit.getWorld("world").getSpawnLocation()) ? "none" :
-                guildLoc.getBlockX() + " " + respawnLoc.getBlockY() + " " + respawnLoc.getBlockZ() + " " + respawnLoc.getWorld().getName() + " " + respawnLoc.getPitch() + " " + respawnLoc.getYaw());
-
-
-        dataFile.getConfig().set("init-file", true);
-        dataFile.saveConfig();
+            return new Location(world, x, y, z);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Location(Bukkit.getWorld("world"), 0, 0, 0);
+        }
     }
 
-    public void setGuildLoc(Location guildLoc) {
-        this.guildLoc = guildLoc;
-    }
-
-    public void setGuildRegionName(String guildRegionName) {
-        this.guildRegionName = guildRegionName;
-    }
-
-    public void setHomeLoc(Location homeLoc) {
-        this.homeLoc = homeLoc;
-    }
-
-    public void setHomeRegionName(String homeRegionName) {
-        this.homeRegionName = homeRegionName;
-    }
-
-    public void setRespawnLoc(Location respawnLoc) {
-        this.respawnLoc = respawnLoc;
-    }
-
-    public void setInitFile(boolean initFile) {
-        this.initFile = initFile;
-    }
-
-    public Location getGuildLoc() {
-        return guildLoc;
-    }
-
-    public String getGuildRegionName() {
-        return guildRegionName;
-    }
-
-    public Location getHomeLoc() {
-        return homeLoc;
-    }
-
-    public String getHomeRegionName() {
-        return homeRegionName;
-    }
-
-    public Location getRespawnLoc() {
-        return respawnLoc;
-    }
-
-    public HashSet<String> getPermissions() {
-        return permissions;
-    }
-
-    public boolean isInitFile() {
-        return initFile;
+    public static String LocationToString(Location location) {
+        return Math.ceil(location.getX()) + " " + Math.ceil(location.getY()) + " " + Math.ceil(location.getZ());
     }
 }

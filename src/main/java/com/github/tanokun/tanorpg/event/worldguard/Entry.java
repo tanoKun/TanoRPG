@@ -31,36 +31,33 @@ public class Entry extends Handler implements Listener {
     }
 
     @Override
-    public boolean onCrossBoundary(LocalPlayer player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> left, MoveType moveType)
-    {
+    public boolean onCrossBoundary(LocalPlayer player, Location from, Location to, ApplicableRegionSet toSet, Set<ProtectedRegion> entered, Set<ProtectedRegion> left, MoveType moveType) {
         WgRegionsChangeEvent rce = new WgRegionsChangeEvent(player.getUniqueId(), left, entered);
         pm.callEvent(rce);
-        if(rce.isCancelled()) return false;
+        if (rce.isCancelled()) return false;
 
         WgRegionsEnterEvent ree = new WgRegionsEnterEvent(player.getUniqueId(), entered);
         pm.callEvent(ree);
-        if(ree.isCancelled()) return false;
+        if (ree.isCancelled()) return false;
 
         WgRegionsLeftEvent rle = new WgRegionsLeftEvent(player.getUniqueId(), left);
         pm.callEvent(rle);
-        if(rle.isCancelled()) return false;
+        if (rle.isCancelled()) return false;
 
-        for(ProtectedRegion r : entered) {
+        for (ProtectedRegion r : entered) {
             WgRegionEnterEvent regentered = new WgRegionEnterEvent(player.getUniqueId(), r);
             pm.callEvent(regentered);
-            if(regentered.isCancelled()) return false;
+            if (regentered.isCancelled()) return false;
         }
 
 
-        for(ProtectedRegion r : left) {
+        for (ProtectedRegion r : left) {
             WgRegionLeftEvent regleft = new WgRegionLeftEvent(player.getUniqueId(), r);
             pm.callEvent(regleft);
-            if(regleft.isCancelled()) return false;
+            if (regleft.isCancelled()) return false;
         }
         return true;
     }
-
-
 
 
 }

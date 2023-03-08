@@ -15,7 +15,7 @@ public enum ItemRarityType {
     private int green;
     private int blue;
 
-    private ItemRarityType(String name, String color, int r, int g, int b, String type){
+    private ItemRarityType(String name, String color, int r, int g, int b, String type) {
         this.name = name;
         this.type = type;
         this.color = color;
@@ -23,11 +23,28 @@ public enum ItemRarityType {
         green = g;
         blue = b;
     }
-    public String getName() {return name;}
-    public String getColor() {return color;}
-    public String getType() {return type;}
 
-    public int getRed() {return red;}
-    public int getGreen() {return green;}
-    public int getBlue() {return blue;}
+    public String getName() {
+        return name;
+    }
+
+    public String getColor() {
+        return color;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getRed() {
+        return red;
+    }
+
+    public int getGreen() {
+        return green;
+    }
+
+    public int getBlue() {
+        return blue;
+    }
 }

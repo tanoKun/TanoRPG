@@ -16,10 +16,11 @@ import java.util.stream.Collectors;
 public class WgEvents {
     static RegionContainer container;
 
-    public static void setup(){
+    public static void setup() {
         container = WorldGuard.getInstance().getPlatform().getRegionContainer();
         WorldGuard.getInstance().getPlatform().getSessionManager().registerHandler(Entry.factory, null);
     }
+
     @Nonnull
     public static Set<ProtectedRegion> getRegions(UUID playerUUID) {
         Player player = Bukkit.getPlayer(playerUUID);
@@ -38,16 +39,16 @@ public class WgEvents {
 
     public static boolean isPlayerInAllRegions(UUID playerUUID, Set<String> regionNames) {
         Set<String> regions = getRegionsNames(playerUUID);
-        if(regions.isEmpty()) throw new IllegalArgumentException("You need to check for at least one region !");
+        if (regions.isEmpty()) throw new IllegalArgumentException("You need to check for at least one region !");
 
         return regions.containsAll(regionNames.stream().map(String::toLowerCase).collect(Collectors.toSet()));
     }
 
     public static boolean isPlayerInAnyRegion(UUID playerUUID, Set<String> regionNames) {
         Set<String> regions = getRegionsNames(playerUUID);
-        if(regions.isEmpty()) throw new IllegalArgumentException("You need to check for at least one region !");
-        for(String region : regionNames) {
-            if(regions.contains(region.toLowerCase()))
+        if (regions.isEmpty()) throw new IllegalArgumentException("You need to check for at least one region !");
+        for (String region : regionNames) {
+            if (regions.contains(region.toLowerCase()))
                 return true;
         }
         return false;

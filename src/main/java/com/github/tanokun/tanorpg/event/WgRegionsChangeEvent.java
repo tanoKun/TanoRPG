@@ -1,4 +1,5 @@
 package com.github.tanokun.tanorpg.event;
+
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -23,31 +24,32 @@ public class WgRegionsChangeEvent extends Event implements Cancellable {
     private final Set<ProtectedRegion> currentRegions = new HashSet<>();
     private final Set<String> previousRegionsNames = new HashSet<>();
     private final Set<String> currentRegionsNames = new HashSet<>();
+
     /**
      * This even is fired whenever a region is entered.
      * It may be fired multiple times per tick, if several
      * regions are entered at the same time.
+     *
      * @param playerUUID The UUID of the player entering the region.
-     * @param previous Set of WorldGuard's ProtectedRegion the player was in before this event
-     * @param current Set of WorldGUard's ProtectedRegion the player is currently in
+     * @param previous   Set of WorldGuard's ProtectedRegion the player was in before this event
+     * @param current    Set of WorldGuard's ProtectedRegion the player is currently in
      */
-    public WgRegionsChangeEvent(UUID playerUUID, @NotNull Set<ProtectedRegion> previous, @NotNull Set<ProtectedRegion> current)
-    {
+    public WgRegionsChangeEvent(UUID playerUUID, @NotNull Set<ProtectedRegion> previous, @NotNull Set<ProtectedRegion> current) {
         this.uuid = playerUUID;
         previousRegions.addAll(previous);
         currentRegions.addAll(current);
 
-        for(ProtectedRegion r : current) {
+        for (ProtectedRegion r : current) {
             currentRegionsNames.add(r.getId());
         }
 
-        for(ProtectedRegion r : previous) {
+        for (ProtectedRegion r : previous) {
             previousRegionsNames.add(r.getId());
         }
 
     }
 
-    @Contract (pure = true)
+    @Contract(pure = true)
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -94,6 +96,6 @@ public class WgRegionsChangeEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancelled) {
-        this.cancelled=cancelled;
+        this.cancelled = cancelled;
     }
 }

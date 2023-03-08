@@ -2,7 +2,9 @@ package com.github.tanokun.tanorpg.game.item.type.base;
 
 import com.github.tanokun.tanorpg.game.item.ItemRarityType;
 import com.github.tanokun.tanorpg.game.item.ItemType;
+import com.github.tanokun.tanorpg.game.item.status.ItemStatus;
 import com.github.tanokun.tanorpg.player.EquipmentMap;
+import com.github.tanokun.tanorpg.player.quests.actions.QuestGiveBuffAction;
 import com.github.tanokun.tanorpg.player.skill.SkillClass;
 import com.github.tanokun.tanorpg.player.status.StatusMap;
 import org.bukkit.Color;
@@ -17,7 +19,7 @@ public abstract class ItemBase {
     private String displayName;
     private Material material;
     private List<String> lore;
-    private StatusMap statuses;
+    private ItemStatus statuses;
     private boolean glowing;
     private long price = 0;
     private ItemRarityType rarity;
@@ -27,9 +29,11 @@ public abstract class ItemBase {
     private int maxDurabilityValue = 1000;
     private int coolTime = 0;
     private EquipmentMap.EquipmentType equipmentType = EquipmentMap.EquipmentType.MAIN;
-    private Color color = Color.fromRGB(0, 0, 0);
+    private Color color = null;
     private List<Integer> combo = new ArrayList<>();
-    private int reach = 0;
+    private int reach = 4;
+    private List<QuestGiveBuffAction> buffs = new ArrayList<>();
+    private String displayType;
 
     public String getId() {
         return id;
@@ -47,7 +51,7 @@ public abstract class ItemBase {
         return lore;
     }
 
-    public StatusMap getBasicStatuses() {
+    public ItemStatus getBasicStatuses() {
         return statuses;
     }
 
@@ -99,6 +103,14 @@ public abstract class ItemBase {
         return reach;
     }
 
+    public List<QuestGiveBuffAction> getBuffs() {
+        return buffs;
+    }
+
+    public String getDisplayType() {
+        return displayType;
+    }
+
     public abstract ItemType getItemType();
 
     public void setId(String id) {
@@ -117,7 +129,7 @@ public abstract class ItemBase {
         this.lore = lore;
     }
 
-    public void setBasicStatuses(StatusMap statuses) {
+    public void setBasicStatuses(ItemStatus statuses) {
         this.statuses = statuses;
     }
 
@@ -169,7 +181,15 @@ public abstract class ItemBase {
         this.reach = reach;
     }
 
-    public ItemBase(String id, Material material, String name, List<String> lore, StatusMap statuses, boolean glowing, ItemRarityType itemRarityType){
+    public void setBuffs(List<QuestGiveBuffAction> buffs) {
+        this.buffs = buffs;
+    }
+
+    public void setDisplayType(String displayType) {
+        this.displayType = displayType;
+    }
+
+    public ItemBase(String id, Material material, String name, List<String> lore, ItemStatus statuses, boolean glowing, ItemRarityType itemRarityType) {
         this.id = id;
         this.material = material;
         this.displayName = name;
@@ -179,7 +199,9 @@ public abstract class ItemBase {
         this.rarity = itemRarityType;
     }
 
-    public abstract ItemStack init(int count);
+    public abstract ItemStack init(int count, double p, boolean max);
 
-    public abstract ItemStack initData(ItemStack itemStack);
+    public abstract ItemStack init(int count, double p, boolean max, StatusMap temp);
+
+    public abstract ItemStack initData(ItemStack itemStack, StatusMap statusMap);
 }

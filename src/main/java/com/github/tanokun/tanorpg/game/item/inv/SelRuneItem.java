@@ -22,7 +22,6 @@ public class SelRuneItem implements InventoryProvider {
     }
 
 
-
     @Override
     public void init(Player player, InventoryContents contents) {
 

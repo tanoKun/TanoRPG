@@ -26,14 +26,13 @@ public class WgRegionEnterEvent extends Event implements Cancellable {
     private final ProtectedRegion region;
     private final String regionName;
 
-    public WgRegionEnterEvent(UUID playerUUID, @NotNull ProtectedRegion region)
-    {
+    public WgRegionEnterEvent(UUID playerUUID, @NotNull ProtectedRegion region) {
         this.uuid = playerUUID;
         this.region = region;
         this.regionName = region.getId();
     }
 
-    @Contract (pure = true)
+    @Contract(pure = true)
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -70,6 +69,6 @@ public class WgRegionEnterEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancelled) {
-        this.cancelled=cancelled;
+        this.cancelled = cancelled;
     }
 }

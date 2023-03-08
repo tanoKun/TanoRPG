@@ -9,12 +9,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 
-public class ChestInventoryOpener implements InventoryOpener
-{
+public class ChestInventoryOpener implements InventoryOpener {
 
     @Override
-    public Inventory open(SmartInventory inv, Player player)
-    {
+    public Inventory open(SmartInventory inv, Player player) {
         Preconditions.checkArgument(inv.getColumns() == 9,
                 "The column count for the chest inventory must be 9, found: %s.", inv.getColumns());
         Preconditions.checkArgument(inv.getRows() >= 1 && inv.getRows() <= 6,
@@ -30,8 +28,7 @@ public class ChestInventoryOpener implements InventoryOpener
     }
 
     @Override
-    public boolean supports(InventoryType type)
-    {
+    public boolean supports(InventoryType type) {
         return type == InventoryType.CHEST || type == InventoryType.ENDER_CHEST;
     }
 }

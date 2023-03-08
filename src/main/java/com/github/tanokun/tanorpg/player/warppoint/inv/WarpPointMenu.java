@@ -13,7 +13,7 @@ public class WarpPointMenu implements InventoryProvider {
         m = member;
     }
 
-    public static SmartInventory getInv(Member m){
+    public static SmartInventory getInv(Member m) {
         return SmartInventory.builder()
                 .closeable(true)
                 .provider(new WarpPointMenu(m))

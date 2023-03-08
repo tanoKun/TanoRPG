@@ -8,15 +8,18 @@ public enum ItemType {
     EQUIPMENT("装備", "EQUIPMENT"),
     RUNE("ルーン", "RUNE"),
     ACCESSORY("アクセサリー", "ACCESSORY"),
-    NULL("その他", "NULL");
+    NULL("その他", "NULL"),
+    POTION("ポーション", "POTION");
 
     private final String name;
 
     private final String type;
 
-    ItemType(String name, String type){this.name = name;
+    ItemType(String name, String type) {
+        this.name = name;
         this.type = type;
     }
+
     public String getName() {
         return name;
     }

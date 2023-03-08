@@ -1,0 +1,8 @@
+LOCATION:
+  - location.guild, world:0.0:0.0:0.0:0.0:0.0
+  - location.home, world:0.0:0.0:0.0:0.0:0.0
+  - location.respawn, world:0.0:0.0:0.0:0.0:0.0
+
+STRING:
+  - region.guild, unknown
+  - region.home, unknown

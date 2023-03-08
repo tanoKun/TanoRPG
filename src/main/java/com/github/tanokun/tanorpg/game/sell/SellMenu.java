@@ -3,7 +3,7 @@ package com.github.tanokun.tanorpg.game.sell;
 import com.github.tanokun.tanorpg.TanoRPG;
 import com.github.tanokun.tanorpg.game.item.type.base.ItemData;
 import com.github.tanokun.tanorpg.player.Member;
-import com.github.tanokun.tanorpg.util.ItemUtils;
+import com.github.tanokun.tanorpg.util.ItemUtilsKt;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.ClickableItem;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.InventoryListener;
 import com.github.tanokun.tanorpg.util.smart_inv.inv.SmartInventory;
@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class SellMenu implements InventoryProvider {
     private Member member;
 
-    public SmartInventory getInv(){
+    public SmartInventory getInv() {
         return SmartInventory.builder()
                 .id("SellMenu")
                 .title("§d§l売却")
@@ -32,17 +32,17 @@ public class SellMenu implements InventoryProvider {
                 .cancelable(false)
                 .size(6, 9)
                 .listener(new InventoryListener<>(InventoryCloseEvent.class, e -> {
-            if (e.getPlayer().hasMetadata("selling")){
-                e.getPlayer().removeMetadata("selling", TanoRPG.getPlugin());
-                return;
-            }
-            for (int i = 0; i < 53; i++) {
-                if (e.getView().getItem(i) == null) continue;
-                if (e.getView().getItem(i).getType().equals(Material.AIR)) continue;
-                if (ItemUtils.getItemData(e.getView().getItem(i)) == null) continue;
-                e.getPlayer().getInventory().addItem(e.getView().getItem(i));
-            }
-        }))
+                    if (e.getPlayer().hasMetadata("selling")) {
+                        e.getPlayer().removeMetadata("selling", TanoRPG.getPlugin());
+                        return;
+                    }
+                    for (int i = 0; i < 53; i++) {
+                        if (e.getView().getItem(i) == null) continue;
+                        if (e.getView().getItem(i).getType().equals(Material.AIR)) continue;
+                        if (ItemUtilsKt.getItemData(e.getView().getItem(i)) == null) continue;
+                        e.getPlayer().getInventory().addItem(e.getView().getItem(i));
+                    }
+                }))
                 .build();
     }
 
@@ -52,10 +52,10 @@ public class SellMenu implements InventoryProvider {
 
     @Override
     public void init(Player player, InventoryContents contents) {
-        ClickableItem BSG = ClickableItem.of(ItemUtils.createItem(Material.PURPLE_STAINED_GLASS_PANE, "    ", 1, false), e -> {
+        ClickableItem BSG = ClickableItem.of(ItemUtilsKt.createItem(Material.PURPLE_STAINED_GLASS_PANE, "    ", 1, false), e -> {
             e.setCancelled(true);
         });
-        ClickableItem side = ClickableItem.of(ItemUtils.createItem(Material.PURPLE_GLAZED_TERRACOTTA, "  ", 1, false), e -> {
+        ClickableItem side = ClickableItem.of(ItemUtilsKt.createItem(Material.PURPLE_GLAZED_TERRACOTTA, "  ", 1, false), e -> {
             e.setCancelled(true);
         });
 
@@ -65,7 +65,7 @@ public class SellMenu implements InventoryProvider {
         contents.set(5, 0, side);
         contents.set(5, 8, side);
 
-        contents.set(5, 4, ClickableItem.of(ItemUtils.createItem(Material.EMERALD, "§d§l合計値段: 0" + " " + TanoRPG.MONEY,
+        contents.set(5, 4, ClickableItem.of(ItemUtilsKt.createItem(Material.EMERALD, "§d§l合計値段: 0" + " " + TanoRPG.MONEY,
                 Arrays.asList("§bクリックで売却する"), 1, true), e -> {
             e.setCancelled(true);
             Bukkit.dispatchCommand(Bukkit.getConsoleSender(),
@@ -89,12 +89,12 @@ public class SellMenu implements InventoryProvider {
         player.getOpenInventory().setItem(49, item);
     }
 
-    private static long check(ItemStack[] items){
+    private static long check(ItemStack[] items) {
         long price = 0;
-        for (ItemStack item : items){
+        for (ItemStack item : items) {
             if (item == null) continue;
-            if (ItemUtils.getItemData(item) == null) continue;
-            ItemData sell_item = ItemUtils.getItemData(item);
+            if (ItemUtilsKt.getItemData(item) == null) continue;
+            ItemData sell_item = ItemUtilsKt.getItemData(item);
             price += sell_item.getPrice() * item.getAmount();
         }
         return price;

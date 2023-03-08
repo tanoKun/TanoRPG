@@ -1,19 +1,16 @@
 package com.github.tanokun.tanorpg.util.smart_inv.inv.contents;
 
-public class SlotPos
-{
+public class SlotPos {
     private final int row;
     private final int column;
 
-    public SlotPos(int row, int column)
-    {
+    public SlotPos(int row, int column) {
         this.row = row;
         this.column = column;
     }
 
     @Override
-    public boolean equals(Object obj)
-    {
+    public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
 
@@ -23,18 +20,21 @@ public class SlotPos
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         int result = row;
         result = 31 * result + column;
         return result;
     }
 
-    public int getRow() { return row; }
-    public int getColumn() { return column; }
+    public int getRow() {
+        return row;
+    }
 
-    public static SlotPos of(int row, int column)
-    {
+    public int getColumn() {
+        return column;
+    }
+
+    public static SlotPos of(int row, int column) {
         return new SlotPos(row, column);
     }
 }

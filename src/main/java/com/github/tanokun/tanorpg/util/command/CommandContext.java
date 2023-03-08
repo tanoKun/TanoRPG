@@ -8,14 +8,11 @@ import org.bukkit.command.BlockCommandSender;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class CommandContext {
-    public List<String> args;
+    public List<String> args = new ArrayList<>();
 
     String[] baseArgs;
 
@@ -29,75 +26,23 @@ public class CommandContext {
 
     public CommandContext(CommandSender sender, String[] args) {
         this.sender = sender;
-        baseArgs = args;
-        int i = 0;
-        for (; i < args.length; i++) {
-            args[i] = args[i].trim();
-            if (args[i].length() != 0)
-                if (args[i].charAt(0) == '\'' || args[i].charAt(0) == '"' || args[i].charAt(0) == '`') {
-                    char quote = args[i].charAt(0);
-                    String quoted = args[i].substring(1);
-                    if (quoted.length() > 0 && quoted.charAt(quoted.length() - 1) == quote) {
-                        args[i] = quoted.substring(0, quoted.length() - 1);
-                    } else {
-                        for (int inner = i + 1; inner < args.length; inner++) {
-                            if (!args[inner].isEmpty()) {
-                                String test = args[inner].trim();
-                                quoted = quoted + " " + test;
-                                if (test.charAt(test.length() - 1) == quote) {
-                                    args[i] = quoted.substring(0, quoted.length() - 1);
-                                    for (int j = i + 1; j <= inner; j++)
-                                        args[j] = "";
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-        }
-        for (i = 0; i < args.length; i++) {
-            int length = args[i].length();
-            if (length != 0)
-                if (i + 1 < args.length && length > 2 && VALUE_FLAG.matcher(args[i]).matches()) {
-                    int inner = i + 1;
-                    while (args[inner].length() == 0) {
-                        if (++inner >= args.length) {
-                            inner = -1;
-                            break;
-                        }
-                    }
-                    if (inner != -1) {
-                        this.valueFlags.put(args[i].toLowerCase().substring(2), args[inner]);
-                        args[i] = "";
-                        args[inner] = "";
-                    }
-                } else if (FLAG.matcher(args[i]).matches()) {
-                    for (int k = 1; k < args[i].length(); k++)
-                        this.flags.add(Character.valueOf(args[i].charAt(k)));
-                    args[i] = "";
-                }
-        }
-
-        List<String> copied = Lists.newArrayList();
-        for (String arg : args) {
-            arg = arg.trim();
-            if (arg != null && !arg.isEmpty())
-                copied.add(arg.trim());
-        }
-        this.args = copied;
+        init(sender, args);
     }
 
     public CommandContext(String[] args) {
         this(null, args);
     }
 
-    public void init(CommandSender sender, String[] args){
+    public CommandContext(){}
+
+    public void init(CommandSender sender, String[] args) {
+        if (args == null) return;
         this.sender = sender;
-        baseArgs = args;
         int i = 0;
         valueFlags.clear();
         flags.clear();
         this.args.clear();
+        baseArgs = args;
         for (; i < args.length; i++) {
             args[i] = args[i].trim();
             if (args[i].length() != 0)
@@ -122,27 +67,20 @@ public class CommandContext {
                     }
                 }
         }
+
         for (i = 0; i < args.length; i++) {
             int length = args[i].length();
-            if (length != 0)
-                if (i + 1 < args.length && length > 2 && VALUE_FLAG.matcher(args[i]).matches()) {
-                    int inner = i + 1;
-                    while (args[inner].length() == 0) {
-                        if (++inner >= args.length) {
-                            inner = -1;
-                            break;
-                        }
-                    }
-                    if (inner != -1) {
-                        this.valueFlags.put(args[i].toLowerCase().substring(2), args[inner]);
-                        args[i] = "";
-                        args[inner] = "";
-                    }
+            if (length != 0) {
+                if (i + 1 < args.length && length > 2 && args[i].contains("--")) {
+                    this.valueFlags.put(args[i].substring(2), args[i + 1]);
+                    args[i] = "";
+                    args[i + 1] = "";
                 } else if (FLAG.matcher(args[i]).matches()) {
                     for (int k = 1; k < args[i].length(); k++)
-                        this.flags.add(Character.valueOf(args[i].charAt(k)));
+                        this.flags.add(args[i].charAt(k));
                     args[i] = "";
                 }
+            }
         }
 
         List<String> copied = Lists.newArrayList();
@@ -215,7 +153,8 @@ public class CommandContext {
         if (index + 1 < this.args.size())
             try {
                 return Integer.parseInt(this.args.get(index));
-            } catch (NumberFormatException numberFormatException) {}
+            } catch (NumberFormatException numberFormatException) {
+            }
         return def;
     }
 
@@ -241,9 +180,9 @@ public class CommandContext {
         if (this.sender == null)
             return this.location;
         if (this.sender instanceof Player) {
-            this.location = ((Player)this.sender).getTargetBlock((Set)null, 50).getLocation();
+            this.location = ((Player) this.sender).getTargetBlock((Set) null, 50).getLocation();
         } else if (this.sender instanceof BlockCommandSender) {
-            this.location = ((BlockCommandSender)this.sender).getBlock().getLocation();
+            this.location = ((BlockCommandSender) this.sender).getBlock().getLocation();
         }
         return this.location;
     }
@@ -294,8 +233,10 @@ public class CommandContext {
         return this.args.get(0).equalsIgnoreCase(command);
     }
 
-    public String getArg(int i, String re){
-        if  ((i + 1) > args.size()){return re;}
+    public String getArg(int i, String re) {
+        if ((i + 1) > args.size()) {
+            return re;
+        }
         return args.get(i) != null ? args.get(i) : re;
     }
 
@@ -310,6 +251,4 @@ public class CommandContext {
     private static final Pattern FLAG = Pattern.compile("^-[a-zA-Z]+$");
 
     private static final Splitter LOCATION_SPLITTER = Splitter.on(Pattern.compile("[,]|[:]")).omitEmptyStrings();
-
-    private static final Pattern VALUE_FLAG = Pattern.compile("^--[a-zA-Z0-9-]+$");
 }

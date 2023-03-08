@@ -12,8 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ClickableItem
-{
+public class ClickableItem {
     public ItemStack basedItemStack;
     public Material material = Material.AIR;
     public int amount = 1;
@@ -27,83 +26,72 @@ public class ClickableItem
     private Consumer<ClickableItem> iconSettings;
     private Consumer<InventoryClickEvent> consumer;
 
-    private ClickableItem(ItemStack item, Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer)
-    {
+    private ClickableItem(ItemStack item, Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer) {
         this.iconSettings = settings;
         this.basedItemStack = item;
         this.consumer = consumer;
         this.iconSettings.accept(this);
     }
 
-    private ClickableItem(ItemStack item, Consumer<InventoryClickEvent> consumer)
-    {
+    private ClickableItem(ItemStack item, Consumer<InventoryClickEvent> consumer) {
         this.basedItemStack = item;
         this.consumer = consumer;
     }
 
-    private ClickableItem(Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer)
-    {
+    private ClickableItem(Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer) {
         this.iconSettings = settings;
         this.consumer = consumer;
         this.iconSettings.accept(this);
     }
 
-    public static ClickableItem empty(ItemStack item)
-    {
-        return of(item, e -> {});
+    public static ClickableItem empty(ItemStack item) {
+        return of(item, e -> {
+        });
     }
 
-    public static ClickableItem empty(Consumer<ClickableItem> item)
-    {
-        return of(item, e -> {});
+    public static ClickableItem empty(Consumer<ClickableItem> item) {
+        return of(item, e -> {
+        });
     }
 
-    public static ClickableItem empty(ItemStack item, Consumer<ClickableItem> iconSettings)
-    {
-        return of(item, iconSettings, e -> {});
+    public static ClickableItem empty(ItemStack item, Consumer<ClickableItem> iconSettings) {
+        return of(item, iconSettings, e -> {
+        });
     }
 
-    public static ClickableItem of(ItemStack item, Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer)
-    {
+    public static ClickableItem of(ItemStack item, Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer) {
         return new ClickableItem(item, settings, consumer);
     }
 
-    public static ClickableItem of(ItemStack item, Consumer<InventoryClickEvent> consumer)
-    {
+    public static ClickableItem of(ItemStack item, Consumer<InventoryClickEvent> consumer) {
         return new ClickableItem(item, consumer);
     }
 
-    public static ClickableItem of(Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer)
-    {
+    public static ClickableItem of(Consumer<ClickableItem> settings, Consumer<InventoryClickEvent> consumer) {
         return new ClickableItem(settings, consumer);
     }
 
-    public void run(InventoryClickEvent e)
-    {
+    public void run(InventoryClickEvent e) {
         consumer.accept(e);
     }
 
-    public ItemStack getItem()
-    {
+    public ItemStack getItem() {
         if (basedItemStack == null) basedItemStack = apply();
         return basedItemStack;
     }
 
-    public void raw(Consumer<ItemStack> settings)
-    {
+    public void raw(Consumer<ItemStack> settings) {
         raw = settings;
     }
 
-    public ItemStack apply()
-    {
+    public ItemStack apply() {
         ItemStack item = new ItemStack(material);
         item.setAmount(amount);
 
         if (basedItemStack == null) item.setDurability((short) damage);
 
         ItemMeta meta = item.getItemMeta();
-        if (meta != null)
-        {
+        if (meta != null) {
             meta.setDisplayName(displayName);
             meta.setLore(lore);
             enchantments.forEach((enchantment, level) -> meta.addEnchant(enchantment, level, true));
@@ -115,8 +103,7 @@ public class ClickableItem
         return item;
     }
 
-    public ItemStack toItemStack()
-    {
+    public ItemStack toItemStack() {
         ItemStack item = basedItemStack != null ? basedItemStack : apply();
         return item;
     }

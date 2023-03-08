@@ -18,7 +18,7 @@ public class WgRegionsEnterEvent extends Event implements Cancellable {
 
     private static final HandlerList handlers = new HandlerList();
 
-    private boolean cancelled=false;
+    private boolean cancelled = false;
 
     private final UUID uuid;
     private final Set<ProtectedRegion> regions;
@@ -26,26 +26,24 @@ public class WgRegionsEnterEvent extends Event implements Cancellable {
 
     /**
      * This even is fired whenever one or several regions are entered.
+     *
      * @param playerUUID The UUID of the player entering the regions.
-     * @param regions Set of WorldGuard's ProtectedRegion regions.
+     * @param regions    Set of WorldGuard's ProtectedRegion regions.
      */
-    public WgRegionsEnterEvent(UUID playerUUID, @Nullable Set<ProtectedRegion> regions)
-    {
+    public WgRegionsEnterEvent(UUID playerUUID, @Nullable Set<ProtectedRegion> regions) {
         this.uuid = playerUUID;
         this.regionsNames = new HashSet<>();
         this.regions = new HashSet<>();
 
-        if(regions != null)
-        {
+        if (regions != null) {
             this.regions.addAll(regions);
-            for(ProtectedRegion region : regions)
-            {
+            for (ProtectedRegion region : regions) {
                 this.regionsNames.add(region.getId());
             }
         }
     }
 
-    @Contract (pure = true)
+    @Contract(pure = true)
     public static HandlerList getHandlerList() {
         return handlers;
     }
@@ -82,6 +80,6 @@ public class WgRegionsEnterEvent extends Event implements Cancellable {
 
     @Override
     public void setCancelled(boolean cancelled) {
-        this.cancelled=cancelled;
+        this.cancelled = cancelled;
     }
 }
